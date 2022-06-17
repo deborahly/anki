@@ -1,0 +1,22 @@
+{% extends 'anki/layout.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block main %}
+    <h2>Login</h2>
+
+    <section id="login_form">
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <input autofocus type="text" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+            <input type="submit" value="Login">
+        </form>
+    </section>
+
+    <section id="login_message">
+        {% if message %}
+            {{ message }}
+        {% endif %}
+    </section>
+{% endblock %}

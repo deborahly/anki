@@ -1,0 +1,31 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'anki/styles.css' %}">
+        <script src="{% static 'anki/main.js' %}"></script>
+    </head>
+    <body>
+        <header>
+            <nav class="navigation-bar">
+                <ul>
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'logout' %}">Log out</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Log in</a></li>
+                        <li><a href="{% url 'register' %}">Register</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <div>
+                {% if user.is_authenticated %}
+                    Signed in as <strong>{{ user.username }}</strong>
+                {% endif %}
+            </div>
+        </header>
+        {% block main %}{% endblock %}
+    </body>
+</html>

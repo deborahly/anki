@@ -1,0 +1,24 @@
+{% extends 'anki/layout.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block main %}
+    <h2>Register</h2>
+
+    <section id="register_form">
+        <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <input autofocus type="text" name="username" placeholder="Username">
+            <input type="email" name="email" placeholder="Email Address">
+            <input type="password" name="password" placeholder="Password">
+            <input type="password" name="confirmation" placeholder="Confirm Password">            
+            <input type="submit" value="Register">
+        </form>
+    </section>
+    
+    <section id="register_message">
+        {% if message %}
+            {{ message }}
+        {% endif %}
+    </section>
+{% endblock %}

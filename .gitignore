@@ -1,0 +1,7 @@
+venv
+__pycache__
+*.tsv
+movies/migrations
+db.sqlite3
+queries.sqlite3
+launch.json
