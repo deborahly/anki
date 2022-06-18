@@ -1,7 +1,34 @@
 {% extends 'anki/layout.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}Index{% endblock %}
 
 {% block main %}
-    Hello, world!
+    <section id="form-section">
+        <h5>Create new card</h5>
+            <form action="{% url 'save' 'basic card' %}" method="post">
+                {% csrf_token %}
+                {{ basic_card_form | crispy }}
+                <input type="submit" value="Save card">
+            </form>
+        <h5>Create new deck</h5>
+            <form action="{% url 'save' 'deck' %}" method="post">
+                {% csrf_token %}
+                {{ deck_form | crispy }}
+                <input type="submit" value="Save deck">
+            </form>
+    </section>
+
+    <section id="deck-section">
+        <h5>My decks</h5>
+        <ul>
+            {% for deck in decks %}
+                <a href="#">{{ deck.name }}</a>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section id="card-section">
+    </section>
 {% endblock %}
