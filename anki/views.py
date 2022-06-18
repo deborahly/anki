@@ -1,13 +1,38 @@
 from django.shortcuts import render
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
 from django.urls import reverse
-from .models import User
+from .models import User, CardDeck
+from .forms import BasicCardForm, CardDeckForm
 
 # Create your views here.
 def index(request):
-    return render(request, 'anki/index.html')
+    basic_card_form = BasicCardForm
+    deck_form = CardDeckForm
+    decks = CardDeck.objects.filter(user=request.user)
+    return render(request, 'anki/index.html', {
+        'basic_card_form': basic_card_form,
+        'deck_form': deck_form,
+        'decks': decks
+    })
+
+def save(request, type):
+    if request.method != 'POST':
+        return HttpResponseBadRequest
+    else:
+        if type == 'deck':
+            form = CardDeckForm(request.POST)
+            if form.is_valid():
+                form.instance.user = request.user
+                form.save()
+                return HttpResponseRedirect(reverse('index'))
+        elif type == 'basic card':
+            form = BasicCardForm(request.POST)
+            if form.is_valid():
+                form.instance.user = request.user
+                form.save()
+                return HttpResponseRedirect(reverse('index'))
 
 def login_view(request):
     if request.method == 'POST':
