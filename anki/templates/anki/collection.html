@@ -1,0 +1,20 @@
+{% extends 'anki/layout.html' %}
+
+{% block title %}Collection{% endblock %}
+
+{% block main %}
+    <section id="deck-section">
+        <h5>My decks</h5>
+        <ul>
+            {% for deck in decks %}
+                <a href="#" class="deck">{{ deck.name }}</a>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section id="card-section">
+    </section>
+
+    <section id="btn-section">
+    </section>
+{% endblock %}
