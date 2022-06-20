@@ -47,3 +47,14 @@ class BasicCard(TimeStampedModel):
     def __str__(self):
         return f'{self.front}'
 
+    def serialize(self):
+        return {
+            'grammar_class': self.grammar_class,
+            'easiness': self.easiness,
+            'front': self.front,
+            'front_extra': self.front_extra,
+            'back_main': self.back_main,
+            'back_alt_1': self.back_alt_1,
+            'back_alt_2': self.back_alt_2
+        }
+
