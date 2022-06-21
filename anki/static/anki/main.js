@@ -2,9 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // When COLLECTION page is loaded:
     if (document.title === 'Collection') {
         // Show deck when selected:
-        document.querySelectorAll('.deck').forEach(deck => {
-            deck.addEventListener('click', event => {                
-                const name = deck.innerHTML;
+        document.querySelectorAll('.deck').forEach(element => {
+            element.addEventListener('click', () => {                
+                const name = element.innerHTML;
                 
                 const fetchDeck = async (name) => {
                     try {
@@ -74,6 +74,15 @@ function showDeck(deck, index) {
     const edit_btn = document.getElementById('edit-btn');
     edit_btn.addEventListener('click', () => {
         editCard(deck, index);
+    })
+
+    addDeleteBtn();
+    const delete_btn = document.getElementById('delete-btn');
+    delete_btn.addEventListener('click', () => {
+        var result = confirm('Are you sure to delete?');
+        if (result) {
+            deleteCard(deck, index);
+        }
     })
 }
 
@@ -174,6 +183,15 @@ function addEditBtn() {
     btn_section.append(edit_btn);
 }
 
+function addDeleteBtn() {
+    const delete_btn = document.createElement('button');
+    delete_btn.id = 'delete-btn';
+    delete_btn.innerHTML = 'Delete card';
+
+    const btn_section = document.getElementById('btn-section');
+    btn_section.append(delete_btn);
+}
+
 function editCard(deck, index) {
     // Adjust page display:
     document.getElementById('card-section').innerHTML = '';
@@ -195,11 +213,12 @@ function editCard(deck, index) {
 
     // Get form:
     const form = document.getElementById('basic-card-form');
-    // form.append('id', `${deck[index]['id']}`)
 
     form.onsubmit = async (event) => {
         event.preventDefault();
+        
         const csrftoken = getCookie('csrftoken');
+        
         const id_field = document.getElementById('id-field')
         id_field.value = deck[index]['id'];
         id_field.name = 'id';
@@ -214,11 +233,46 @@ function editCard(deck, index) {
             })
             const data = await response.json();
             deck[index] = await data.card;
+
+            // Hide form section:
+            const edit_section = document.getElementById('edit-section');
+            edit_section.style.display = 'none';
+
             showDeck(deck, index);
         } catch (error) {
             console.error(error);
         }
     }
+}
+
+function deleteCard(deck, index) {
+    const csrftoken = getCookie('csrftoken');
+    
+    const newDeck = async () => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/delete/card`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id: deck[index]['id']})
+            })
+            if (response.ok) {
+                deck.splice(index, 1);
+                if (index > 1) {
+                    showDeck(deck, (index-1));
+                } else {
+                    // Clear out card section:  
+                    const card_section = document.getElementById('card-section');
+                    card_section.innerHTML = '';
+                }
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    newDeck();        
 }
 
 function getCookie(name) {

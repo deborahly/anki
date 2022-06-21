@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import get_object_or_404, render
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
@@ -58,6 +59,7 @@ def create(request, type):
                 form.save()
                 return HttpResponseRedirect(reverse('index'))
 
+@login_required
 def update_card(request):
     if request.method != 'POST':
         return HttpResponseBadRequest
@@ -71,6 +73,22 @@ def update_card(request):
                 return JsonResponse({'card': card[0].serialize()})
             else:
                 return Http404
+
+@login_required
+def delete_card(request):
+    if request.method != 'POST':
+        return HttpResponseBadRequest
+    else:
+        data = json.loads(request.body)
+        id = data.get('id', '')
+        try:
+            card = BasicCard.objects.get(pk=id)
+            card.delete()
+            return JsonResponse({
+                'message': 'Card deleted'
+            }, status=200)
+        except:
+            return Http404
 
 def login_view(request):
     if request.method == 'POST':
