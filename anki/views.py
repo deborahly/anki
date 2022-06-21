@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
+from django.http import Http404, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
 from django.urls import reverse
 from .models import BasicCard, User, CardDeck
 from .forms import BasicCardForm, CardDeckForm
@@ -20,12 +20,14 @@ def index(request):
 @login_required
 def collection(request):
     decks = CardDeck.objects.filter(user=request.user)
+    basic_card_form = BasicCardForm
     return render(request, 'anki/collection.html', {
-        'decks': decks
+        'decks': decks,
+        'basic_card_form': basic_card_form
     })
 
 @login_required
-def save(request, type):
+def create(request, type):
     if request.method != 'POST':
         return HttpResponseBadRequest
     else:
@@ -42,12 +44,25 @@ def save(request, type):
                 form.save()
                 return HttpResponseRedirect(reverse('index'))
 
+def update_card(request):
+    if request.method != 'POST':
+        return HttpResponseBadRequest
+    else:
+        form = BasicCardForm(request.POST)
+        id = int(request.POST['id'])
+        if form.is_valid():
+            card = BasicCard.objects.filter(id=id)
+            if card:
+                card.update(**form.cleaned_data)
+                return JsonResponse({'card': card[0].serialize()})
+            else:
+                return Http404
+
 def retrieve(request):
     type = request.GET.get('type', '')
     name = request.GET.get('name', '')
     if type == 'basic':
         deck = CardDeck.objects.get(name=name, user=request.user)
-        # cards = BasicCard.objects.filter(deck=deck)
         cards = deck.content.all()
         card_list = []
         for card in cards:
