@@ -27,6 +27,20 @@ def collection(request):
     })
 
 @login_required
+def retrieve(request):
+    type = request.GET.get('type', '')
+    name = request.GET.get('name', '')
+    if type == 'basic':
+        deck = CardDeck.objects.get(name=name, user=request.user)
+        cards = deck.content.all()
+        card_list = []
+        for card in cards:
+            card_dict = card.serialize()
+            card_list.append(card_dict)
+
+        return JsonResponse({'cards': card_list}, status=200)
+
+@login_required
 def create(request, type):
     if request.method != 'POST':
         return HttpResponseBadRequest
@@ -57,19 +71,6 @@ def update_card(request):
                 return JsonResponse({'card': card[0].serialize()})
             else:
                 return Http404
-
-def retrieve(request):
-    type = request.GET.get('type', '')
-    name = request.GET.get('name', '')
-    if type == 'basic':
-        deck = CardDeck.objects.get(name=name, user=request.user)
-        cards = deck.content.all()
-        card_list = []
-        for card in cards:
-            card_dict = card.serialize()
-            card_list.append(card_dict)
-
-        return JsonResponse({'cards': card_list}, status=200)
 
 def login_view(request):
     if request.method == 'POST':
