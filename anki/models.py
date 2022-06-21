@@ -49,12 +49,14 @@ class BasicCard(TimeStampedModel):
 
     def serialize(self):
         return {
+            'id': self.id,
             'grammar_class': self.grammar_class,
             'easiness': self.easiness,
             'front': self.front,
             'front_extra': self.front_extra,
             'back_main': self.back_main,
             'back_alt_1': self.back_alt_1,
-            'back_alt_2': self.back_alt_2
+            'back_alt_2': self.back_alt_2,
+            'deck': self.deck.name
         }
 
