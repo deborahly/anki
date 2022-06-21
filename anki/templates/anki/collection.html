@@ -1,5 +1,7 @@
 {% extends 'anki/layout.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}Collection{% endblock %}
 
 {% block main %}
@@ -16,5 +18,15 @@
     </section>
 
     <section id="btn-section">
+    </section>
+
+    <section id="edit-section" style="display: none;">
+        <h5>Edit card</h5>
+            <form action="#" method="post" id="basic-card-form">
+                {% csrf_token %}
+                {{ basic_card_form | crispy }}
+                <input type="hidden" id="id-field">
+                <input type="submit" value="create card">
+            </form>
     </section>
 {% endblock %}
