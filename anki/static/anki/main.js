@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // When COLLECTION page is loaded:
-    if (document.title === 'Collection') {
+    // When PLAY CARDS page is loaded:
+    if (document.title === 'Play cards') {
         // Show deck when selected:
         document.querySelectorAll('.deck').forEach(element => {
-            element.addEventListener('click', () => {                
+            element.addEventListener('click', () => {                              
+                displayInitialPlay();
+
                 const name = element.innerHTML;
                 
                 const fetchDeck = async (name) => {
@@ -20,7 +22,50 @@ document.addEventListener('DOMContentLoaded', function() {
             })
         }); 
     }
+
+    // When MY COLLECTION page is loaded:
+    if (document.title === 'My collection') {
+        // Show deck when selected:
+        document.querySelectorAll('.deck').forEach(element => {
+            element.addEventListener('click', () => {
+                displayInitialCollection();
+                
+                const name = element.innerHTML;
+                
+                const fetchDeck = async (name) => {
+                    try {
+                        const response = await fetch(`http://127.0.0.1:8000/retrieve/?type=basic&name=${name}`);
+                        const data = await response.json();
+                        deck = await data.cards;
+                        listDeck(deck);
+                    } catch (error) {
+                        console.error(error);
+                    } 
+                }
+                fetchDeck(name);
+            })
+        }); 
+    }
 })
+
+function displayInitialPlay() {
+    const card_section = document.getElementById('card-section');
+    card_section.innerHTML = '';
+    
+    const btn_section = document.getElementById('btn-section');
+    btn_section.innerHTML = '';
+    
+    const edit_section = document.getElementById('edit-section');
+    edit_section.style.display = 'none';
+}
+
+function displayInitialCollection() {
+    const list_section = document.getElementById('list-section');
+    list_section.innerHTML = '';
+
+    const edit_section = document.getElementById('edit-section');
+    edit_section.style.display = 'none';
+}
 
 function showDeck(deck, index) {    
     showCard(deck[index]);
@@ -73,6 +118,9 @@ function showDeck(deck, index) {
     addEditBtn();
     const edit_btn = document.getElementById('edit-btn');
     edit_btn.addEventListener('click', () => {
+        // Adjust page display:
+        document.getElementById('card-section').innerHTML = '';
+        document.getElementById('btn-section').innerHTML = '';
         editCard(deck, index);
     })
 
@@ -84,6 +132,41 @@ function showDeck(deck, index) {
             deleteCard(deck, index);
         }
     })
+}
+
+function listDeck(deck) {
+    const list_section = document.getElementById('list-section');
+
+    const list_header = document.createElement('div');
+    list_section.append(list_header);
+
+    const list_name = document.createElement('h5');
+    list_name.innerHTML = deck[0]['deck'];
+    list_header.append(list_name);
+
+    const archive_btn = document.createElement('button');
+    archive_btn.id = 'archive-btn';
+    archive_btn.innerHTML = 'Archive deck';
+    list_header.append(archive_btn);
+
+    const list = document.createElement('ol');
+    list_section.append(list);
+    
+    for (let i = 0; i < deck.length; i++) {
+        let list_element = document.createElement('li');
+
+        let list_link = document.createElement('a');
+        list_link.setAttribute('href', '#');
+        list_link.innerHTML = `${deck[i]['front']}`
+
+        list_element.append(list_link);
+        list.append(list_element);
+
+        list_element.addEventListener('click', (event) => {
+            event.preventDefault();
+            editCard(deck, i);
+        })
+    }
 }
 
 function showCard(card) {
@@ -193,10 +276,6 @@ function addDeleteBtn() {
 }
 
 function editCard(deck, index) {
-    // Adjust page display:
-    document.getElementById('card-section').innerHTML = '';
-    document.getElementById('btn-section').innerHTML = '';
-
     // Display form section:
     const edit_section = document.getElementById('edit-section');
     edit_section.style.display = 'block';
