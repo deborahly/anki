@@ -19,6 +19,15 @@ def index(request):
     })
 
 @login_required
+def play(request):
+    decks = CardDeck.objects.filter(user=request.user)
+    basic_card_form = BasicCardForm
+    return render(request, 'anki/play.html', {
+        'decks': decks,
+        'basic_card_form': basic_card_form
+    })
+
+@login_required
 def collection(request):
     decks = CardDeck.objects.filter(user=request.user)
     basic_card_form = BasicCardForm

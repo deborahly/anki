@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('play', views.play, name='play'),
     path('collection', views.collection, name='collection'),
     path('retrieve/', views.retrieve, name='retrieve'),
     path('create/<str:type>', views.create, name='create'),
