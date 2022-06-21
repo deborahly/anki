@@ -1,24 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // When Index page is loaded:
+    // When COLLECTION page is loaded:
     if (document.title === 'Collection') {
         // Show deck when selected:
         document.querySelectorAll('.deck').forEach(deck => {
             deck.addEventListener('click', event => {                
-                // Update page display:
-                document.getElementById('deck-section').style.display = 'none';
-                document.getElementById('card-section').style.display = 'block';
-                
                 const name = deck.innerHTML;
                 
                 const fetchDeck = async (name) => {
                     try {
                         const response = await fetch(`http://127.0.0.1:8000/retrieve/?type=basic&name=${name}`);
                         const data = await response.json();
-                        current_deck = await data.cards;
+                        deck = await data.cards;
+                        showDeck(deck, 0);
                     } catch (error) {
                         console.error(error);
                     } 
-                    return showDeck(current_deck, 0);
                 }
                 fetchDeck(name);
             })
@@ -72,59 +68,14 @@ function showDeck(deck, index) {
             }
         }
     }
+
+    // Add edit and delete button for all cards:
+    addEditBtn();
+    const edit_btn = document.getElementById('edit-btn');
+    edit_btn.addEventListener('click', () => {
+        editCard(deck, index);
+    })
 }
-
-// function fetchDeck(name) {
-//     fetch(`http://127.0.0.1:8000/retrieve/?type=basic&name=${name}`)
-//     .then(response => response.json())
-//     .then(data => {
-        // const deck = data.cards;
-        // var card_index = 0;
-
-        // // If card 1 of 1:
-        // if (card_index === 0 && deck.length === 1) {
-        //     showCard(deck[card_index]);
-        // } else {
-        //     // If card 1 of many:
-        //     showCard(deck[card_index]);
-        //     addNextBtn();
-        //     const next_btn = document.getElementById('next-btn');   
-        //     next_btn.addEventListener('click', () => {
-        //         card_index++;
-        //         showCard(deck[card_index]);
-        //     }), {once: true};
-        // }
-            // } else {
-            //     // Last card of cards:
-            //     if (card_index === deck.lenght - 1) {
-            //         addPreviousBtn();
-            //         const previous_btn = document.getElementById('previous-btn');
-            //         previous_btn.addEventListener('click', () => {
-            //             card_index--;
-            //             showCard(deck[card_index]);
-            //         });              
-            //     } else {
-            //         // Card x of cards:
-            //         addNextBtn();
-            //         addPreviousBtn();
-            //         const next_btn = document.getElementById('next-btn');
-            //         next_btn.addEventListener('click', () => {
-            //             card_index++;
-            //             showCard(deck[card_index]);
-            //         });
-            //         const previous_btn = document.getElementById('previous-btn');
-            //         previous_btn.addEventListener('click', () => {
-            //             card_index--;
-            //             showCard(deck[card_index]);
-            //         });
-            //     }
-            // }
-//     })
-//     .catch((error) => {
-//         console.error(`Error: ${error}`);
-//     });
-// }
-
 
 function showCard(card) {
     // Clean card section
@@ -212,4 +163,76 @@ function addNextBtn() {
 
     const btn_section = document.getElementById('btn-section');
     btn_section.append(next_btn);
+}
+
+function addEditBtn() {
+    const edit_btn = document.createElement('button');
+    edit_btn.id = 'edit-btn';
+    edit_btn.innerHTML = 'Edit card';
+
+    const btn_section = document.getElementById('btn-section');
+    btn_section.append(edit_btn);
+}
+
+function editCard(deck, index) {
+    // Adjust page display:
+    document.getElementById('card-section').innerHTML = '';
+    document.getElementById('btn-section').innerHTML = '';
+
+    // Display form section:
+    const edit_section = document.getElementById('edit-section');
+    edit_section.style.display = 'block';
+
+    // Pre-fill form with current data:
+    document.getElementById('grammar-class-field').value = deck[index]['grammar_class'];
+    document.getElementById('easiness-field').value = deck[index]['easiness'];
+    document.getElementById('front-field').value = deck[index]['front'];
+    document.getElementById('front-extra-field').value = deck[index]['front_extra'];
+    document.getElementById('back-main-field').value = deck[index]['back_main'];
+    document.getElementById('back-alt-1-field').value = deck[index]['back_alt_1'];
+    document.getElementById('back-alt-2-field').value = deck[index]['back_alt_2'];
+    document.getElementById('deck-field').value = deck[index]['deck'];
+
+    // Get form:
+    const form = document.getElementById('basic-card-form');
+    // form.append('id', `${deck[index]['id']}`)
+
+    form.onsubmit = async (event) => {
+        event.preventDefault();
+        const csrftoken = getCookie('csrftoken');
+        const id_field = document.getElementById('id-field')
+        id_field.value = deck[index]['id'];
+        id_field.name = 'id';
+
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/update/card`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                body: new FormData(form)
+            })
+            const data = await response.json();
+            deck[index] = await data.card;
+            showDeck(deck, index);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
