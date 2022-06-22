@@ -14,6 +14,14 @@
         </ul>
     </section>
 
+    <section id="archive-section" style="display: none;">
+        <form action="{% url 'archive' %}" method="post" id="archive-form">
+            {% csrf_token %}
+            <input type="hidden" name="deck-to-archive" id="deck-to-archive">
+            <input type="submit" value="Archive list">
+        </form>
+    </section>
+
     <section id="list-section">
     </section>
 

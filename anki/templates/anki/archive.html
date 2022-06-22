@@ -1,0 +1,19 @@
+{% extends 'anki/layout.html' %}
+
+{% block title %}Archive{% endblock %}
+
+{% block main %}
+    <div id="message">
+        {{ message }}
+    </div>
+
+    <ul>
+        {% for deck in archived_decks %}
+            <li id="li-{{ deck.name }}">
+                <span class="archived_deck">{{ deck.name }}</span>
+                <button type="button" class="unarchive-btn" data-name="{{ deck.name }}">Unarchive</button>
+                <button type="button" class="delete-deck-btn" data-name="{{ deck.name }}">Delete</button>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
