@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // When MY COLLECTION page is loaded:
     if (document.title === 'My collection') {
-        // Show deck when selected:
+        // List cards on deck when selected:
         document.querySelectorAll('.deck').forEach(element => {
             element.addEventListener('click', () => {
                 displayInitialCollection();
@@ -43,6 +43,38 @@ document.addEventListener('DOMContentLoaded', function() {
                     } 
                 }
                 fetchDeck(name);
+            })
+        }); 
+    }
+
+    // When ARCHIVE page is loaded:
+    if (document.title === 'Archive') {
+        // Unarchive when button is clicked:
+        document.querySelectorAll('.unarchive-btn').forEach(element => {
+            element.addEventListener('click', () => {                
+                const csrftoken = getCookie('csrftoken');
+                
+                const name = element.dataset.name;
+                
+                const unarchiveDeck = async (name) => {
+                    try {
+                        const response = await fetch(`http://127.0.0.1:8000/unarchive`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrftoken,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({name: name})
+                        })
+                        if (response.ok) {
+                            const list_element = document.getElementById(`li-${name}`);
+                            list_element.remove();
+                        }
+                    } catch (error) {
+                        console.error(error);
+                    } 
+                }
+                unarchiveDeck(name);
             })
         }); 
     }
@@ -65,6 +97,9 @@ function displayInitialCollection() {
 
     const edit_section = document.getElementById('edit-section');
     edit_section.style.display = 'none';
+
+    const archive_section = document.getElementById('archive-section');
+    archive_section.style.display = 'none';
 }
 
 function showDeck(deck, index) {    
@@ -134,20 +169,16 @@ function showDeck(deck, index) {
     })
 }
 
-function listDeck(deck) {
+function listDeck(deck) { 
     const list_section = document.getElementById('list-section');
 
     const list_header = document.createElement('div');
+    list_header.id = 'list-header';
     list_section.append(list_header);
 
     const list_name = document.createElement('h5');
     list_name.innerHTML = deck[0]['deck'];
     list_header.append(list_name);
-
-    const archive_btn = document.createElement('button');
-    archive_btn.id = 'archive-btn';
-    archive_btn.innerHTML = 'Archive deck';
-    list_header.append(archive_btn);
 
     const list = document.createElement('ol');
     list_section.append(list);
@@ -167,6 +198,7 @@ function listDeck(deck) {
             editCard(deck, i);
         })
     }
+    updateArchiveForm(deck[0]['deck']);
 }
 
 function showCard(card) {
@@ -273,6 +305,15 @@ function addDeleteBtn() {
 
     const btn_section = document.getElementById('btn-section');
     btn_section.append(delete_btn);
+}
+
+function updateArchiveForm(deck_name) {
+    // Display form section:
+    const archive_section = document.getElementById('archive-section');
+    archive_section.style.display = 'block';
+    // Inform deck to be archived:
+    const deck_to_archive = document.getElementById('deck-to-archive');
+    deck_to_archive.value = deck_name;
 }
 
 function editCard(deck, index) {
