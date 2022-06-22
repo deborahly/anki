@@ -16,6 +16,7 @@ class CardDeck(TimeStampedModel):
     name =  models.CharField(max_length=16, primary_key=True, verbose_name='File name', editable=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='files', editable=False, blank=False, null=False)
     easiness = models.CharField(max_length=16, verbose_name='Overall easiness', editable=True, blank=True, null=True)
+    archived = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.name}'

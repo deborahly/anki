@@ -11,6 +11,9 @@ urlpatterns = [
     # For cards only:
     path('update/card', views.update_card, name='update_card'),
     path('delete/card', views.delete_card, name='delete_card'),
+    # For decks only:
+    path('archive', views.archive, name='archive'),
+    path('unarchive', views.unarchive, name='unarchive'),
     # Login, register, logout:  
     path('login', views.login_view, name='login'),
     path('register', views.register_view, name='register'),

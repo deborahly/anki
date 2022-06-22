@@ -1,9 +1,9 @@
 import json
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
+from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
 from django.urls import reverse
 from .models import BasicCard, User, CardDeck
 from .forms import BasicCardForm, CardDeckForm
@@ -20,7 +20,7 @@ def index(request):
 
 @login_required
 def play(request):
-    decks = CardDeck.objects.filter(user=request.user)
+    decks = CardDeck.objects.filter(user=request.user, archived=False)
     basic_card_form = BasicCardForm
     return render(request, 'anki/play.html', {
         'decks': decks,
@@ -29,7 +29,7 @@ def play(request):
 
 @login_required
 def collection(request):
-    decks = CardDeck.objects.filter(user=request.user)
+    decks = CardDeck.objects.filter(user=request.user, archived=False)
     basic_card_form = BasicCardForm
     return render(request, 'anki/collection.html', {
         'decks': decks,
@@ -98,6 +98,38 @@ def delete_card(request):
             }, status=200)
         except:
             return Http404
+
+@login_required
+def archive(request):
+    if request.method == 'POST':
+        deck_name = request.POST['deck-to-archive']
+        if deck_name != 'Generic':
+            deck = CardDeck.objects.get(pk=deck_name)
+            deck.archived = True
+            deck.save()
+            return HttpResponseRedirect(reverse(archive))
+        else:
+            archived_decks = CardDeck.objects.filter(user=request.user, archived=True)
+            return render(request, 'anki/archive.html', {
+                'archived_decks': archived_decks,
+                'message': 'Cannot archive deck Generic.'
+            })
+    
+    archived_decks = CardDeck.objects.filter(user=request.user, archived=True)
+    return render(request, 'anki/archive.html', {
+        'archived_decks': archived_decks
+    })
+
+def unarchive(request):
+    if request.method != 'POST':
+        return HttpResponseBadRequest
+    else:
+        data = json.loads(request.body)
+        deck_name = data.get('name', '')
+        deck = CardDeck.objects.get(pk=deck_name)
+        deck.archived = False
+        deck.save()
+        return HttpResponse(status=200)
 
 def login_view(request):
     if request.method == 'POST':
