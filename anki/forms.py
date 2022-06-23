@@ -15,6 +15,11 @@ class BasicCardForm(forms.ModelForm):
             'back_alt_2': forms.TextInput(attrs={'id': 'back-alt-2-field'}),
             'deck': forms.Select(attrs={'id': 'deck-field'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(BasicCardForm, self).__init__(*args, **kwargs)
+        self.fields['deck'].queryset = CardDeck.objects.filter(archived=False)
 
 class CardDeckForm(forms.ModelForm):
     class Meta:
