@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const response = await fetch(`http://127.0.0.1:8000/retrieve/?type=basic&name=${name}`);
                         const data = await response.json();
                         deck = await data.cards;
-                        listDeck(deck);
+                        listDeck(deck, name);
                     } catch (error) {
                         console.error(error);
                     } 
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const unarchiveDeck = async (name) => {
                     try {
-                        const response = await fetch(`http://127.0.0.1:8000/unarchive`, {
+                        const response = await fetch('http://127.0.0.1:8000/unarchive', {
                             method: 'POST',
                             headers: {
                                 'X-CSRFToken': csrftoken,
@@ -75,6 +75,34 @@ document.addEventListener('DOMContentLoaded', function() {
                     } 
                 }
                 unarchiveDeck(name);
+            })
+        }); 
+        // Delete when button is clicked:
+        document.querySelectorAll('.delete-deck-btn').forEach(element => {
+            element.addEventListener('click', () => {                
+                const csrftoken = getCookie('csrftoken');
+                
+                const name = element.dataset.name;
+                
+                const deleteDeck = async (name) => {
+                    try {
+                        const response = await fetch('http://127.0.0.1:8000/delete/deck', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrftoken,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({name: name})
+                        })
+                        if (response.ok) {
+                            const list_element = document.getElementById(`li-${name}`);
+                            list_element.remove();
+                        }
+                    } catch (error) {
+                        console.error(error);
+                    } 
+                }
+                deleteDeck(name);
             })
         }); 
     }
@@ -103,102 +131,112 @@ function displayInitialCollection() {
 }
 
 function showDeck(deck, index) {    
-    showCard(deck[index]);
-    
-    // Clear out button section:  
-    const btn_section = document.getElementById('btn-section');
-    btn_section.innerHTML = '';
-
-    // If card 1 of cards:
-    if (index === 0 && deck.length > 1) {
-            addNextBtn();
-            
-            const next_btn = document.getElementById('next-btn');
-            next_btn.addEventListener('click', () => {
-                index++;
-                showDeck(deck, index);
-            }, {once: true});
+    if (deck.length === 0) {
+        alert('This deck is empty.');
     } else {
-        // If last card of cards:
-        if (index !== 0 && index === deck.length - 1) {
-            addPreviousBtn();
-            
-            const previous_btn = document.getElementById('previous-btn');
-            previous_btn.addEventListener('click', () => {
-                index--;
-                showDeck(deck, index);
-            }, {once: true});     
-        } else {
-            // Card x of cards:
-            if (index !== 0 && index !== deck.length - 1) {
-                addPreviousBtn();
+        showCard(deck[index]);
+    
+        // Clear out button section:  
+        const btn_section = document.getElementById('btn-section');
+        btn_section.innerHTML = '';
+    
+        // If card 1 of cards:
+        if (index === 0 && deck.length > 1) {
                 addNextBtn();
-
-                const previous_btn = document.getElementById('previous-btn');
-                previous_btn.addEventListener('click', () => {
-                    index--;
-                    showDeck(deck, index);
-                }, {once: true});
-
+                
                 const next_btn = document.getElementById('next-btn');
                 next_btn.addEventListener('click', () => {
                     index++;
                     showDeck(deck, index);
                 }, {once: true});
+        } else {
+            // If last card of cards:
+            if (index !== 0 && index === deck.length - 1) {
+                addPreviousBtn();
+                
+                const previous_btn = document.getElementById('previous-btn');
+                previous_btn.addEventListener('click', () => {
+                    index--;
+                    showDeck(deck, index);
+                }, {once: true});     
+            } else {
+                // Card x of cards:
+                if (index !== 0 && index !== deck.length - 1) {
+                    addPreviousBtn();
+                    addNextBtn();
+    
+                    const previous_btn = document.getElementById('previous-btn');
+                    previous_btn.addEventListener('click', () => {
+                        index--;
+                        showDeck(deck, index);
+                    }, {once: true});
+    
+                    const next_btn = document.getElementById('next-btn');
+                    next_btn.addEventListener('click', () => {
+                        index++;
+                        showDeck(deck, index);
+                    }, {once: true});
+                }
             }
         }
-    }
-
-    // Add edit and delete button for all cards:
-    addEditBtn();
-    const edit_btn = document.getElementById('edit-btn');
-    edit_btn.addEventListener('click', () => {
-        // Adjust page display:
-        document.getElementById('card-section').innerHTML = '';
-        document.getElementById('btn-section').innerHTML = '';
-        editCard(deck, index);
-    })
-
-    addDeleteBtn();
-    const delete_btn = document.getElementById('delete-btn');
-    delete_btn.addEventListener('click', () => {
-        var result = confirm('Are you sure to delete?');
-        if (result) {
-            deleteCard(deck, index);
-        }
-    })
-}
-
-function listDeck(deck) { 
-    const list_section = document.getElementById('list-section');
-
-    const list_header = document.createElement('div');
-    list_header.id = 'list-header';
-    list_section.append(list_header);
-
-    const list_name = document.createElement('h5');
-    list_name.innerHTML = deck[0]['deck'];
-    list_header.append(list_name);
-
-    const list = document.createElement('ol');
-    list_section.append(list);
     
-    for (let i = 0; i < deck.length; i++) {
-        let list_element = document.createElement('li');
-
-        let list_link = document.createElement('a');
-        list_link.setAttribute('href', '#');
-        list_link.innerHTML = `${deck[i]['front']}`
-
-        list_element.append(list_link);
-        list.append(list_element);
-
-        list_element.addEventListener('click', (event) => {
-            event.preventDefault();
-            editCard(deck, i);
+        // Add edit and delete button for all cards:
+        addEditBtn();
+        const edit_btn = document.getElementById('edit-btn');
+        edit_btn.addEventListener('click', () => {
+            // Adjust page display:
+            document.getElementById('card-section').innerHTML = '';
+            document.getElementById('btn-section').innerHTML = '';
+            editCard(deck, index);
+        })
+    
+        addDeleteBtn();
+        const delete_btn = document.getElementById('delete-btn');
+        delete_btn.addEventListener('click', () => {
+            var result = confirm('Are you sure to delete?');
+            if (result) {
+                deleteCard(deck, index);
+            }
         })
     }
-    updateArchiveForm(deck[0]['deck']);
+}
+
+function listDeck(deck, name) { 
+    if (deck.length === 0) {
+        updateArchiveForm(name);
+    } else {
+        const list_section = document.getElementById('list-section');
+
+        const list_header = document.createElement('div');
+        list_header.id = 'list-header';
+        list_section.append(list_header);
+    
+        const list_name = document.createElement('h5');
+        list_name.innerHTML = name;
+        list_header.append(list_name);
+    
+        const list = document.createElement('ol');
+        list_section.append(list);
+        
+        for (let i = 0; i < deck.length; i++) {
+            let list_element = document.createElement('li');
+    
+            let list_link = document.createElement('a');
+            list_link.setAttribute('href', '#');
+            list_link.innerHTML = `${deck[i]['front']}`
+    
+            list_element.append(list_link);
+            list.append(list_element);
+    
+            list_element.addEventListener('click', (event) => {
+                event.preventDefault();
+                editCard(deck, i);
+            })
+        }
+        if (name != 'Generic') {
+            updateArchiveForm(name);
+        }
+    }
 }
 
 function showCard(card) {

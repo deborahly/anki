@@ -14,6 +14,7 @@ urlpatterns = [
     # For decks only:
     path('archive', views.archive, name='archive'),
     path('unarchive', views.unarchive, name='unarchive'),
+    path('delete/deck', views.delete_deck, name='delete_deck'),
     # Login, register, logout:  
     path('login', views.login_view, name='login'),
     path('register', views.register_view, name='register'),

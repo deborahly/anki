@@ -120,6 +120,7 @@ def archive(request):
         'archived_decks': archived_decks
     })
 
+@login_required
 def unarchive(request):
     if request.method != 'POST':
         return HttpResponseBadRequest
@@ -129,6 +130,16 @@ def unarchive(request):
         deck = CardDeck.objects.get(pk=deck_name)
         deck.archived = False
         deck.save()
+        return HttpResponse(status=200)
+
+def delete_deck(request):
+    if request.method != 'POST':
+        return HttpResponseBadRequest
+    else:
+        data = json.loads(request.body)
+        deck_name = data.get('name', '')
+        deck = CardDeck.objects.get(pk=deck_name)
+        deck.delete()
         return HttpResponse(status=200)
 
 def login_view(request):
