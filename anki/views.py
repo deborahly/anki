@@ -35,16 +35,21 @@ def collection(request):
 @login_required
 def retrieve(request):
     type = request.GET.get('type', '')
-    name = request.GET.get('name', '')
+    id = request.GET.get('id', '')
     if type == 'basic':
-        deck = CardDeck.objects.get(name=name, user=request.user)
+        deck = CardDeck.objects.get(pk=id, user=request.user)
         cards = deck.content.all()
+        
         card_list = []
         for card in cards:
             card_dict = card.serialize()
             card_list.append(card_dict)
+        deck = deck.serialize()
 
-        return JsonResponse({'cards': card_list}, status=200)
+        return JsonResponse({
+            'cards': card_list,
+            'deck': deck
+            }, status=200)
 
 @login_required
 def create(request, type):
@@ -56,13 +61,13 @@ def create(request, type):
             if form.is_valid():
                 form.instance.user = request.user
                 form.save()
-                return HttpResponseRedirect(reverse('index'))
+                return HttpResponseRedirect(reverse('collection'))
         elif type == 'basic card':
             form = BasicCardForm(request.POST, user=request.user)
             if form.is_valid():
                 form.instance.user = request.user
                 form.save()
-                return HttpResponseRedirect(reverse('index'))
+                return HttpResponseRedirect(reverse('collection'))
 
 @login_required
 def update_card(request):
@@ -95,6 +100,7 @@ def delete_card(request):
         except:
             return Http404
 
+@login_required
 def easiness_card(request): 
     if request.method != 'PUT':
         return HttpResponseBadRequest
@@ -115,8 +121,8 @@ def easiness_card(request):
 @login_required
 def archive(request):
     if request.method == 'POST':
-        deck_name = request.POST['deck-to-archive']
-        deck = CardDeck.objects.get(pk=deck_name)
+        id = request.POST['deck-to-archive']
+        deck = CardDeck.objects.get(pk=id)
         deck.archived = True
         deck.save()
         return HttpResponseRedirect(reverse(archive))
@@ -132,8 +138,8 @@ def unarchive(request):
         return HttpResponseBadRequest
     else:
         data = json.loads(request.body)
-        deck_name = data.get('name', '')
-        deck = CardDeck.objects.get(pk=deck_name)
+        id = data.get('deck_id', '')
+        deck = CardDeck.objects.get(pk=id)
         deck.archived = False
         deck.save()
         return HttpResponse(status=200)
@@ -144,8 +150,8 @@ def delete_deck(request):
         return HttpResponseBadRequest
     else:
         data = json.loads(request.body)
-        deck_name = data.get('name', '')
-        deck = CardDeck.objects.get(pk=deck_name)
+        id = data.get('deck_id', '')
+        deck = CardDeck.objects.get(pk=id)
         deck.delete()
         return HttpResponse(status=200)
 

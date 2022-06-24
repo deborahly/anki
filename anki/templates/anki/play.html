@@ -9,7 +9,7 @@
         <h5>My decks</h5>
         <ul>
             {% for deck in decks %}
-                <a href="#" class="deck">{{ deck.name }}</a>
+                <a href="#" id="id-{{ deck.id }}" data-id="{{ deck.id }}" class="deck">{{ deck.name }}</a>
             {% endfor %}
         </ul>
     </section>
