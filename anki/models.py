@@ -43,7 +43,7 @@ class BasicCard(TimeStampedModel):
     back_main = models.CharField(max_length=32, verbose_name='Back-main', editable=True, blank=False, null=False)
     back_alt_1 =  models.CharField(max_length=32, verbose_name='Back-alternative 1', editable=True, blank=True, null=True)
     back_alt_2 = models.CharField(max_length=32, verbose_name='Back-alternative 2', editable=True, blank=True, null=True)
-    deck = models.ForeignKey(CardDeck, to_field='name', on_delete=models.CASCADE, related_name='content', editable=True, blank=False, null=False, default='Generic')
+    deck = models.ForeignKey(CardDeck, to_field='name', on_delete=models.CASCADE, related_name='content', editable=True, blank=False, null=False)
 
     def __str__(self):
         return f'{self.front}'
