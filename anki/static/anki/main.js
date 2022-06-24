@@ -80,29 +80,32 @@ document.addEventListener('DOMContentLoaded', function() {
         // Delete when button is clicked:
         document.querySelectorAll('.delete-deck-btn').forEach(element => {
             element.addEventListener('click', () => {                
-                const csrftoken = getCookie('csrftoken');
+                var result = confirm('Are you sure to delete?');
+                if (result) {
+                    const csrftoken = getCookie('csrftoken');
                 
-                const name = element.dataset.name;
-                
-                const deleteDeck = async (name) => {
-                    try {
-                        const response = await fetch('http://127.0.0.1:8000/delete/deck', {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': csrftoken,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({name: name})
-                        })
-                        if (response.ok) {
-                            const list_element = document.getElementById(`li-${name}`);
-                            list_element.remove();
-                        }
-                    } catch (error) {
-                        console.error(error);
-                    } 
-                }
-                deleteDeck(name);
+                    const name = element.dataset.name;
+                    
+                    const deleteDeck = async (name) => {
+                        try {
+                            const response = await fetch('http://127.0.0.1:8000/delete/deck', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': csrftoken,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({name: name})
+                            })
+                            if (response.ok) {
+                                const list_element = document.getElementById(`li-${name}`);
+                                list_element.remove();
+                            }
+                        } catch (error) {
+                            console.error(error);
+                        } 
+                    }
+                    deleteDeck(name);
+                } 
             })
         }); 
     }
@@ -134,7 +137,7 @@ function showDeck(deck, index) {
     if (deck.length === 0) {
         alert('This deck is empty.');
     } else {
-        showCard(deck[index]);
+        showCard(deck, index);
     
         // Clear out button section:  
         const btn_section = document.getElementById('btn-section');
@@ -233,13 +236,11 @@ function listDeck(deck, name) {
                 editCard(deck, i);
             })
         }
-        if (name != 'Generic') {
-            updateArchiveForm(name);
-        }
+        updateArchiveForm(name);
     }
 }
 
-function showCard(card) {
+function showCard(deck, index) {
     // Clean card section
     const card_section = document.getElementById('card-section');
     card_section.innerHTML = '';
@@ -251,15 +252,15 @@ function showCard(card) {
 
     // Create elements:
     const grammar_class = document.createElement('div');
-    grammar_class.innerHTML = card['grammar_class'];
+    grammar_class.innerHTML = deck[index]['grammar_class'];
     grammar_class.classList.add('grammar-class');
 
     const front = document.createElement('div');
-    front.innerHTML = card['front'];
+    front.innerHTML = deck[index]['front'];
     front.classList.add('front');
 
     const front_extra = document.createElement('div');
-    front_extra.innerHTML = card['front_extra'];
+    front_extra.innerHTML = deck[index]['front_extra'];
     front_extra.classList.add('front-extra');
 
     // Append everything:
@@ -270,11 +271,12 @@ function showCard(card) {
 
     // Add event listener to turn card when clicked:
     card_front.addEventListener('click', () => {
-        showCardBack(card);
+        showCardBack(deck, index);
+        addEasinessBtn(deck, index);
     }, {once: true});
 }
 
-function showCardBack(card) {
+function showCardBack(deck, index) {
     // Clean card section
     const card_section = document.getElementById('card-section');
     card_section.innerHTML = '';
@@ -286,15 +288,15 @@ function showCardBack(card) {
 
     // Create elements:
     const back_main = document.createElement('div');
-    back_main.innerHTML = card['back_main'];
+    back_main.innerHTML = deck[index]['back_main'];
     back_main.classList.add('back-main')
 
     const back_alt_1 = document.createElement('div');
-    back_alt_1.innerHTML = card['back_alt_1'];
+    back_alt_1.innerHTML = deck[index]['back_alt_1'];
     back_alt_1.classList.add('back-alt-1')
 
     const back_alt_2 = document.createElement('div');
-    back_alt_2.innerHTML = card['back_alt_2'];
+    back_alt_2.innerHTML = deck[index]['back_alt_2'];
     back_alt_2.classList.add('back-alt-2')
 
     // Append everything:
@@ -305,13 +307,14 @@ function showCardBack(card) {
 
     // Add event listener to turn card when clicked:
     card_back.addEventListener('click', () => {
-        showCard(card);
+        showCard(deck, index);
     }, {once: true});
 }
 
 function addPreviousBtn() {
     const previous_btn = document.createElement('button');
     previous_btn.id = 'previous-btn';
+    previous_btn.setAttribute('type', 'button');
     previous_btn.innerHTML = 'Previous card';
 
     const btn_section = document.getElementById('btn-section');
@@ -321,6 +324,7 @@ function addPreviousBtn() {
 function addNextBtn() {
     const next_btn = document.createElement('button');
     next_btn.id = 'next-btn';
+    next_btn.setAttribute('type', 'button');
     next_btn.innerHTML = 'Next card';
 
     const btn_section = document.getElementById('btn-section');
@@ -330,6 +334,7 @@ function addNextBtn() {
 function addEditBtn() {
     const edit_btn = document.createElement('button');
     edit_btn.id = 'edit-btn';
+    edit_btn.setAttribute('type', 'button');
     edit_btn.innerHTML = 'Edit card';
 
     const btn_section = document.getElementById('btn-section');
@@ -339,10 +344,46 @@ function addEditBtn() {
 function addDeleteBtn() {
     const delete_btn = document.createElement('button');
     delete_btn.id = 'delete-btn';
+    delete_btn.setAttribute('type', 'button');
     delete_btn.innerHTML = 'Delete card';
 
     const btn_section = document.getElementById('btn-section');
     btn_section.append(delete_btn);
+}
+
+function addEasinessBtn(deck, index) {
+    const cake_btn = document.createElement('button');
+    cake_btn.id = 'cake-btn';
+    cake_btn.dataset.value = 'PIECE OF CAKE';
+    cake_btn.setAttribute('type', 'button');
+    cake_btn.innerHTML = 'Piece of cake!';
+
+    const normal_btn = document.createElement('button');
+    normal_btn.id = 'normal-btn';
+    normal_btn.dataset.value = 'NORMAL';
+    normal_btn.setAttribute('type', 'button');
+    normal_btn.innerHTML = 'Normal';
+
+    const challenging_btn = document.createElement('button');
+    challenging_btn.id = 'challenging-btn';
+    challenging_btn.dataset.value = 'CHALLENGING';
+    challenging_btn.setAttribute('type', 'button');
+    challenging_btn.innerHTML = 'Challenging';
+
+    const btn_section = document.getElementById('btn-section');
+    btn_section.append(cake_btn);
+    btn_section.append(normal_btn);
+    btn_section.append(challenging_btn);
+
+    // const cake_btn = document.getElementById('cake-btn');
+    // const normal_btn = document.getElementById('normal-btn');
+    // const challenging_btn = document.getElementById('challenging-btn');
+    [cake_btn, normal_btn, challenging_btn].forEach(element => {
+        element.addEventListener('click', (event) => {
+            const easiness = event.target.dataset.value;
+            updateEasiness(easiness, deck, index);
+        })
+    })
 }
 
 function updateArchiveForm(deck_name) {
@@ -431,6 +472,37 @@ function deleteCard(deck, index) {
         }
     }
     newDeck();        
+}
+
+function updateEasiness(easiness, deck, index) {
+    const csrftoken = getCookie('csrftoken');
+    
+    const fetchCardEasiness = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/easiness/card', {
+                method: 'PUT',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id: deck[index]['id'], easiness: easiness})
+            })
+            if (response.ok) {
+                if (index < (deck.length - 1)) {
+                    showDeck(deck, (index + 1));
+                } else {
+                    // Clear out card section and btn section:  
+                    const card_section = document.getElementById('card-section');
+                    card_section.innerHTML = '';
+                    const btn_section = document.getElementById('btn-section');
+                    btn_section.innerHTML = '';
+                }
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    fetchCardEasiness();        
 }
 
 function getCookie(name) {

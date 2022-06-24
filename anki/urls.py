@@ -11,6 +11,7 @@ urlpatterns = [
     # For cards only:
     path('update/card', views.update_card, name='update_card'),
     path('delete/card', views.delete_card, name='delete_card'),
+    path('easiness/card', views.easiness_card, name='easiness_card'),
     # For decks only:
     path('archive', views.archive, name='archive'),
     path('unarchive', views.unarchive, name='unarchive'),
