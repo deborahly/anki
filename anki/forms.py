@@ -16,10 +16,9 @@ class BasicCardForm(forms.ModelForm):
             'deck': forms.Select(attrs={'id': 'deck-field'}),
         }
     
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
+    def __init__(self, user, *args, **kwargs):
         super(BasicCardForm, self).__init__(*args, **kwargs)
-        self.fields['deck'].queryset = CardDeck.objects.filter(archived=False)
+        self.fields['deck'].queryset = CardDeck.objects.filter(archived=False, user=user)
 
 class CardDeckForm(forms.ModelForm):
     class Meta:
