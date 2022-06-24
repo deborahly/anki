@@ -10,13 +10,7 @@ from .forms import BasicCardForm, CardDeckForm
 
 # Create your views here.
 def index(request):
-    basic_card_form = BasicCardForm(user=request.user)
-    deck_form = CardDeckForm
-
-    return render(request, 'anki/index.html', {
-        'basic_card_form': basic_card_form,
-        'deck_form': deck_form
-    })
+    return render(request, 'anki/index.html')
 
 @login_required
 def play(request):
@@ -30,10 +24,12 @@ def play(request):
 @login_required
 def collection(request):
     decks = CardDeck.objects.filter(user=request.user, archived=False)
-    basic_card_form = BasicCardForm
+    basic_card_form = BasicCardForm(user=request.user)
+    deck_form = CardDeckForm
     return render(request, 'anki/collection.html', {
         'decks': decks,
-        'basic_card_form': basic_card_form
+        'basic_card_form': basic_card_form,
+        'deck_form': deck_form
     })
 
 @login_required
@@ -62,7 +58,7 @@ def create(request, type):
                 form.save()
                 return HttpResponseRedirect(reverse('index'))
         elif type == 'basic card':
-            form = BasicCardForm(request.POST)
+            form = BasicCardForm(request.POST, user=request.user)
             if form.is_valid():
                 form.instance.user = request.user
                 form.save()
@@ -73,7 +69,7 @@ def update_card(request):
     if request.method != 'POST':
         return HttpResponseBadRequest
     else:
-        form = BasicCardForm(request.POST)
+        form = BasicCardForm(request.POST, user=request.user)
         id = int(request.POST['id'])
         if form.is_valid():
             card = BasicCard.objects.filter(id=id)
