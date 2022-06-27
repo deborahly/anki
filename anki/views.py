@@ -60,12 +60,16 @@ def create(request, type):
                 form.instance.user = request.user
                 form.save()
                 return HttpResponseRedirect(reverse('collection'))
+            else:
+                return Http404
         elif type == 'basic card':
             form = BasicCardForm(request.POST, user=request.user)
             if form.is_valid():
                 form.instance.user = request.user
                 form.save()
                 return HttpResponseRedirect(reverse('collection'))
+            else:
+                return Http404
 
 @login_required
 def update_card(request):
@@ -81,6 +85,8 @@ def update_card(request):
                 return JsonResponse({'card': card[0].serialize()})
             else:
                 return Http404
+        else:
+            return Http404
 
 @login_required
 def delete_card(request):
@@ -111,7 +117,7 @@ def easiness_card(request):
             card.easiness = easiness
             card.save()
             return JsonResponse({
-                'message': 'Card easiness updated.'
+                'message': 'Card easiness updated'
             }, status=200)
         except:
             return Http404
@@ -120,10 +126,13 @@ def easiness_card(request):
 def archive(request):
     if request.method == 'POST':
         id = request.POST['deck-to-archive']
-        deck = CardDeck.objects.get(pk=id)
-        deck.archived = True
-        deck.save()
-        return HttpResponseRedirect(reverse(archive))
+        try:
+            deck = CardDeck.objects.get(pk=id)
+            deck.archived = True
+            deck.save()
+            return HttpResponseRedirect(reverse('archive'))
+        except:
+            return Http404
     
     archived_decks = CardDeck.objects.filter(user=request.user, archived=True)
     return render(request, 'anki/archive.html', {
@@ -137,10 +146,15 @@ def unarchive(request):
     else:
         data = json.loads(request.body)
         id = data.get('deck_id', '')
-        deck = CardDeck.objects.get(pk=id)
-        deck.archived = False
-        deck.save()
-        return HttpResponse(status=200)
+        try:
+            deck = CardDeck.objects.get(pk=id)
+            deck.archived = False
+            deck.save()
+            return JsonResponse({
+                'message': 'Deck unarchived'
+            }, status=200)
+        except:
+            return Http404
 
 @login_required
 def delete_deck(request):
@@ -149,9 +163,14 @@ def delete_deck(request):
     else:
         data = json.loads(request.body)
         id = data.get('deck_id', '')
-        deck = CardDeck.objects.get(pk=id)
-        deck.delete()
-        return HttpResponse(status=200)
+        try:
+            deck = CardDeck.objects.get(pk=id)
+            deck.delete()
+            return JsonResponse({
+                'message': 'Deck deleted'
+            }, status=200)
+        except:
+            return Http404
 
 def login_view(request):
     if request.method == 'POST':
