@@ -10,7 +10,7 @@
     <ul>
         {% for deck in archived_decks %}
             <li id="li-{{ deck.id }}">
-                <span class="archived_deck">{{ deck.name }}</span>
+                <span class="archived-deck">{{ deck.name }}</span>
                 <button type="button" class="unarchive-btn" data-id="{{ deck.id }}">Unarchive</button>
                 <button type="button" class="delete-deck-btn" data-id="{{ deck.id }}">Delete</button>
             </li>
