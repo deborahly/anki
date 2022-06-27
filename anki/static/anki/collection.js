@@ -6,7 +6,7 @@ document.querySelectorAll('.deck').forEach(element => {
         
         const fetchDeck = async (deck_id) => {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/retrieve/?type=basic&id=${deck_id}`);
+                const response = await fetch(`http://127.0.0.1:8000/retrieve/?id=${deck_id}`);
                 const data = await response.json();
                 deck = await data.deck;
                 cards = await data.cards;
@@ -51,6 +51,7 @@ function listDeck(deck, cards) {
             let list_element = document.createElement('li');
     
             let list_link = document.createElement('a');
+            list_link.classList.add('card');
             list_link.setAttribute('href', '#');
             list_link.innerHTML = `${cards[i]['front']}`
     

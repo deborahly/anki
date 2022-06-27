@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const fetchDeck = async (deck_id) => {
                     try {
-                        const response = await fetch(`http://127.0.0.1:8000/retrieve/?type=basic&id=${deck_id}`);
+                        const response = await fetch(`http://127.0.0.1:8000/retrieve/?id=${deck_id}`);
                         const data = await response.json();
                         cards = await data.cards;
                         playDeck(cards, 0);
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const fetchDeck = async (deck_id) => {
                     try {
-                        const response = await fetch(`http://127.0.0.1:8000/retrieve/?type=basic&id=${deck_id}`);
+                        const response = await fetch(`http://127.0.0.1:8000/retrieve/?id=${deck_id}`);
                         const data = await response.json();
                         deck = await data.deck;
                         cards = await data.cards;

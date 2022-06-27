@@ -8,7 +8,7 @@ from django.urls import reverse
 from .models import BasicCard, User, CardDeck
 from .forms import BasicCardForm, CardDeckForm
 
-# Create your views here.
+
 def index(request):
     return render(request, 'anki/index.html')
 
@@ -34,22 +34,20 @@ def collection(request):
 
 @login_required
 def retrieve(request):
-    type = request.GET.get('type', '')
     id = request.GET.get('id', '')
-    if type == 'basic':
-        deck = CardDeck.objects.get(pk=id, user=request.user)
-        cards = deck.content.all()
-        
-        card_list = []
-        for card in cards:
-            card_dict = card.serialize()
-            card_list.append(card_dict)
-        deck = deck.serialize()
+    deck = CardDeck.objects.get(pk=id, user=request.user)
+    cards = deck.content.all()
+    
+    card_list = []
+    for card in cards:
+        card_dict = card.serialize()
+        card_list.append(card_dict)
+    deck = deck.serialize()
 
-        return JsonResponse({
-            'cards': card_list,
-            'deck': deck
-            }, status=200)
+    return JsonResponse({
+        'cards': card_list,
+        'deck': deck
+        }, status=200)
 
 @login_required
 def create(request, type):
