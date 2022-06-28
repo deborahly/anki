@@ -19,7 +19,20 @@ class BasicCardForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(BasicCardForm, self).__init__(*args, **kwargs)
-        self.fields['deck'].queryset = CardDeck.objects.filter(archived=False, user=user)
+        decks = CardDeck.objects.filter(archived=False, user=user)
+        tuple = ()
+        for deck in decks:
+            l = []
+            l.append(deck.id)
+            l.append(deck.name)
+            t = (*l,)
+            tuple = tuple + (t,)
+        self.fields['deck'].choices = tuple
+
+    # def __init__(self, *args, **kwargs):
+    #     user = kwargs.pop('user', None)
+    #     super(BasicCardForm, self).__init__(*args, **kwargs)
+    #     self.fields['deck'].queryset = CardDeck.objects.filter(archived=False, user=user)
 
 class CardDeckForm(forms.ModelForm):
     class Meta:
