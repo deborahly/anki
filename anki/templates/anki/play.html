@@ -5,10 +5,8 @@
 {% block title %}Play cards{% endblock %}
 
 {% block main %}
-    <div id="message">
-        {{ message }}
-    </div>
-    
+    <div id="message">{{ message }}</div>
+
     <section id="deck-section">
         <h5>My decks</h5>
         <ul>
@@ -18,11 +16,17 @@
         </ul>
     </section>
 
-    <section id="card-section">
+    <section id="option-section" style="display: none;">
+        <form action="#" id="quantity-form">
+            <label for="quantity">Enter card quantity (between 1 and deck total):</label>
+            <input type="number" id="quantity" name="quantity" min="1">
+            <input type="submit" value="Start">
+        </form>
     </section>
 
-    <section id="btn-section">
-    </section>
+    <section id="card-section"></section>
+
+    <section id="btn-section"></section>
 
     <section id="edit-section" style="display: none;">
         <h5>Edit card</h5>

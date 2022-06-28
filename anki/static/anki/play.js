@@ -2,51 +2,74 @@ document.querySelectorAll('.deck').forEach(element => {
     element.addEventListener('click', () => {                              
         displayInitialPlay();
 
+        // Get deck id:
         const deck_id = element.dataset.id;
         
-        const fetchDeck = async (deck_id) => {
+        // Show options if deck is not empty:
+        const checkDeck = async () => {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/retrieve/?id=${deck_id}`);
-                const data = await response.json();
-                cards = await data.cards;
-                playDeck(cards, 0);
+                const response = await fetchDeck(deck_id);
+                const cards = response['cards'];          
+                if (cards.length === 0) {
+                    message.innerHTML = 'This deck is empty.'; 
+                } else {
+                    const option_section = document.getElementById('option-section');
+                    option_section.style.display = 'block';
+
+                    // Update quantity:
+                    updateQuantity(deck_id);
+
+                    // If quantity is submitted:
+                    const quantity_form = document.getElementById('quantity-form');
+                    
+                    quantity_form.onsubmit = async (event) => {
+                        event.preventDefault();
+                        const quantity = document.getElementById('quantity').value;
+                        showCard(cards, 0, quantity);
+                    }
+                }
             } catch (error) {
                 console.error(error);
-            } 
+            }
         }
-        fetchDeck(deck_id);
+        checkDeck();
     })
 });
 
 function displayInitialPlay() {
+    const message = document.getElementById('message');
+    message.innerHTML = '';
+
+    const option_section = document.getElementById('option-section');
+    option_section.style.display = 'none';
+    
     const card_section = document.getElementById('card-section');
     card_section.innerHTML = '';
     
     const btn_section = document.getElementById('btn-section');
     btn_section.innerHTML = '';
-    
-    const edit_section = document.getElementById('edit-section');
-    edit_section.style.display = 'none';
 }
 
-function playDeck(cards, index) {    
-    let message = document.getElementById('message');
-        message.innerHTML = '';
-
-    if (cards.length === 0) {
-        message.innerHTML = 'This deck is empty.';
-    } else {
-        // Clear out button section:  
-        const btn_section = document.getElementById('btn-section');
-        btn_section.innerHTML = '';
-        showCard(cards, index);
-    }
+async function fetchDeck(deck_id) {
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/retrieve/?id=${deck_id}`);
+        const data = await response.json();
+        deck = await data.deck;
+        cards = await data.cards;
+        const response_dict = {
+            'deck': deck,
+            'cards': cards
+        }
+        return response_dict
+    } catch (error) {
+        console.error(error);
+    } 
 }
 
-function showCard(cards, index) {
-    // Clean card section
+function showCard(cards, index, quantity) {
+    displayInitialPlay();
+
     const card_section = document.getElementById('card-section');
-    card_section.innerHTML = '';
 
     // Create card front:
     const card_front = document.createElement('div');
@@ -74,12 +97,12 @@ function showCard(cards, index) {
 
     // Add event listener to turn card when clicked:
     card_front.addEventListener('click', () => {
-        showCardBack(cards, index);
-        addEasinessBtn(cards, index);
+        showCardBack(cards, index, quantity);
+        addEasinessBtn(cards, index, quantity);
     }, {once: true});
 }
 
-function showCardBack(cards, index) {
+function showCardBack(cards, index, quantity) {
     // Clean card section
     const card_section = document.getElementById('card-section');
     card_section.innerHTML = '';
@@ -110,11 +133,11 @@ function showCardBack(cards, index) {
 
     // Add event listener to turn card when clicked:
     card_back.addEventListener('click', () => {
-        playDeck(cards, index);
+        showCard(cards, index, quantity);
     }, {once: true});
 }
 
-function addEasinessBtn(cards, index) {
+function addEasinessBtn(cards, index, quantity) {
     const cake_btn = document.createElement('button');
     cake_btn.id = 'cake-btn';
     cake_btn.dataset.value = 'PIECE OF CAKE';
@@ -141,12 +164,12 @@ function addEasinessBtn(cards, index) {
     [cake_btn, normal_btn, challenging_btn].forEach(element => {
         element.addEventListener('click', (event) => {
             const easiness = event.target.dataset.value;
-            updateEasiness(easiness, cards, index);
+            updateEasiness(easiness, cards, index, quantity);
         })
     })
 }
 
-function updateEasiness(easiness, cards, index) {
+function updateEasiness(easiness, cards, index, quantity) {
     const csrftoken = getCookie('csrftoken');
     
     const fetchCardEasiness = async () => {
@@ -160,8 +183,8 @@ function updateEasiness(easiness, cards, index) {
                 body: JSON.stringify({id: cards[index]['id'], easiness: easiness})
             })
             if (response.ok) {
-                if (index < (cards.length - 1)) {
-                    playDeck(cards, (index + 1));
+                if (index < (quantity - 1) && index < (cards.length - 1)) {
+                    showCard(cards, (index + 1), quantity);
                 } else {
                     // Clear out card section and btn section:  
                     const card_section = document.getElementById('card-section');
@@ -178,4 +201,19 @@ function updateEasiness(easiness, cards, index) {
         }
     }
     fetchCardEasiness();        
+}
+
+function updateQuantity(deck_id) {
+    const fetchCardQuantity = async () => {
+        try {
+            const response = await fetchDeck(deck_id);
+            const cards = response['cards'];
+            let cards_max = cards.length;
+            let max = document.getElementById('quantity');
+            max.setAttribute('max', `${cards_max}`);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    fetchCardQuantity();
 }
