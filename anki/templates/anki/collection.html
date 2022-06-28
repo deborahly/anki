@@ -5,25 +5,54 @@
 {% block title %}My collection{% endblock %}
 
 {% block main %}
+    <div id="message">{{ message }}</div>
+
+    <section id="deck-form-section">
+        <h5>Create new deck</h5>
+            <form action="{% url 'create' 'deck' %}" method="post" id="deck-form">
+                {% csrf_token %}
+                {{ deck_form | crispy }}
+                <input type="submit" value="create">
+            </form>
+    </section>
+
     <section id="deck-section">
         <h5>My decks</h5>
         <ul>
             {% for deck in decks %}
-                <a href="#" id="id-{{ deck.id }}" data-id="{{ deck.id }}" class="deck">{{ deck.name }}</a>
+                <li><a href="#" class="deck" data-id="{{ deck.id }}">{{ deck.name }}</a></li>
+                <form action="{% url 'archive' %}" method="post" id="archive-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="deck-to-archive" id="deck-to-archive" value="{{ deck.id }}">
+                    <input type="submit" value="Archive">
+                </form>
             {% endfor %}
         </ul>
     </section>
 
-    <section id="archive-section" style="display: none;">
+    <!-- <section id="archive-section" style="display: none;">
         <form action="{% url 'archive' %}" method="post" id="archive-form">
             {% csrf_token %}
             <input type="hidden" name="deck-to-archive" id="deck-to-archive">
             <input type="submit" value="Archive list">
         </form>
+    </section> -->
+
+    <section id="option-section">
+        <nav id="option-nav"></nav>
+        <div id="option-area"></div>
+    </section>
+
+    <!-- <section id="info-section">        
+    </section>
+
+    <section id="card-section">
     </section>
 
     <section id="list-section">
-    </section>
+    </section> -->
+
+    <section id="btn-section"></section>
 
     <section id="edit-section" style="display: none;">
         <h5>Edit card</h5>
@@ -35,21 +64,12 @@
             </form>
     </section>
 
-    <section id="card-form-section">
+    <section id="card-form-section" style="display: none;">
         <h5>Create new card</h5>
-            <form action="{% url 'create' 'basic card' %}" method="post" id="basic-card-form">
+            <form action="#" method="post" id="basic-card-form">
                 {% csrf_token %}
                 {{ basic_card_form | crispy }}
                 <input type="submit" value="create">
-            </form>
-    </section>
-    
-    <section id="deck-form-section">
-        <h5>Create new deck</h5>
-            <form action="{% url 'create' 'deck' %}" method="post" id="deck-form">
-                {% csrf_token %}
-                {{ deck_form | crispy }}
-                <input type="submit" value="create">
-            </form>
+            </form> 
     </section>
 {% endblock %}

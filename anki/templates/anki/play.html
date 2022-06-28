@@ -5,11 +5,15 @@
 {% block title %}Play cards{% endblock %}
 
 {% block main %}
+    <div id="message">
+        {{ message }}
+    </div>
+    
     <section id="deck-section">
         <h5>My decks</h5>
         <ul>
             {% for deck in decks %}
-                <a href="#" id="id-{{ deck.id }}" data-id="{{ deck.id }}" class="deck">{{ deck.name }}</a>
+                <a href="#" class="deck" data-id="{{ deck.id }}" >{{ deck.name }}</a>
             {% endfor %}
         </ul>
     </section>
