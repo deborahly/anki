@@ -37,7 +37,6 @@ def retrieve(request):
     id = request.GET.get('id', '')
     deck = CardDeck.objects.get(pk=id, user=request.user)
     cards = deck.content.all()
-    
     card_list = []
     for card in cards:
         card_dict = card.serialize()
@@ -67,7 +66,10 @@ def create(request, type):
             if form.is_valid():
                 form.instance.user = request.user
                 form.save()
-                return HttpResponseRedirect(reverse('collection'))
+                return JsonResponse({
+                    'message': 'Card created'
+                    }, status=200)
+                # return HttpResponseRedirect(reverse('collection'))
             else:
                 return Http404
 
@@ -141,20 +143,29 @@ def archive(request):
 
 @login_required
 def unarchive(request):
-    if request.method != 'POST':
-        return HttpResponseBadRequest
-    else:
-        data = json.loads(request.body)
-        id = data.get('deck_id', '')
+    if request.method == 'POST':
+        id = request.POST['deck-to-unarchive']
         try:
             deck = CardDeck.objects.get(pk=id)
             deck.archived = False
             deck.save()
-            return JsonResponse({
-                'message': 'Deck unarchived'
-            }, status=200)
+            return HttpResponseRedirect(reverse('collection'))
         except:
             return Http404
+#     if request.method != 'POST':
+#         return HttpResponseBadRequest
+#     else:
+#         data = json.loads(request.body)
+#         id = data.get('deck_id', '')
+#         try:
+#             deck = CardDeck.objects.get(pk=id)
+#             deck.archived = False
+#             deck.save()
+#             return JsonResponse({
+#                 'message': 'Deck unarchived'
+#             }, status=200)
+#         except:
+#             return Http404
 
 @login_required
 def delete_deck(request):
