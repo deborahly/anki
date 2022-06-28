@@ -30,8 +30,12 @@ function displayInitialPlay() {
 }
 
 function playDeck(cards, index) {    
+    let message = document.getElementById('message');
+        message.innerHTML = '';
+
     if (cards.length === 0) {
-        alert('This deck is empty.');
+        message.innerHTML = 'This deck is empty.';
+        // alert('This deck is empty.');
     } else {
         showCard(cards, index);
     
@@ -132,6 +136,7 @@ function showCard(cards, index) {
     // Add event listener to turn card when clicked:
     card_front.addEventListener('click', () => {
         showCardBack(cards, index);
+        addEasinessBtn(cards, index);
     }, {once: true});
 }
 
@@ -164,12 +169,13 @@ function showCardBack(cards, index) {
     card_back.append(back_alt_1);
     card_back.append(back_alt_2);
 
-    // Add easiness btns:
-    addEasinessBtn(cards, index);
+    // // Add easiness btns:
+    // addEasinessBtn(cards, index);
 
     // Add event listener to turn card when clicked:
     card_back.addEventListener('click', () => {
-        showCard(cards, index);
+        // showCard(cards, index);
+        playDeck(cards, index);
     }, {once: true});
 }
 
@@ -341,13 +347,16 @@ function updateEasiness(easiness, cards, index) {
             })
             if (response.ok) {
                 if (index < (cards.length - 1)) {
-                    showcards(cards, (index + 1));
+                    playDeck(cards, (index + 1));
                 } else {
                     // Clear out card section and btn section:  
                     const card_section = document.getElementById('card-section');
                     card_section.innerHTML = '';
                     const btn_section = document.getElementById('btn-section');
                     btn_section.innerHTML = '';
+                    // Show message
+                    let message = document.getElementById('message');
+                    message.innerHTML = 'Congratulations! You finished this session!'
                 }
             }
         } catch (error) {
