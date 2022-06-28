@@ -35,72 +35,11 @@ function playDeck(cards, index) {
 
     if (cards.length === 0) {
         message.innerHTML = 'This deck is empty.';
-        // alert('This deck is empty.');
     } else {
-        showCard(cards, index);
-    
         // Clear out button section:  
         const btn_section = document.getElementById('btn-section');
         btn_section.innerHTML = '';
-    
-        // If card 1 of cards:
-        if (index === 0 && cards.length > 1) {
-                addNextBtn();
-                
-                const next_btn = document.getElementById('next-btn');
-                next_btn.addEventListener('click', () => {
-                    index++;
-                    playDeck(cards, index);
-                }, {once: true});
-        } else {
-            // If last card of cards:
-            if (index !== 0 && index === cards.length - 1) {
-                addPreviousBtn();
-                
-                const previous_btn = document.getElementById('previous-btn');
-                previous_btn.addEventListener('click', () => {
-                    index--;
-                    playDeck(cards, index);
-                }, {once: true});     
-            } else {
-                // Card x of cards:
-                if (index !== 0 && index !== cards.length - 1) {
-                    addPreviousBtn();
-                    addNextBtn();
-    
-                    const previous_btn = document.getElementById('previous-btn');
-                    previous_btn.addEventListener('click', () => {
-                        index--;
-                        playDeck(cards, index);
-                    }, {once: true});
-    
-                    const next_btn = document.getElementById('next-btn');
-                    next_btn.addEventListener('click', () => {
-                        index++;
-                        playDeck(cards, index);
-                    }, {once: true});
-                }
-            }
-        }
-    
-        // Add edit and delete button for all cards:
-        addEditBtn();
-        const edit_btn = document.getElementById('edit-btn');
-        edit_btn.addEventListener('click', () => {
-            // Adjust page display:
-            document.getElementById('card-section').innerHTML = '';
-            document.getElementById('btn-section').innerHTML = '';
-            editCard(cards, index);
-        })
-    
-        addDeleteBtn();
-        const delete_btn = document.getElementById('delete-btn');
-        delete_btn.addEventListener('click', () => {
-            var result = confirm('Are you sure to delete?');
-            if (result) {
-                deleteCard(cards, index);
-            }
-        })
+        showCard(cards, index);
     }
 }
 
@@ -169,54 +108,10 @@ function showCardBack(cards, index) {
     card_back.append(back_alt_1);
     card_back.append(back_alt_2);
 
-    // // Add easiness btns:
-    // addEasinessBtn(cards, index);
-
     // Add event listener to turn card when clicked:
     card_back.addEventListener('click', () => {
-        // showCard(cards, index);
         playDeck(cards, index);
     }, {once: true});
-}
-
-function addPreviousBtn() {
-    const previous_btn = document.createElement('button');
-    previous_btn.id = 'previous-btn';
-    previous_btn.setAttribute('type', 'button');
-    previous_btn.innerHTML = 'Previous card';
-
-    const btn_section = document.getElementById('btn-section');
-    btn_section.append(previous_btn);
-}
-
-function addNextBtn() {
-    const next_btn = document.createElement('button');
-    next_btn.id = 'next-btn';
-    next_btn.setAttribute('type', 'button');
-    next_btn.innerHTML = 'Next card';
-
-    const btn_section = document.getElementById('btn-section');
-    btn_section.append(next_btn);
-}
-
-function addEditBtn() {
-    const edit_btn = document.createElement('button');
-    edit_btn.id = 'edit-btn';
-    edit_btn.setAttribute('type', 'button');
-    edit_btn.innerHTML = 'Edit card';
-
-    const btn_section = document.getElementById('btn-section');
-    btn_section.append(edit_btn);
-}
-
-function addDeleteBtn() {
-    const delete_btn = document.createElement('button');
-    delete_btn.id = 'delete-btn';
-    delete_btn.setAttribute('type', 'button');
-    delete_btn.innerHTML = 'Delete card';
-
-    const btn_section = document.getElementById('btn-section');
-    btn_section.append(delete_btn);
 }
 
 function addEasinessBtn(cards, index) {
@@ -249,87 +144,6 @@ function addEasinessBtn(cards, index) {
             updateEasiness(easiness, cards, index);
         })
     })
-}
-
-function editCard(cards, index) {
-    // Display form section:
-    const edit_section = document.getElementById('edit-section');
-    edit_section.style.display = 'block';
-
-    // Pre-fill form with current data:
-    document.getElementById('grammar-class-field').value = cards[index]['grammar_class'];
-    document.getElementById('easiness-field').value = cards[index]['easiness'];
-    document.getElementById('front-field').value = cards[index]['front'];
-    document.getElementById('front-extra-field').value = cards[index]['front_extra'];
-    document.getElementById('back-main-field').value = cards[index]['back_main'];
-    document.getElementById('back-alt-1-field').value = cards[index]['back_alt_1'];
-    document.getElementById('back-alt-2-field').value = cards[index]['back_alt_2'];
-    document.getElementById('deck-field').value = cards[index]['deck'];
-
-    // Get form:
-    const form = document.getElementById('basic-card-form');
-
-    form.onsubmit = async (event) => {
-        event.preventDefault();
-        
-        const csrftoken = getCookie('csrftoken');
-        
-        const id_field = document.getElementById('id-field')
-        id_field.value = cards[index]['id'];
-        id_field.name = 'id';
-
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/update/card`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                body: new FormData(form)
-            })
-            const data = await response.json();
-            cards[index] = await data.card;
-
-            // Hide form section:
-            const edit_section = document.getElementById('edit-section');
-            edit_section.style.display = 'none';
-
-            playDeck(cards, index);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-}
-
-function deleteCard(cards, index) {
-    const csrftoken = getCookie('csrftoken');
-    
-    const newDeck = async () => {
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/delete/card`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({id: cards[index]['id']})
-            })
-            if (response.ok) {
-                cards.splice(index, 1);
-                if (index > 1) {
-                    playDeck(cards, (index-1));
-                } else {
-                    // Clear out:  
-                    const card_section = document.getElementById('card-section');
-                    card_section.innerHTML = '';
-                    const btn_section = document.getElementById('btn-section');
-                    btn_section.innerHTML = '';
-                }
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    newDeck();        
 }
 
 function updateEasiness(easiness, cards, index) {
