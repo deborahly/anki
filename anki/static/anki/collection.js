@@ -1,6 +1,5 @@
 document.querySelectorAll('.deck').forEach(element => {
     element.addEventListener('click', () => {
-        // Clear out:
         displayInitialCollection();
         
         // Get deck id and show options:
@@ -13,7 +12,7 @@ document.querySelectorAll('.deck').forEach(element => {
 function displayInitialCollection() {
     const message = document.getElementById('message');
     message.innerHTML = '';
-    
+  
     const option_nav = document.getElementById('option-nav');
     option_nav.innerHTML = '';
 
@@ -142,22 +141,6 @@ async function fetchDeck(deck_id) {
     } catch (error) {
         console.error(error);
     } 
-    // const fetchDeck = async (deck_id) => {
-    //     try {
-    //         const response = await fetch(`http://127.0.0.1:8000/retrieve/?id=${deck_id}`);
-    //         const data = await response.json();
-    //         deck = await data.deck;
-    //         cards = await data.cards;
-    //         const response_dict = {
-    //             'deck': deck,
-    //             'cards': cards
-    //         }
-    //         return response_dict
-    //     } catch (error) {
-    //         console.error(error);
-    //     } 
-    // }
-    // fetchDeck(deck_id);
 }
 
 function showInfo(deck, cards) {
@@ -173,7 +156,6 @@ function listDeck(deck, cards) {
     if (cards.length === 0) {
         let message = document.getElementById('message');
         message.innerHTML = 'This deck is empty.'
-        // updateArchiveForm(deck['id']);
     } else {
         const option_area = document.getElementById('option-area');
 
@@ -204,18 +186,8 @@ function listDeck(deck, cards) {
                 showDeck(cards, i);
             })
         }
-        // updateArchiveForm(deck['id']);
     }
 }
-
-// function updateArchiveForm(deck_id) {
-    // Display form section:
-    // const archive_section = document.getElementById('archive-section');
-    // archive_section.style.display = 'block';
-    // Inform deck to be archived:
-//     const deck_to_archive = document.getElementById('deck-to-archive');
-//     deck_to_archive.value = deck_id;
-// }
 
 function showDeck(cards, index) {    
     let message = document.getElementById('message');
@@ -223,11 +195,9 @@ function showDeck(cards, index) {
 
     if (cards.length === 0) {
         message.innerHTML = 'This deck is empty.';
-        // alert('This deck is empty.');
     } else {
         showCard(cards, index);
-    
-        // Clear out button section:  
+     
         const btn_section = document.getElementById('btn-section');
         btn_section.innerHTML = '';
     
@@ -324,7 +294,6 @@ function showCard(cards, index) {
     // Add event listener to turn card when clicked:
     card_front.addEventListener('click', () => {
         showCardBack(cards, index);
-        // addEasinessBtn(cards, index);
     }, {once: true});
 }
 
@@ -357,12 +326,8 @@ function showCardBack(cards, index) {
     card_back.append(back_alt_1);
     card_back.append(back_alt_2);
 
-    // // Add easiness btns:
-    // addEasinessBtn(cards, index);
-
     // Add event listener to turn card when clicked:
     card_back.addEventListener('click', () => {
-        // showCard(cards, index);
         showDeck(cards, index);
     }, {once: true});
 }
@@ -413,15 +378,6 @@ function editCard(cards, index) {
     edit_section.style.display = 'block';
 
     // Pre-fill form with current data:
-    // document.getElementById('grammar-class-field').value = cards[index]['grammar_class'];
-    // document.getElementById('easiness-field').value = cards[index]['easiness'];
-    // document.getElementById('front-field').value = cards[index]['front'];
-    // document.getElementById('front-extra-field').value = cards[index]['front_extra'];
-    // document.getElementById('back-main-field').value = cards[index]['back_main'];
-    // document.getElementById('back-alt-1-field').value = cards[index]['back_alt_1'];
-    // document.getElementById('back-alt-2-field').value = cards[index]['back_alt_2'];
-    // document.getElementById('deck-field').value = cards[index]['deck'];
-
     let grammar_class_field = getElementByXpath('//*[@id="edit-section"]//select[@id="grammar-class-field"]');
     grammar_class_field.value = cards[index]['grammar_class'];
     let easiness_field = getElementByXpath('//*[@id="edit-section"]//select[@id="easiness-field"]');
