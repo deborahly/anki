@@ -152,12 +152,14 @@ class IntegrationTestCase(TestCase):
             'back_alt_2': '',
             'deck': DECK_ID
         }
-        r = self.user1_client.post(f'/create/{CREATE_TYPE}', data=data, follow=True)
-        tree = lxml.html.fromstring(r.content)
-        title = tree.xpath('//title')[0]
+        r = self.user1_client.post(f'/create/{CREATE_TYPE}', data=data)
+        # r = self.user1_client.post(f'/create/{CREATE_TYPE}', data=data, follow=True)
+        # tree = lxml.html.fromstring(r.content)
+        # title = tree.xpath('//title')[0]
         BasicCard.objects.get(front='loup, louve', deck=DECK_ID)
         assert r.status_code == 200
-        assert title.text_content() == 'My collection'
+        # assert r.status_code == 200
+        # assert title.text_content() == 'My collection'
     
     def test_update_card(self):
         DECK_ID = CardDeck.objects.get(name='Animals', user=self.user1).id
@@ -225,14 +227,24 @@ class IntegrationTestCase(TestCase):
         assert deck.archived == True
         # Unarchive
         data = {
-            'deck_id': DECK_ID
+            'deck-to-unarchive': DECK_ID
         }
-        r = self.user1_client.post('/unarchive', json.dumps(data), content_type='application/json')
-        r_json = r.json()
+        r = self.user1_client.post('/unarchive', data=data, follow=True)
+        tree = lxml.html.fromstring(r.content)
+        title = tree.xpath('//title')[0]
         deck = CardDeck.objects.get(pk=DECK_ID)
         assert r.status_code == 200
-        assert r_json['message'] == 'Deck unarchived'
+        assert title.text_content() == 'My collection'
         assert deck.archived == False
+        # data = {
+        #     'deck_id': DECK_ID
+        # }
+        # r = self.user1_client.post('/unarchive', json.dumps(data), content_type='application/json')
+        # r_json = r.json()
+        # deck = CardDeck.objects.get(pk=DECK_ID)
+        # assert r.status_code == 200
+        # assert r_json['message'] == 'Deck unarchived'
+        # assert deck.archived == False
 
     def test_delete_deck(self):
         DECK_ID = 1
