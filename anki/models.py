@@ -27,7 +27,7 @@ class CardDeck(TimeStampedModel):
             'id': self.id,
             'name': self.name,
             'easiness': self.easiness,
-            'achived': self.archived
+            'archived': self.archived
         }
 
 class BasicCard(TimeStampedModel):
@@ -46,7 +46,7 @@ class BasicCard(TimeStampedModel):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cards', editable=False, blank=False, null=False)
     grammar_class = models.CharField(max_length=32, choices=GRAMMAR_CLASS_CHOICES, verbose_name='Class', editable=True, blank=False, null=False)
-    easiness = models.CharField(max_length=16, choices=EASINESS_CHOICES, verbose_name='Easiness', editable=True, blank=False, null=False, default='NORMAL')
+    easiness = models.CharField(max_length=16, choices=EASINESS_CHOICES, verbose_name='Easiness', editable=True, blank=False, null=False)
     front = models.CharField(max_length=32, verbose_name='Front', editable=True, blank=False, null=False)
     front_extra = models.CharField(max_length=32, verbose_name='Front-extra', editable=True, blank=True, null=True)
     back_main = models.CharField(max_length=32, verbose_name='Back-main', editable=True, blank=False, null=False)
@@ -67,6 +67,6 @@ class BasicCard(TimeStampedModel):
             'back_main': self.back_main,
             'back_alt_1': self.back_alt_1,
             'back_alt_2': self.back_alt_2,
-            'deck': self.deck.name
+            'deck': self.deck.id
         }
 
