@@ -30,33 +30,16 @@
         </ul>
     </section>
 
-    <!-- <section id="archive-section" style="display: none;">
-        <form action="{% url 'archive' %}" method="post" id="archive-form">
-            {% csrf_token %}
-            <input type="hidden" name="deck-to-archive" id="deck-to-archive">
-            <input type="submit" value="Archive list">
-        </form>
-    </section> -->
-
     <section id="option-section">
         <nav id="option-nav"></nav>
         <div id="option-area"></div>
     </section>
 
-    <!-- <section id="info-section">        
-    </section>
-
-    <section id="card-section">
-    </section>
-
-    <section id="list-section">
-    </section> -->
-
     <section id="btn-section"></section>
 
     <section id="edit-section" style="display: none;">
         <h5>Edit card</h5>
-            <form action="#" method="post" id="basic-card-form">
+            <form action="#" id="basic-card-form">
                 {% csrf_token %}
                 {{ basic_card_form | crispy }}
                 <input type="hidden" id="id-field">
@@ -66,7 +49,7 @@
 
     <section id="card-form-section" style="display: none;">
         <h5>Create new card</h5>
-            <form action="#" method="post" id="basic-card-form">
+            <form action="#" id="basic-card-form">
                 {% csrf_token %}
                 {{ basic_card_form | crispy }}
                 <input type="submit" value="create">
