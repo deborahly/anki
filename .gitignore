@@ -1,7 +1,7 @@
 venv
 __pycache__
 *.tsv
-movies/migrations
+anki/migrations/*.py
 db.sqlite3
 queries.sqlite3
 launch.json
