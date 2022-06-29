@@ -7,6 +7,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonRespons
 from django.urls import reverse
 from .models import BasicCard, User, CardDeck
 from .forms import BasicCardForm, CardDeckForm
+from django.core.paginator import Paginator
 
 
 def index(request):
@@ -47,6 +48,36 @@ def retrieve(request):
         'cards': card_list,
         'deck': deck
         }, status=200)
+
+def retrieve_batch(request):
+    id = request.GET.get('id', '')
+    page = request.GET.get('page', '')
+    per_page = request.GET.get('per-page', '')
+    
+    deck = CardDeck.objects.get(pk=id, user=request.user)
+    cards = deck.content.all()
+    # Add paginator:
+    paginator = Paginator(cards, per_page)
+    page_object = paginator.get_page(page)
+    # Serialize objects:
+    cards_on_page = []
+    for card in page_object.object_list:
+        c = card.serialize()
+        cards_on_page.append(c)
+    # Serialize deck:
+    deck = deck.serialize()
+    # Define payload:
+    payload = {
+        'pagination': {
+            'current': page_object.number,
+            'has_next': page_object.has_next(),
+            'has_previous': page_object.has_previous()
+        },
+        'cards': cards_on_page,
+        'deck': deck
+    }
+
+    return JsonResponse(payload, status=200)
 
 @login_required
 def create(request, type):

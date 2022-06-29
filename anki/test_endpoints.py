@@ -122,6 +122,18 @@ class IntegrationTestCase(TestCase):
         assert type(r_json['cards']) == list
         assert r_json['deck']['id'] == DECK_ID
 
+    def test_retrieve_batch(self):
+        DECK_ID = 1
+        PAGE = 1
+        PER_PAGE = 2
+        r = self.user1_client.get(f'/retrieve/batch?id={DECK_ID}&page={PAGE}&per-page={PER_PAGE}', follow=True)
+        r_json = r.json()
+        assert r.status_code == 200
+        assert r_json['pagination']['current'] == PAGE
+        assert r_json['pagination']['has_next'] == True
+        assert r_json['pagination']['has_previous'] == False
+        assert len(r_json['cards']) == PER_PAGE
+
     def test_create_deck(self):
         CREATE_TYPE = 'deck'
         data = {

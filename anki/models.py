@@ -19,6 +19,9 @@ class CardDeck(TimeStampedModel):
     easiness = models.CharField(max_length=16, verbose_name='Overall easiness', editable=True, blank=True, null=True)
     archived = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ["created_at"]
+    
     def __str__(self):
         return f'{self.name}'
 
@@ -54,6 +57,9 @@ class BasicCard(TimeStampedModel):
     back_alt_2 = models.CharField(max_length=32, verbose_name='Back-alternative 2', editable=True, blank=True, null=True)
     deck = models.ForeignKey(CardDeck, on_delete=models.CASCADE, related_name='content', editable=True, blank=False, null=False)
 
+    class Meta:
+        ordering = ["created_at"]
+    
     def __str__(self):
         return f'{self.front}'
 
