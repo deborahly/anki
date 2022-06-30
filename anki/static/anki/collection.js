@@ -63,6 +63,11 @@ document.querySelectorAll('.deck').forEach(element => {
             let card_form_section = document.getElementById('card-form-section');
             card_form_section.style.display = 'block';
             
+            let cancel_create_btn = document.getElementById('cancel-create-btn');
+            cancel_create_btn.addEventListener('click', () => {
+                displayInitialOptions();
+            })
+            
             let deck_field = getElementByXpath('//*[@id="card-form-section"]//select[@id="deck-field"]');
             deck_field.value = deck_id;
     
@@ -342,9 +347,9 @@ function editCard(index) {
     edit_form_section.style.display = 'block';
 
     // Add listener to cancel input:
-    let cancel_submit = document.getElementById('cancel-submit');
-    cancel_submit.addEventListener('click', () => {
-        edit_form_section.style.display = 'none';
+    let cancel_edit_btn = document.getElementById('cancel-edit-btn');
+    cancel_edit_btn.addEventListener('click', () => {
+        displayInitialList();
     })
 
     // Pre-fill form with current data:
@@ -397,22 +402,6 @@ function editCard(index) {
         } catch (error) {
             console.error(error);
         }
-    }
-}
-
-function addCancelBtn() {
-    if (document.getElementById('cancel-btn') != null) {
-        let cancel_btn = document.createElement('button');
-        cancel_btn.id = 'cancel-btn';
-        cancel_btn.setAttribute('type', 'button');
-        cancel_btn.innerHTML = 'Cancel';
-    
-        let edit_form_section = document.getElementById('edit-form-section');
-        edit_form_section.append(cancel_btn);
-        
-        cancel_btn.addEventListener('click', () => {
-            edit_form_section.style.display = 'none';
-        })
     }
 }
 

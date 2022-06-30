@@ -46,7 +46,7 @@
                 {{ basic_card_form | crispy }}
                 <input type="hidden" id="id-field">
                 <input type="submit" id="save-submit" value="Save">
-                <input type="submit" id="cancel-submit" value="Cancel">
+                <button type="button" id="cancel-edit-btn">Cancel</button>
             </form>
     </section>
 
@@ -56,7 +56,7 @@
                 {% csrf_token %}
                 {{ basic_card_form | crispy }}
                 <input type="submit" id="create-submit" value="Create">
-                <input type="submit" id="cancel-submit" value="Cancel">
+                <button type="button" id="cancel-create-btn">Cancel</button>
             </form> 
     </section>
 {% endblock %}
