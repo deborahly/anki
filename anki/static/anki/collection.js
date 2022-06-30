@@ -118,6 +118,20 @@ function displayInitialOptions() {
     card_form_section.style.display = 'none';
 }
 
+function displayInitialList() {
+    let card_section = document.getElementById('card-section');
+    card_section.innerHTML = '';
+
+    let btn_section = document.getElementById('btn-section');
+    btn_section.innerHTML = '';
+
+    let edit_form_section = document.getElementById('edit-form-section');
+    edit_form_section.style.display = 'none';
+
+    let card_form_section = document.getElementById('card-form-section');
+    card_form_section.style.display = 'none';
+}
+
 function showOptions() {
     displayInitialCollection();
 
@@ -209,6 +223,7 @@ function listBatch() {
 
         list_element.addEventListener('click', (event) => {
             event.preventDefault();
+            displayInitialList();
             showDeck(i);        
         })
     }
@@ -248,13 +263,8 @@ function listBatch() {
 }
 
 function showDeck(index) {    
-    // Adjust page display:
-    document.getElementById('card-section').innerHTML = '';
-    document.getElementById('btn-section').innerHTML = '';
-    
     showCard(index);
 
-    // Add edit and delete button for all cards:
     addEditBtn();
     let edit_btn = document.getElementById('edit-btn');
     edit_btn.addEventListener('click', () => {
@@ -310,7 +320,7 @@ function addEditBtn() {
     let edit_btn = document.createElement('button');
     edit_btn.id = 'edit-btn';
     edit_btn.setAttribute('type', 'button');
-    edit_btn.innerHTML = 'Edit card';
+    edit_btn.innerHTML = 'Edit';
 
     let btn_section = document.getElementById('btn-section');
     btn_section.append(edit_btn);
@@ -320,20 +330,22 @@ function addDeleteBtn() {
     let delete_btn = document.createElement('button');
     delete_btn.id = 'delete-btn';
     delete_btn.setAttribute('type', 'button');
-    delete_btn.innerHTML = 'Delete card';
+    delete_btn.innerHTML = 'Delete';
 
     let btn_section = document.getElementById('btn-section');
     btn_section.append(delete_btn);
 }
 
 function editCard(index) {
-    // Adjust page display:
-    document.getElementById('card-section').innerHTML = '';
-    document.getElementById('btn-section').innerHTML = '';
-    
     // Display form section:
     let edit_form_section = document.getElementById('edit-form-section');
     edit_form_section.style.display = 'block';
+
+    // Add listener to cancel input:
+    let cancel_submit = document.getElementById('cancel-submit');
+    cancel_submit.addEventListener('click', () => {
+        edit_form_section.style.display = 'none';
+    })
 
     // Pre-fill form with current data:
     let grammar_class_field = getElementByXpath('//*[@id="edit-form-section"]//select[@id="grammar-class-field"]');
@@ -385,6 +397,22 @@ function editCard(index) {
         } catch (error) {
             console.error(error);
         }
+    }
+}
+
+function addCancelBtn() {
+    if (document.getElementById('cancel-btn') != null) {
+        let cancel_btn = document.createElement('button');
+        cancel_btn.id = 'cancel-btn';
+        cancel_btn.setAttribute('type', 'button');
+        cancel_btn.innerHTML = 'Cancel';
+    
+        let edit_form_section = document.getElementById('edit-form-section');
+        edit_form_section.append(cancel_btn);
+        
+        cancel_btn.addEventListener('click', () => {
+            edit_form_section.style.display = 'none';
+        })
     }
 }
 
