@@ -34,14 +34,32 @@ def collection(request):
     })
 
 @login_required
-def retrieve(request):
+def retrieve_session(request):
     id = request.GET.get('id', '')
+    try:
+        quantity = int(request.GET.get('quantity', ''))
+    except ValueError:
+        return HttpResponseBadRequest
+
     deck = CardDeck.objects.get(pk=id, user=request.user)
-    cards = deck.content.all()
+
+    quantity_normal = int(0.50 * quantity)
     card_list = []
-    for card in cards:
+    q1 = BasicCard.objects.filter(easiness='NORMAL', user=request.user, deck=deck).order_by('updated_at')[:(quantity_normal)]
+    remainder = quantity - q1.count()
+    for card in q1:
         card_dict = card.serialize()
         card_list.append(card_dict)
+    q2 = BasicCard.objects.filter(easiness='CHALLENGING', user=request.user, deck=deck).order_by('updated_at')[:(remainder/2)]
+    remainder = remainder - q2.count()
+    for card in q2:
+        card_dict = card.serialize()
+        card_list.append(card_dict)
+    q3 = BasicCard.objects.filter(easiness='PIECE OF CAKE', user=request.user, deck=deck).order_by('updated_at')[:(remainder)]
+    for card in q3:
+        card_dict = card.serialize()
+        card_list.append(card_dict)
+    
     deck = deck.serialize()
 
     return JsonResponse({
@@ -49,6 +67,7 @@ def retrieve(request):
         'deck': deck
         }, status=200)
 
+@login_required
 def retrieve_batch(request):
     id = request.GET.get('id', '')
     page = request.GET.get('page', '')

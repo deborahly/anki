@@ -6,7 +6,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('play', views.play, name='play'),
     path('collection', views.collection, name='collection'),
-    path('retrieve/', views.retrieve, name='retrieve'),
+    path('retrieve/session/', views.retrieve_session, name='retrieve_session'),
     path('retrieve/batch/', views.retrieve_batch, name='retrieve_batch'),
     path('create/<str:type>', views.create, name='create'),
     # For cards only:
