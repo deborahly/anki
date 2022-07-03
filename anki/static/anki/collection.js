@@ -2,10 +2,10 @@
 const PER_PAGE = 10;
 
 // Globals
-var pagination = [];
+var deck = {};
 var cards = [];
-var deck = [];
-var page_index = 1;
+var pagination = [];
+var page_index = 0  ;
 
 document.querySelectorAll('.deck').forEach(element => {
     element.addEventListener('click', () => {      
@@ -19,14 +19,8 @@ document.querySelectorAll('.deck').forEach(element => {
         document.getElementById('deck-info-link').addEventListener('click', () => {
             let getInfo = async () => {
                 displayInitialOptions();
-                
-                let option_area = document.getElementById('option-area');
-                option_area.innerHTML = '';
-                
-                let response = await fetchBatch(deck_id);
-                deck = response['deck'];
-                cards = response['cards'];
-                pagination = response['pagination'];
+
+                await fetchBatch(deck_id, page_index);
                 
                 showInfo();
             }
@@ -35,16 +29,12 @@ document.querySelectorAll('.deck').forEach(element => {
     
         // If list deck is selected:
         document.getElementById('list-deck-link').addEventListener('click', () => {
-            let getList = async () => {
+            let getBatch = async () => {
                 displayInitialOptions();
+
+                page_index = 1;
                 
-                let option_area = document.getElementById('option-area');
-                option_area.innerHTML = '';
-                
-                let response = await fetchBatch(deck_id);
-                deck = response['deck'];
-                cards = response['cards'];
-                pagination = response['pagination'];
+                await fetchBatch(deck_id, page_index);
 
                 if (cards.length != 0) {
                     listBatch();
@@ -53,7 +43,7 @@ document.querySelectorAll('.deck').forEach(element => {
                     message.innerHTML = 'This deck is empty.'
                 }
             }
-            getList();
+            getBatch();
         })
     
         // If create card is selected:
@@ -170,19 +160,19 @@ function showOptions() {
     option_list.append(create_card_li);
 }
 
-async function fetchBatch(deck_id) {
+async function fetchBatch(deck_id, page_index) {
     try {
         let response = await fetch(`http://127.0.0.1:8000/retrieve/batch?id=${deck_id}&page=${page_index}&per-page=${PER_PAGE}`);
         let data = await response.json();
         pagination = await data.pagination;
         deck = await data.deck;
         cards = await data.cards;
-        let response_dict = {
-            'pagination': pagination,
-            'deck': deck,
-            'cards': cards
-        }
-        return response_dict
+        // let response_dict = {
+        //     'pagination': pagination,
+        //     'deck': deck,
+        //     'cards': cards
+        // }
+        // return response_dict
     } catch (error) {
         console.error(error);
     } 
@@ -191,17 +181,23 @@ async function fetchBatch(deck_id) {
 function showInfo() {
     let option_area = document.getElementById('option-area');
 
+    let deck_name = document.createElement('div');
+    deck_name.innerHTML = `Total cards: ${deck['name']}`;
+    
     let total_cards = document.createElement('div');
     total_cards.innerHTML = `Total cards: `;
 
     let easiness = document.createElement('div');
     easiness.innerHTML = `Easiness: `;
 
+    option_area.append(deck_name);
     option_area.append(total_cards);
     option_area.append(easiness);
 }
 
 function listBatch() {
+    displayInitialOptions();
+
     let option_area = document.getElementById('option-area');
 
     let list_header = document.createElement('div');
@@ -233,38 +229,7 @@ function listBatch() {
         })
     }
 
-    // Display previous/next buttons, when applicable:
-    if (pagination.has_previous === false && pagination.has_next === true) {
-            let next_btn = document.createElement('button');
-            next_btn.setAttribute('type', 'button');
-            next_btn.innerHTML = 'Next';
-            option_area.append(next_btn);
-    } else {
-        if (pagination.has_previous === true && pagination.has_next === false) {
-            let previous_btn = document.createElement('button');
-            previous_btn.setAttribute('type', 'button');
-            previous_btn.innerHTML = 'Previous';
-            option_area.append(previous_btn);
-        } else {
-            if (pagination.has_previous === true && pagination.has_next === true) {
-                let next_btn = document.createElement('button');
-                next_btn.setAttribute('type', 'button');
-                next_btn.innerHTML = 'Next';
-                option_area.append(next_btn);
-    
-                let previous_btn = document.createElement('button');
-                previous_btn.setAttribute('type', 'button');
-                previous_btn.innerHTML = 'Previous';
-                option_area.append(previous_btn);
-            }
-        }
-    }
-    // Add event listener to previous/next buttons:
-    // previous_btn.addEventListener('click', (event) => {
-    //     event.preventDefault();
-    //     pagination_index++;
-    //     let response = await fetchBatch(deck_id, 1, 2);
-    //     listBatch();
+    addPaginationBtn();
 }
 
 function showDeck(index) {    
@@ -392,10 +357,12 @@ function editCard(index) {
             if (response.ok) {
                 displayInitialOptions();
                 
-                let response = await fetchBatch(deck['id']);
-                deck = response['deck'];
-                cards = response['cards'];
-                pagination = response['pagination'];
+                // let response = await fetchBatch(deck['id'], page_index);
+                // deck = response['deck'];
+                // cards = response['cards'];
+                // pagination = response['pagination'];
+
+                fetchBatch(deck['id'], page_index);
                 
                 listBatch();
             }
@@ -421,10 +388,12 @@ function deleteCard(index) {
             if (response.ok) {
                 displayInitialOptions();
                 
-                let response = await fetchBatch(deck['id']);
-                deck = response['deck'];
-                cards = response['cards'];
-                pagination = response['pagination'];
+                // let response = await fetchBatch(deck['id'], page_index);
+                // deck = response['deck'];
+                // cards = response['cards'];
+                // pagination = response['pagination'];
+
+                fetchBatch(deck['id'], page_index);
 
                 if (cards.length != 0) {
                     listBatch();
@@ -477,4 +446,78 @@ async function createCard(form) {
     } catch (error) {
         console.error(error);
         }
+}
+
+function addPaginationBtn() {
+    let option_area = document.getElementById('option-area');
+    
+    if (pagination.has_previous === false && pagination.has_next === true) {
+        let next_btn = document.createElement('button');
+        next_btn.setAttribute('type', 'button');
+        next_btn.innerHTML = 'Next';
+        option_area.append(next_btn);
+
+        // Add event listener to next button:
+        next_btn.addEventListener('click', (event) => {
+            event.preventDefault();
+            page_index++;
+            let getBatch = async () => {
+                await fetchBatch(deck['id'], page_index);
+                listBatch();
+            }
+            getBatch();
+        })
+    } else {
+        if (pagination.has_previous === true && pagination.has_next === false) {
+            let previous_btn = document.createElement('button');
+            previous_btn.setAttribute('type', 'button');
+            previous_btn.innerHTML = 'Previous';
+            option_area.append(previous_btn);
+
+            // Add event listener to previous button:
+            previous_btn.addEventListener('click', (event) => {
+                event.preventDefault();
+                page_index--;
+                let getBatch = async () => {
+                    await fetchBatch(deck['id'], page_index);
+                    listBatch();
+                }
+                getBatch();
+            })
+        } else {
+            if (pagination.has_previous === true && pagination.has_next === true) {
+                let next_btn = document.createElement('button');
+                next_btn.setAttribute('type', 'button');
+                next_btn.innerHTML = 'Next';
+                option_area.append(next_btn);
+
+                // Add event listener to next button:
+                next_btn.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    page_index++;
+                    let getBatch = async () => {
+                        await fetchBatch(deck['id'], page_index);
+                        listBatch();
+                    }
+                    getBatch();
+                })
+
+                let previous_btn = document.createElement('button');
+                previous_btn.setAttribute('type', 'button');
+                previous_btn.innerHTML = 'Previous';
+                option_area.append(previous_btn);
+
+                // Add event listener to previous button:
+                previous_btn.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    page_index--;
+                    let getBatch = async () => {
+                        await fetchBatch(deck['id'], page_index);
+                        listBatch();
+                    }
+                    getBatch();
+                })
+            }
+        }
+    }
 }
