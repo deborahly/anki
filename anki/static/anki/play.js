@@ -52,7 +52,7 @@ function displayInitialPlay() {
 
 async function fetchDeck(deck_id) {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/retrieve/?id=${deck_id}`);
+        const response = await fetch(`http://127.0.0.1:8000/retrieve/session?id=${deck_id}`);
         const data = await response.json();
         deck = await data.deck;
         cards = await data.cards;
