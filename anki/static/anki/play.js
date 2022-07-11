@@ -8,6 +8,7 @@ document.querySelectorAll('.deck').forEach(element => {
         // Get quantity from user:
         document.getElementById('option-section').style.display = 'block';
 
+        // Fetch deck
         const quantity_form = document.getElementById('quantity-form');
 
         quantity_form.onsubmit = async (event) => {
@@ -193,19 +194,4 @@ function updateEasiness(easiness, cards, index, quantity) {
         }
     }
     fetchCardEasiness();        
-}
-
-function updateQuantity(deck_id) {
-    const fetchCardQuantity = async () => {
-        try {
-            const response = await fetchDeck(deck_id);
-            const cards = response['cards'];
-            let cards_max = cards.length;
-            let max = document.getElementById('quantity');
-            max.setAttribute('max', `${cards_max}`);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    fetchCardQuantity();
 }
