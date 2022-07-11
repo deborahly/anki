@@ -117,21 +117,21 @@ class IntegrationTestCase(TestCase):
 
     def test_retrieve_session(self):
         DECK_ID = 1
-        QUANTITY = 5
+        QUANTITY = 10
         r = self.user1_client.get(f'/retrieve/session?id={DECK_ID}&quantity={QUANTITY}', follow=True)
         r_json = r.json()
         
-        r_normal = list(filter(lambda x: x['easiness'] == 'NORMAL', r_json['cards']))
-        r_challenging = list(filter(lambda x: x['easiness'] == 'CHALLENGING', r_json['cards']))
-        r_piece_of_cake = list(filter(lambda x: x['easiness'] == 'PIECE OF CAKE', r_json['cards']))
+        # r_normal = list(filter(lambda x: x['easiness'] == 'NORMAL', r_json['cards']))
+        # r_challenging = list(filter(lambda x: x['easiness'] == 'CHALLENGING', r_json['cards']))
+        # r_piece_of_cake = list(filter(lambda x: x['easiness'] == 'PIECE OF CAKE', r_json['cards']))
         
         assert r.status_code == 200
         assert type(r_json['cards']) == list
         assert r_json['deck']['id'] == DECK_ID
-        assert len(r_normal) == 2
-        assert len(r_challenging) == 1
-        assert len(r_piece_of_cake) == 2
-        print(r_challenging[0])
+        assert r_json['cards'][0]['front'] == 'papillon'
+        assert r_json['cards'][5]['front'] == 'baleine'
+        assert r_json['cards'][7]['front'] == 'écureuil'
+        assert r_json['cards'][9]['front'] == 'chat, chatte'
 
     def test_retrieve_batch(self):
         DECK_ID = 1

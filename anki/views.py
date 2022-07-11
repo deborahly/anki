@@ -59,6 +59,13 @@ def retrieve_session(request):
     for card in q3:
         card_dict = card.serialize()
         card_list.append(card_dict)
+
+    if (len(card_list) < quantity):
+        q4 = BasicCard.objects.filter(user=request.user, deck=deck).order_by('updated_at')
+        for card in q4:
+            if (len(card_list) < quantity) and (card not in q1) and (card not in q2) and (card not in q3):
+                card_dict = card.serialize()
+                card_list.append(card_dict)
     
     deck = deck.serialize()
 
