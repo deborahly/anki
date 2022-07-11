@@ -4,35 +4,27 @@ document.querySelectorAll('.deck').forEach(element => {
 
         // Get deck id:
         const deck_id = element.dataset.id;
-        
-        // Show options if deck is not empty:
-        const checkDeck = async () => {
+
+        // Get quantity from user:
+        document.getElementById('option-section').style.display = 'block';
+
+        const quantity_form = document.getElementById('quantity-form');
+
+        quantity_form.onsubmit = async (event) => {
+            event.preventDefault();
+            const quantity = document.getElementById('quantity').value;
             try {
-                const response = await fetchDeck(deck_id);
+                const response = await fetchDeck(deck_id, quantity);
                 const cards = response['cards'];          
                 if (cards.length === 0) {
                     message.innerHTML = 'This deck is empty.'; 
                 } else {
-                    const option_section = document.getElementById('option-section');
-                    option_section.style.display = 'block';
-
-                    // Update quantity:
-                    updateQuantity(deck_id);
-
-                    // If quantity is submitted:
-                    const quantity_form = document.getElementById('quantity-form');
-                    
-                    quantity_form.onsubmit = async (event) => {
-                        event.preventDefault();
-                        const quantity = document.getElementById('quantity').value;
-                        showCard(cards, 0, quantity);
-                    }
+                    showCard(cards, 0, cards.length);
                 }
             } catch (error) {
                 console.error(error);
             }
         }
-        checkDeck();
     })
 });
 
@@ -50,9 +42,9 @@ function displayInitialPlay() {
     btn_section.innerHTML = '';
 }
 
-async function fetchDeck(deck_id) {
+async function fetchDeck(deck_id, quantity) {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/retrieve/session?id=${deck_id}`);
+        const response = await fetch(`http://127.0.0.1:8000/retrieve/session?id=${deck_id}&quantity=${quantity}`);
         const data = await response.json();
         deck = await data.deck;
         cards = await data.cards;
