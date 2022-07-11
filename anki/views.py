@@ -175,6 +175,12 @@ def easiness_card(request):
             card = BasicCard.objects.get(pk=id)
             card.easiness = easiness
             card.save()
+
+            # Update deck
+            deck = card.deck
+            deck.easiness = deck.easiness_average()
+            deck.save()
+
             return JsonResponse({
                 'message': 'Card easiness updated'
             }, status=200)

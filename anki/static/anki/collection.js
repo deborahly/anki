@@ -182,17 +182,25 @@ function showInfo() {
     let option_area = document.getElementById('option-area');
 
     let deck_name = document.createElement('div');
-    deck_name.innerHTML = `Total cards: ${deck['name']}`;
+    deck_name.innerHTML = `Deck name: ${deck['name']}`;
     
     let total_cards = document.createElement('div');
-    total_cards.innerHTML = `Total cards: `;
+    total_cards.innerHTML = `Total cards: ${deck['count']}`;
 
     let easiness = document.createElement('div');
-    easiness.innerHTML = `Easiness: `;
+    easiness.innerHTML = `Easiness: ${deck['easiness']}`;
+
+    let created_at = document.createElement('div');
+    created_at.innerHTML = `Created at: ${deck['created_at']}`;
+
+    let updated_at = document.createElement('div');
+    updated_at.innerHTML = `Last played at: ${deck['updated_at']}`;
 
     option_area.append(deck_name);
     option_area.append(total_cards);
     option_area.append(easiness);
+    option_area.append(created_at);
+    option_area.append(updated_at);
 }
 
 function listBatch() {

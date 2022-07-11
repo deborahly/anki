@@ -25,14 +25,33 @@ class CardDeck(TimeStampedModel):
     def __str__(self):
         return f'{self.name}'
 
+    def easiness_average(self):
+        value = 0
+        for card in self.content.all():
+            if card.easiness == 'NORMAL':
+                value += 1
+            elif card.easiness == 'CHALLENGING':
+                value += 2
+        average = value / self.content.count()
+        if average > 1.5:
+            easiness_average = 'Challenging'
+        elif average < 0.5:
+            easiness_average = 'Piece of cake!'
+        else:
+            easiness_average = 'Normal'
+        return easiness_average
+
     def serialize(self):
         return {
             'id': self.id,
             'name': self.name,
+            'archived': self.archived,
+            'count': self.content.count(),
             'easiness': self.easiness,
-            'archived': self.archived
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M'),
+            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M')
         }
-
+    
 class BasicCard(TimeStampedModel):
     GRAMMAR_CLASS_CHOICES = (
         ('VERB', 'Verb'),
