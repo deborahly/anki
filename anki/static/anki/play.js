@@ -13,17 +13,52 @@ document.querySelectorAll('.deck').forEach(element => {
 
         quantity_form.onsubmit = async (event) => {
             event.preventDefault();
-            const quantity = document.getElementById('quantity').value;
-            try {
-                const response = await fetchDeck(deck_id, quantity);
-                const cards = response['cards'];          
-                if (cards.length === 0) {
-                    message.innerHTML = 'This deck is empty.'; 
-                } else {
-                    showCard(cards, 0, cards.length);
+            let validate = validateForm();
+            if (validate === true) {
+                const quantity = document.getElementById('quantity').value;
+                const minutes = document.getElementById('minutes').value;
+                try {
+                    const response = await fetchDeck(deck_id, quantity);
+                    const cards = response['cards'];          
+                    if (cards.length === 0) {
+                        message.innerHTML = 'This deck is empty.'; 
+                    } else {
+                        showCard(cards, 0, cards.length);
+
+                        if (minutes != '') {
+                            // Set timer:
+                            var time = minutes * 60;
+                            let interval = setInterval(function(){
+                                time--;
+
+                                let message = document.getElementById('message');
+
+                                if (time === 0) {
+                                    // Clear out card section and btn section:  
+                                    const card_section = document.getElementById('card-section');
+                                    card_section.innerHTML = '';
+                                    const btn_section = document.getElementById('btn-section');
+                                    btn_section.innerHTML = '';
+                                    clearInterval(interval);
+                                    message.innerHTML = 'Time is up!'
+                                }
+
+                                if (message.innerHTML == 'Congratulations! You finished this session!') {
+                                    clearInterval(interval);
+                                }
+
+                                const minutes = Math.floor(time / 60);
+                                let seconds = time % 60;           
+                                seconds = seconds < 10 ? '0' + seconds : seconds;
+
+                                const countdown = document.getElementById('countdown');
+                                countdown.innerHTML = `${minutes}:${seconds}`;
+                            }, 1000);
+                        }
+                    }
+                } catch (error) {
+                    console.error(error);
                 }
-            } catch (error) {
-                console.error(error);
             }
         }
     })
@@ -35,6 +70,9 @@ function displayInitialPlay() {
 
     const option_section = document.getElementById('option-section');
     option_section.style.display = 'none';
+
+    const countdown = document.getElementById('countdown');
+    countdown.innerHTML = '';
     
     const card_section = document.getElementById('card-section');
     card_section.innerHTML = '';
@@ -91,7 +129,7 @@ function showCard(cards, index, quantity) {
     // Add event listener to turn card when clicked:
     card_front.addEventListener('click', () => {
         showCardBack(cards, index, quantity);
-        addEasinessBtn(cards, index, quantity);
+        addGradeBtn(cards, index, quantity);
     }, {once: true});
 }
 
@@ -130,7 +168,7 @@ function showCardBack(cards, index, quantity) {
     }, {once: true});
 }
 
-function addEasinessBtn(cards, index, quantity) {
+function addGradeBtn(cards, index, quantity) {
     const cake_btn = document.createElement('button');
     cake_btn.id = 'cake-btn';
     cake_btn.dataset.value = 'PIECE OF CAKE';
@@ -156,24 +194,24 @@ function addEasinessBtn(cards, index, quantity) {
 
     [cake_btn, normal_btn, challenging_btn].forEach(element => {
         element.addEventListener('click', (event) => {
-            const easiness = event.target.dataset.value;
-            updateEasiness(easiness, cards, index, quantity);
+            const grade = event.target.dataset.value;
+            updateGrade(grade, cards, index, quantity);
         })
     })
 }
 
-function updateEasiness(easiness, cards, index, quantity) {
+function updateGrade(grade, cards, index, quantity) {
     const csrftoken = getCookie('csrftoken');
     
-    const fetchCardEasiness = async () => {
+    const fetchCardGrade = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/easiness/card', {
+            const response = await fetch('http://127.0.0.1:8000/grade/card', {
                 method: 'PUT',
                 headers: {
                     'X-CSRFToken': csrftoken,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({id: cards[index]['id'], easiness: easiness})
+                body: JSON.stringify({id: cards[index]['id'], grade: grade})
             })
             if (response.ok) {
                 if (index < (quantity - 1) && index < (cards.length - 1)) {
@@ -193,5 +231,25 @@ function updateEasiness(easiness, cards, index, quantity) {
             console.error(error);
         }
     }
-    fetchCardEasiness();        
+    fetchCardGrade();        
+}
+
+function validateForm() {
+    const quantity = document.getElementById('quantity').value;
+    const minutes = document.getElementById('minutes').value;
+    const skip_timer = document.getElementById('skip-timer').checked;
+
+    let message = document.getElementById('message');
+
+    if (quantity === '') {
+        message.innerHTML = 'Quantity must be filled out.';
+        return false;
+    }
+    
+    if ((minutes === '' && skip_timer === false) | (minutes != '' && skip_timer === true)) {
+        message.innerHTML = 'Either minutes is filled out, or skip timer is checked.';
+        return false;
+    }
+
+    return true;
 }

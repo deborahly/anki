@@ -20,21 +20,20 @@
         <form action="#" id="quantity-form">
             <label for="quantity">Enter card quantity:</label>
             <input type="number" id="quantity" name="quantity" min="1">
+            
+            <label for="minutes">Enter timer minutes:</label>
+            <input type="number" id="minutes" name="minutes" min="1" max="60">
+            
+            <label for="skip-timer">Skip timer</label>
+            <input type="checkbox" id="skip-timer" name="skip-timer">
+            
             <input type="submit" value="Start">
         </form>
     </section>
 
+    <section id="countdown"></section>
+
     <section id="card-section"></section>
 
     <section id="btn-section"></section>
-
-    <!-- <section id="edit-section" style="display: none;">
-        <h5>Edit card</h5>
-            <form action="#" method="post" id="basic-card-form">
-                {% csrf_token %}
-                {{ basic_card_form | crispy }}
-                <input type="hidden" id="id-field">
-                <input type="submit" value="save">
-            </form>
-    </section> -->
 {% endblock %}
