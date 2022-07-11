@@ -45,17 +45,17 @@ def retrieve_session(request):
 
     quantity_normal = int(0.50 * quantity)
     card_list = []
-    q1 = BasicCard.objects.filter(easiness='NORMAL', user=request.user, deck=deck).order_by('updated_at')[:(quantity_normal)]
+    q1 = BasicCard.objects.filter(grade='NORMAL', user=request.user, deck=deck).order_by('updated_at')[:(quantity_normal)]
     remainder = quantity - q1.count()
     for card in q1:
         card_dict = card.serialize()
         card_list.append(card_dict)
-    q2 = BasicCard.objects.filter(easiness='CHALLENGING', user=request.user, deck=deck).order_by('updated_at')[:(remainder/2)]
+    q2 = BasicCard.objects.filter(grade='CHALLENGING', user=request.user, deck=deck).order_by('updated_at')[:(remainder/2)]
     remainder = remainder - q2.count()
     for card in q2:
         card_dict = card.serialize()
         card_list.append(card_dict)
-    q3 = BasicCard.objects.filter(easiness='PIECE OF CAKE', user=request.user, deck=deck).order_by('updated_at')[:(remainder)]
+    q3 = BasicCard.objects.filter(grade='PIECE OF CAKE', user=request.user, deck=deck).order_by('updated_at')[:(remainder)]
     for card in q3:
         card_dict = card.serialize()
         card_list.append(card_dict)
@@ -164,25 +164,25 @@ def delete_card(request):
             return Http404
 
 @login_required
-def easiness_card(request): 
+def grade_card(request): 
     if request.method != 'PUT':
         return HttpResponseBadRequest
     else:
         data = json.loads(request.body)
         id = data.get('id', '')
-        easiness = data.get('easiness', '')
+        grade = data.get('grade', '')
         try:
             card = BasicCard.objects.get(pk=id)
-            card.easiness = easiness
+            card.grade = grade
             card.save()
 
             # Update deck
             deck = card.deck
-            deck.easiness = deck.easiness_average()
+            deck.grade = deck.grade_average()
             deck.save()
 
             return JsonResponse({
-                'message': 'Card easiness updated'
+                'message': 'Card grade updated'
             }, status=200)
         except:
             return Http404

@@ -124,7 +124,7 @@ class IntegrationTestCase(StaticLiveServerTestCase):
         collection_link.click()
 
         grammar_class_field = wait_for_element(self.selenium, By.XPATH, '//section[@id="card-form-section"]//*[@id="grammar-class-field"]')
-        easiness_field = wait_for_element(self.selenium, By.XPATH, '//section[@id="card-form-section"]//*[@id="easiness-field"]')
+        grade_field = wait_for_element(self.selenium, By.XPATH, '//section[@id="card-form-section"]//*[@id="grade-field"]')
         front_field = wait_for_element(self.selenium, By.XPATH, '//section[@id="card-form-section"]//*[@id="front-field"]')
         front_extra_field = wait_for_element(self.selenium, By.XPATH, '//section[@id="card-form-section"]//*[@id="front-extra-field"]')
         back_main_field = wait_for_element(self.selenium, By.XPATH, '//section[@id="card-form-section"]//*[@id="back-main-field"]')
@@ -133,7 +133,7 @@ class IntegrationTestCase(StaticLiveServerTestCase):
         deck_field = wait_for_element(self.selenium, By.XPATH, '//section[@id="card-form-section"]//*[@id="deck-field"]')
 
         grammar_class_field.send_keys('Verb')
-        easiness_field.send_keys('Challenging')
+        grade_field.send_keys('Challenging')
         front_field.send_keys('cuire/faire cuire')
         front_extra_field.send_keys('qqch.')
         back_main_field.send_keys('to cook')
@@ -151,7 +151,7 @@ class IntegrationTestCase(StaticLiveServerTestCase):
         card.click()
 
         # wait_for_element(self.selenium, By.XPATH, '//section[@id="edit-section"]//*[@id="grammar-class-field"]//option[contains(text(), "Verb")]')
-        # wait_for_element(self.selenium, By.XPATH, '//section[@id="edit-section"]//*[@id="easiness-field"]//option[contains(text(), "Challenging")]')
+        # wait_for_element(self.selenium, By.XPATH, '//section[@id="edit-section"]//*[@id="grade-field"]//option[contains(text(), "Challenging")]')
         # wait_for_element(self.selenium, By.XPATH, '//section[@id="edit-section"]//*[@id="front-field" and contains(text(), "cuire/faire cuire")]')
         # wait_for_element(self.selenium, By.XPATH, '//section[@id="edit-section"]//*[@id="front-extra-field" and contains(text(), "qqch.")]')
         # wait_for_element(self.selenium, By.XPATH, '//section[@id="edit-section"]//*[@id="back-main-field" and contains(text(), "to cook")]')

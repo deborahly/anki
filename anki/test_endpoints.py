@@ -39,16 +39,16 @@ class IntegrationTestCase(TestCase):
         deck_user2_animals = CardDeck.objects.create(user=self.user2, name='Animals')
         deck_user2_music = CardDeck.objects.create(user=self.user2, name='Music')
 
-        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='papillon', front_extra='m, s', back_main='butterfly', deck=deck_user1_animals, easiness='NORMAL')
-        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='écureuil', front_extra='m, s', back_main='squirrel', deck=deck_user1_animals, easiness='PIECE OF CAKE')
-        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='baleine', front_extra='f, s', back_main='whale', deck=deck_user1_animals, easiness='CHALLENGING')
-        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='souris', front_extra='f, s', back_main='mouse', deck=deck_user1_animals, easiness='NORMAL')
-        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='coccinelle', front_extra='f, s', back_main='ladybug', deck=deck_user1_animals, easiness='PIECE OF CAKE')
-        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='abeille', front_extra='f, s', back_main='bee', deck=deck_user1_animals, easiness='CHALLENGING')
-        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='renard', front_extra='m, s', back_main='fox', deck=deck_user1_animals, easiness='NORMAL')
-        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='ours, ourse', back_main='bear', deck=deck_user1_animals, easiness='NORMAL')
-        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='chien, chienne', back_main='dog', deck=deck_user1_animals, easiness='NORMAL')
-        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='chat, chatte', back_main='cat', deck=deck_user1_animals, easiness='NORMAL')
+        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='papillon', front_extra='m, s', back_main='butterfly', deck=deck_user1_animals, grade='NORMAL')
+        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='écureuil', front_extra='m, s', back_main='squirrel', deck=deck_user1_animals, grade='PIECE OF CAKE')
+        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='baleine', front_extra='f, s', back_main='whale', deck=deck_user1_animals, grade='CHALLENGING')
+        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='souris', front_extra='f, s', back_main='mouse', deck=deck_user1_animals, grade='NORMAL')
+        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='coccinelle', front_extra='f, s', back_main='ladybug', deck=deck_user1_animals, grade='PIECE OF CAKE')
+        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='abeille', front_extra='f, s', back_main='bee', deck=deck_user1_animals, grade='CHALLENGING')
+        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='renard', front_extra='m, s', back_main='fox', deck=deck_user1_animals, grade='NORMAL')
+        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='ours, ourse', back_main='bear', deck=deck_user1_animals, grade='NORMAL')
+        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='chien, chienne', back_main='dog', deck=deck_user1_animals, grade='NORMAL')
+        BasicCard.objects.create(user=self.user1, grammar_class='Noun', front='chat, chatte', back_main='cat', deck=deck_user1_animals, grade='NORMAL')
 
         BasicCard.objects.create(user=self.user2, grammar_class='Noun', front='papillon', front_extra='m, s', back_main='butterfly', deck=deck_user2_animals)
         BasicCard.objects.create(user=self.user2, grammar_class='Verb', front='jouer', front_extra='à, au', back_main='to play (an instrument)', deck=deck_user2_music)
@@ -121,9 +121,9 @@ class IntegrationTestCase(TestCase):
         r = self.user1_client.get(f'/retrieve/session?id={DECK_ID}&quantity={QUANTITY}', follow=True)
         r_json = r.json()
         
-        # r_normal = list(filter(lambda x: x['easiness'] == 'NORMAL', r_json['cards']))
-        # r_challenging = list(filter(lambda x: x['easiness'] == 'CHALLENGING', r_json['cards']))
-        # r_piece_of_cake = list(filter(lambda x: x['easiness'] == 'PIECE OF CAKE', r_json['cards']))
+        # r_normal = list(filter(lambda x: x['grade'] == 'NORMAL', r_json['cards']))
+        # r_challenging = list(filter(lambda x: x['grade'] == 'CHALLENGING', r_json['cards']))
+        # r_piece_of_cake = list(filter(lambda x: x['grade'] == 'PIECE OF CAKE', r_json['cards']))
         
         assert r.status_code == 200
         assert type(r_json['cards']) == list
@@ -167,7 +167,7 @@ class IntegrationTestCase(TestCase):
         DECK_ID = 1
         data = {
             'grammar_class': 'NOUN',
-            'easiness': 'NORMAL',
+            'grade': 'NORMAL',
             'front': 'loup, louve',
             'front_extra': '',
             'back_main': 'wolf',
@@ -189,7 +189,7 @@ class IntegrationTestCase(TestCase):
         CARD_ID = BasicCard.objects.get(front='papillon', user=self.user1).id
         data = {
             'grammar_class': 'NOUN',
-            'easiness': 'PIECE OF CAKE',
+            'grade': 'PIECE OF CAKE',
             'front': 'papillon',
             'front_extra': 'm, s',
             'back_main': 'butterfly',
@@ -201,7 +201,7 @@ class IntegrationTestCase(TestCase):
         r = self.user1_client.post('/update/card', data=data)
         r_json = r.json()
         assert r.status_code == 200
-        assert r_json['card']['easiness'] == 'PIECE OF CAKE'
+        assert r_json['card']['grade'] == 'PIECE OF CAKE'
 
     def test_delete_card(self):
         CARD_ID = BasicCard.objects.get(front='chat, chatte', user=self.user1).id
@@ -215,17 +215,17 @@ class IntegrationTestCase(TestCase):
         assert r_json['message'] == 'Card deleted'
         assert r.status_code == 200
 
-    def test_easiness_card(self):
+    def test_grade_card(self):
         CARD_ID = BasicCard.objects.get(front='chat, chatte', user=self.user1).id
         data = {
             'id': CARD_ID,
-            'easiness': 'PIECE OF CAKE'
+            'grade': 'PIECE OF CAKE'
         }
-        r = self.user1_client.put('/easiness/card', json.dumps(data), content_type='application/json')
+        r = self.user1_client.put('/grade/card', json.dumps(data), content_type='application/json')
         r_json = r.json()
         card = BasicCard.objects.get(pk=CARD_ID)
-        assert card.easiness == 'PIECE OF CAKE'
-        assert r_json['message'] == 'Card easiness updated'
+        assert card.grade == 'PIECE OF CAKE'
+        assert r_json['message'] == 'Card grade updated'
         assert r.status_code == 200
 
     def test_get_archive(self):

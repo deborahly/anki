@@ -273,7 +273,7 @@ function showCard(cards, index) {
     // Add event listener to turn card when clicked:
     card_front.addEventListener('click', () => {
         showCardBack(cards, index);
-        addEasinessBtn(cards, index);
+        addGradeBtn(cards, index);
     }, {once: true});
 }
 
@@ -352,7 +352,7 @@ function addDeleteBtn() {
     btn_section.append(delete_btn);
 }
 
-function addEasinessBtn(cards, index) {
+function addGradeBtn(cards, index) {
     const cake_btn = document.createElement('button');
     cake_btn.id = 'cake-btn';
     cake_btn.dataset.value = 'PIECE OF CAKE';
@@ -381,8 +381,8 @@ function addEasinessBtn(cards, index) {
     // const challenging_btn = document.getElementById('challenging-btn');
     [cake_btn, normal_btn, challenging_btn].forEach(element => {
         element.addEventListener('click', (event) => {
-            const easiness = event.target.dataset.value;
-            updateEasiness(easiness, cards, index);
+            const grade = event.target.dataset.value;
+            updateGrade(grade, cards, index);
         })
     })
 }
@@ -403,7 +403,7 @@ function editCard(cards, index) {
 
     // Pre-fill form with current data:
     document.getElementById('grammar-class-field').value = cards[index]['grammar_class'];
-    document.getElementById('easiness-field').value = cards[index]['easiness'];
+    document.getElementById('grade-field').value = cards[index]['grade'];
     document.getElementById('front-field').value = cards[index]['front'];
     document.getElementById('front-extra-field').value = cards[index]['front_extra'];
     document.getElementById('back-main-field').value = cards[index]['back_main'];
@@ -475,18 +475,18 @@ function deleteCard(cards, index) {
     newDeck();        
 }
 
-function updateEasiness(easiness, cards, index) {
+function updateGrade(grade, cards, index) {
     const csrftoken = getCookie('csrftoken');
     
-    const fetchCardEasiness = async () => {
+    const fetchCardGrade = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/easiness/card', {
+            const response = await fetch('http://127.0.0.1:8000/grade/card', {
                 method: 'PUT',
                 headers: {
                     'X-CSRFToken': csrftoken,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({id: cards[index]['id'], easiness: easiness})
+                body: JSON.stringify({id: cards[index]['id'], grade: grade})
             })
             if (response.ok) {
                 if (index < (cards.length - 1)) {
@@ -503,7 +503,7 @@ function updateEasiness(easiness, cards, index) {
             console.error(error);
         }
     }
-    fetchCardEasiness();        
+    fetchCardGrade();        
 }
 
 function getCookie(name) {

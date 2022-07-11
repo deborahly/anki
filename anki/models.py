@@ -16,7 +16,7 @@ class CardDeck(TimeStampedModel):
     id = models.AutoField(primary_key=True)
     name =  models.CharField(max_length=32, verbose_name='File name', editable=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='files', editable=False, blank=False, null=False)
-    easiness = models.CharField(max_length=16, verbose_name='Overall easiness', editable=True, blank=True, null=True)
+    grade = models.CharField(max_length=16, verbose_name='Overall grade', editable=True, blank=True, null=True)
     archived = models.BooleanField(default=False)
 
     class Meta:
@@ -25,21 +25,21 @@ class CardDeck(TimeStampedModel):
     def __str__(self):
         return f'{self.name}'
 
-    def easiness_average(self):
+    def grade_average(self):
         value = 0
         for card in self.content.all():
-            if card.easiness == 'NORMAL':
+            if card.grade == 'NORMAL':
                 value += 1
-            elif card.easiness == 'CHALLENGING':
+            elif card.grade == 'CHALLENGING':
                 value += 2
         average = value / self.content.count()
         if average > 1.5:
-            easiness_average = 'Challenging'
+            grade_average = 'Challenging'
         elif average < 0.5:
-            easiness_average = 'Piece of cake!'
+            grade_average = 'Piece of cake!'
         else:
-            easiness_average = 'Normal'
-        return easiness_average
+            grade_average = 'Normal'
+        return grade_average
 
     def serialize(self):
         return {
@@ -47,7 +47,7 @@ class CardDeck(TimeStampedModel):
             'name': self.name,
             'archived': self.archived,
             'count': self.content.count(),
-            'easiness': self.easiness,
+            'grade': self.grade,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M'),
             'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M')
         }
@@ -60,7 +60,7 @@ class BasicCard(TimeStampedModel):
         ('ADVERB', 'Adverb'),
         ('OTHER', 'Other')
     )
-    EASINESS_CHOICES = (
+    GRADE_CHOICES = (
         ('PIECE OF CAKE', 'Piece of cake!'),
         ('NORMAL', 'Normal'),
         ('CHALLENGING', 'Challenging')
@@ -68,7 +68,7 @@ class BasicCard(TimeStampedModel):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cards', editable=False, blank=False, null=False)
     grammar_class = models.CharField(max_length=32, choices=GRAMMAR_CLASS_CHOICES, verbose_name='Class', editable=True, blank=False, null=False)
-    easiness = models.CharField(max_length=16, choices=EASINESS_CHOICES, verbose_name='Easiness', editable=True, blank=False, null=False)
+    grade = models.CharField(max_length=16, choices=GRADE_CHOICES, verbose_name='Grade', editable=True, blank=False, null=False)
     front = models.CharField(max_length=32, verbose_name='Front', editable=True, blank=False, null=False)
     front_extra = models.CharField(max_length=32, verbose_name='Front-extra', editable=True, blank=True, null=True)
     back_main = models.CharField(max_length=32, verbose_name='Back-main', editable=True, blank=False, null=False)
@@ -86,7 +86,7 @@ class BasicCard(TimeStampedModel):
         return {
             'id': self.id,
             'grammar_class': self.grammar_class,
-            'easiness': self.easiness,
+            'grade': self.grade,
             'front': self.front,
             'front_extra': self.front_extra,
             'back_main': self.back_main,

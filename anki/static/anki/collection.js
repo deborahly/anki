@@ -187,8 +187,8 @@ function showInfo() {
     let total_cards = document.createElement('div');
     total_cards.innerHTML = `Total cards: ${deck['count']}`;
 
-    let easiness = document.createElement('div');
-    easiness.innerHTML = `Easiness: ${deck['easiness']}`;
+    let grade = document.createElement('div');
+    grade.innerHTML = `Grade: ${deck['grade']}`;
 
     let created_at = document.createElement('div');
     created_at.innerHTML = `Created at: ${deck['created_at']}`;
@@ -198,7 +198,7 @@ function showInfo() {
 
     option_area.append(deck_name);
     option_area.append(total_cards);
-    option_area.append(easiness);
+    option_area.append(grade);
     option_area.append(created_at);
     option_area.append(updated_at);
 }
@@ -328,8 +328,8 @@ function editCard(index) {
     // Pre-fill form with current data:
     let grammar_class_field = getElementByXpath('//*[@id="edit-form-section"]//select[@id="grammar-class-field"]');
     grammar_class_field.value = cards[index]['grammar_class'];
-    let easiness_field = getElementByXpath('//*[@id="edit-form-section"]//select[@id="easiness-field"]');
-    easiness_field.value = cards[index]['easiness'];
+    let grade_field = getElementByXpath('//*[@id="edit-form-section"]//select[@id="grade-field"]');
+    grade_field.value = cards[index]['grade'];
     let front_field = getElementByXpath('//*[@id="edit-form-section"]//input[@id="front-field"]');
     front_field.value = cards[index]['front'];
     let front_extra_field = getElementByXpath('//*[@id="edit-form-section"]//input[@id="front-extra-field"]');
@@ -430,8 +430,8 @@ async function createCard(form) {
         // Clean fields:
         let grammar_class_field = getElementByXpath('//*[@id="card-form-section"]//select[@id="grammar-class-field"]');
         grammar_class_field.value = '';
-        let easiness_field = getElementByXpath('//*[@id="card-form-section"]//select[@id="easiness-field"]');
-        easiness_field.value = '';
+        let grade_field = getElementByXpath('//*[@id="card-form-section"]//select[@id="grade-field"]');
+        grade_field.value = '';
         let front_field = getElementByXpath('//*[@id="card-form-section"]//input[@id="front-field"]');
         front_field.value = '';
         let front_extra_field = getElementByXpath('//*[@id="card-form-section"]//input[@id="front-extra-field"]');
