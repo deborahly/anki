@@ -1,0 +1,19 @@
+html {
+    font-size: 100%;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+// Flexbox
+.flex {
+    display: flex;
+
+    &-jc-sb {
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &-jc-c {
+        justify-content: center;
+        align-items: center;
+    }
+}

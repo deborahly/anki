@@ -1,0 +1,21 @@
+// Colors
+$lightBeige: hsl(50, 70%, 90%);
+
+// Font sizes
+$font-xsm: rem(12);
+$font-sm: rem(16);
+$font-sm-md: rem(20);
+$font-md: rem(24);
+$font-md-lg: rem(32);
+$font-lg: rem(40);
+$font-xlg: rem(48);
+
+// Font weights
+$font-thin: 300;
+$font-normal: 400;
+$font-bold: 700;
+
+// Breakpoints
+// Mobile: 375px / Desktop: 1440px
+$breakpoints-up: ("medium": em(641), "large": em(1008));
+$breakpoints-down: ("small": em(640), "medium": em(1007));

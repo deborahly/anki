@@ -1,18 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
     // When PLAY CARDS page is loaded:
     if (document.title === 'Play cards') {
-        loadScript('/static/anki/play.js');
+        loadScript('/static/anki/js/play.js');
     }
 
     // When MY COLLECTION page is loaded:
     if (document.title === 'My collection') {
-        loadScript('/static/anki/collection.js');
+        loadScript('/static/anki/js/collection.js');
     }
 
     // When ARCHIVE page is loaded:
     if (document.title === 'Archive') {
-        loadScript('static/anki/archive.js');
+        loadScript('static/anki/js/archive.js');
     }
+
+    // Load script for events related to styles:
+    loadScript('static/anki/js/styles.js');
 })
 
 function getCookie(name) {

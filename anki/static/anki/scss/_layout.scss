@@ -1,0 +1,46 @@
+header {
+    background-color: $lightBeige;
+    padding: rem(12) rem(12);
+}
+
+.header {
+    &__logo {
+        height: rem(100);
+        width: auto;
+    }
+
+    &__nav {
+        padding: rem(12) rem(12);
+    }
+
+    &__menu { // Mobile menu (icon)
+        > p {
+            width: rem(26);
+            height: rem(2);
+            background-color: $darkBlue;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            transition: all 300ms ease-in-out;
+            transform-origin: rem(3.5) rem(1);
+
+            &:not(:last-child) {
+                margin-block-end: rem(5);
+            }
+        }
+
+        &.open {
+
+            > p:first-child {
+                transform: rotate(45deg);
+            }
+
+            > p:nth-child(2) {
+                opacity: 0;
+            }
+
+            p:last-child {
+                transform: rotate(-45deg);
+            }
+        }
+    }
+}
