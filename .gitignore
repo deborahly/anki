@@ -5,3 +5,4 @@ anki/migrations/*.py
 db.sqlite3
 queries.sqlite3
 launch.json
+*.scssc
