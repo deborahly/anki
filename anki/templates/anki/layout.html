@@ -10,17 +10,23 @@
     <body>
         <header>
             <div class="flex flex-jc-sb">
-                <img id="header-logo" src="{% static 'anki/images/chili_cards_01.jpg' %}" alt="Chili Cards logo" class="header__logo">
+                <a href="/"><img id="header-logo" src="{% static 'anki/images/chili_cards_01.jpg' %}" alt="Chili Cards logo" class="header__logo"></a>
 
                 <h1 id="header-title">Chili Cards</h1>
 
-                <div id="header-menu" class="header__menu">
+                {% if user.is_authenticated %}
+                    <div>
+                        Signed in as <strong>{{ user.username }}</strong>
+                    </div>
+                {% endif %}
+
+                <div id="header-icon" class="header__icon hide-for-desktop">
                     <p></p>
                     <p></p>
                     <p></p>
                 </div>
-                
-                <nav id="header-nav" class="header__nav">
+
+                <nav id="header-menu" class="header__menu">
                     <ul>
                         <li><a href="{% url 'index' %}">Home</a></li>
                         {% if user.is_authenticated %}
@@ -34,12 +40,21 @@
                         {% endif %}
                     </ul>
                 </nav>
-
-                <div>
-                    {% if user.is_authenticated %}
-                        Signed in as <strong>{{ user.username }}</strong>
-                    {% endif %}
-                </div>
+                
+                <nav id="header-nav" class="header__nav hide-for-mobile">
+                    <ul>
+                        <li><a href="{% url 'index' %}">Home</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'play' %}">Play cards</a></li>
+                            <li><a href="{% url 'collection' %}">My collection</a></li>
+                            <li><a href="{% url 'archive' %}">Archive</a></li>   
+                            <li><a href="{% url 'logout' %}">Log out</a></li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}">Log in</a></li>
+                            <li><a href="{% url 'register' %}">Register</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
             </div>
         </header>
         {% block main %}{% endblock %}
