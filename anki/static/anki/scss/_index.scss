@@ -1,0 +1,17 @@
+#index-welcome {
+    padding-top: 0;
+    padding-bottom: rem(20);
+}
+
+.index {
+    &-p {
+        font-size: $font-sm;
+        text-align: justify;
+        font-weight: $font-thin;
+    }
+
+    &-a {
+        font-style: italic;
+    }
+}
+

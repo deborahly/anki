@@ -1,0 +1,29 @@
+@keyframes fade-in {
+    from {
+        visibility: hidden;
+    }
+    
+    1% {
+        visibility: visible;
+    }
+
+    to {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    from {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    99% {
+        opacity: 0;
+    }
+
+    to {
+        visibility: hidden;
+    }
+}

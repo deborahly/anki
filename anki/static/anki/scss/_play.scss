@@ -1,0 +1,105 @@
+#overlay-background {
+    // Display
+    display: block;
+    opacity: 1;
+    visibility: hidden;
+    // Position
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    // Appearance
+    background: linear-gradient($dargGreen, transparent);
+
+    &.fade-in {
+        animation: fade-in 300ms ease-in-out forwards;
+    }
+
+    &.fade-out {
+        animation: fade-out 300ms ease-in-out forwards;
+    }
+}
+
+#option-section {
+    // Display
+    display: none;
+    // Position
+    position: absolute;
+    top: rem(90);
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    transform: translateX(-50%);
+    // Dimension
+    width: 70%;
+    height: max-content;
+    // Padding
+    padding: rem(25) 0;
+    // Appearance
+    border-radius: rem(5);
+    background: white;
+    // Content
+    text-align: center;
+}
+
+#game-section {
+    // Display
+    display: block;
+    opacity: 1;
+    visibility: hidden;
+    // Position  
+    position: absolute;
+    top: rem(90);
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    transform: translateX(-50%);
+    // Dimension
+    width: 70%;
+    height: max-content;
+    // Padding
+    padding: rem(16) rem(16);
+    // Appearance
+    border-radius: rem(5);
+    background: white;
+    // Content
+    text-align: center;
+
+    &.fade-in {
+        animation: fade-in 300ms ease-in-out forwards;
+    }
+
+    &.fade-out {
+        animation: fade-out 300ms ease-in-out forwards;
+    }
+}
+
+.card {
+    border-width: 0.0625rem;
+    border-style: solid;
+    padding: 1rem 1rem;
+    height: 256px;
+    width: 152px;
+    margin-block-start: 20px;
+    margin-block-end: 20px;
+}
+
+.play {
+    &-deck {
+        background-image: url("chili_cards_01.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        
+        height: rem(80);
+        width: rem(100);
+        
+        display: inline-block;
+        padding-top: rem(60);
+        
+        text-align: center;
+        font-size: $font-md;
+        font-weight: $font-bold;
+    }
+}

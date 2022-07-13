@@ -1,19 +1,134 @@
 html {
     font-size: 100%;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    line-height: 1.5;
 }
 
 // Flexbox
 .flex {
-    display: flex;
-
     &-jc-sb {
+        display: flex;
         justify-content: space-between;
         align-items: center;
     }
 
+    &-jc-sa {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
     &-jc-c {
+        display: flex;
         justify-content: center;
         align-items: center;
     }
+}
+
+// Visibility
+.hide-for-mobile {
+    display: none;
+
+    @include screen-breakpoint {
+        display: block;
+    }
+}
+
+.hide-for-desktop {
+    display: block;
+
+    @include screen-breakpoint{
+        display: none;
+    }
+}
+
+// Forms
+.form {
+    &-group {
+        display: block;
+        padding: rem(10) rem(10);
+    }
+
+    &-input-number {
+        border-color: black;
+        border-width: 1px;
+        width: 40px;
+        text-align: center;
+    }
+
+    &-input-submit {
+        height: rem(28);
+        width: rem(56);
+        border-radius: rem(20);
+        border-width: 0;
+        background-color: $darkRed;
+        color: white;
+        font-size: $font-sm;
+        font-weight: $font-normal;
+
+        &:hover {
+            background-color: $dargGreen;
+        }
+    }
+}
+
+// Buttons
+.cancel-btn {
+    height: rem(28);
+    width: rem(56);
+    border-radius: rem(20);
+    border-width: 0;
+    background-color: $darkGray;
+    color: white;
+    font-size: $font-sm;
+    font-weight: $font-normal;
+
+    &:hover {
+        background-color: $mediumGray
+    }
+}
+
+.quit-btn {
+    height: rem(28);
+    width: rem(56);
+    border-radius: rem(20);
+    border-width: 0;
+    background-color: $darkGray;
+    color: white;
+    font-size: $font-sm;
+    font-weight: $font-normal;
+
+    &:hover {
+        background-color: $mediumGray
+    }
+}
+
+// Functionality
+.no-scroll {
+    overflow: hidden;
+}
+
+// Tags
+ul {
+    margin-block-start: em(32);
+    margin-block-end: em(32);
+    padding-left: rem(32);
+    padding-right: rem(32); 
+}
+
+li {
+    list-style-type: none;
+
+    &:not(:last-child) {
+        margin-block-end: rem(10);
+    }
+}
+
+a, a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    color: gray;
 }

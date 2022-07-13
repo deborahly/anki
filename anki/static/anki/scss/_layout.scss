@@ -1,6 +1,6 @@
 header {
-    background-color: $lightBeige;
-    padding: rem(12) rem(12);
+    background-color: $lightGray;
+    padding: rem(20) rem(20);
 }
 
 .header {
@@ -9,27 +9,26 @@ header {
         width: auto;
     }
 
-    &__nav {
-        padding: rem(12) rem(12);
-    }
+    &__icon {
+        &:hover {
+            cursor: pointer;
+        }
 
-    &__menu { // Mobile menu (icon)
         > p {
-            width: rem(26);
+            // Dimension
+            width: rem(24);
             height: rem(2);
-            background-color: $darkBlue;
-            margin-block-start: 0;
+            // Margin
+            margin-block-start: rem(6);
             margin-block-end: 0;
-            transition: all 300ms ease-in-out;
-            transform-origin: rem(3.5) rem(1);
-
-            &:not(:last-child) {
-                margin-block-end: rem(5);
-            }
+            // Appearance
+            background-color: black;
+            // Transition
+            transition: all 150ms ease-in-out;
+            transform-origin: rem(1) rem(1);
         }
 
         &.open {
-
             > p:first-child {
                 transform: rotate(45deg);
             }
@@ -43,4 +42,42 @@ header {
             }
         }
     }
+
+    &__menu {
+        // Position
+        position: absolute;
+        top: rem(132);
+        bottom: 0;
+        left: 0;
+        right: 0;
+        // Dimension
+        height: auto;
+        width: auto;
+        // Margin
+        margin-left: rem(8);
+        margin-right: rem(8);
+        // Appearance
+        display: block;
+        opacity: 1;
+        visibility: hidden;
+        background: orange;
+        // Content
+        text-align: left;
+
+        &.fade-in {
+            animation: fade-in 300ms ease-in-out forwards;
+        }
+
+        &.fade-out {
+            animation: fade-out 300ms ease-in-out forwards;
+        }
+    }
+    
+    &__nav {
+        padding: rem(12) rem(12);
+    }
+}
+
+main {
+    padding: rem(20) rem(20);
 }
