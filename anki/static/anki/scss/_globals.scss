@@ -4,25 +4,75 @@ html {
     line-height: 1.5;
 }
 
+h1 {
+    margin: 0;
+    font-size: $font-xlg;
+}
+
 // Flexbox
 .flex {
+    display: flex;
+
     &-jc-sb {
-        display: flex;
         justify-content: space-between;
         align-items: center;
     }
 
     &-jc-sa {
-        display: flex;
         justify-content: space-around;
         align-items: center;
     }
 
     &-jc-c {
-        display: flex;
         justify-content: center;
         align-items: center;
     }
+
+    &-1 {
+        flex: 1;
+    }
+
+    &-2 {
+        flex: 2;
+    }
+}
+
+// Grid
+.grid {
+    display: grid;
+}
+
+.grid-area {
+    &-top {
+        grid-area: top;
+    }
+
+    &-left {
+        grid-area: left;
+    }
+
+    &-center {
+        grid-area: center;
+    }
+
+    &-right {
+        grid-area: right;
+    }
+
+    &-bottom{
+        grid-area: bottom;
+    }
+}
+
+.header-grid {
+    display: grid;
+    justify-content: space-between;
+    align-items: center;
+    grid-template-areas:
+        'top top'
+        'left right';
+    padding: 0 rem(15);
+    row-gap: rem(15);
 }
 
 // Visibility
@@ -100,6 +150,43 @@ html {
 
     &:hover {
         background-color: $mediumGray
+    }
+}
+
+.grade-btn {
+    height: rem(81.6);
+    width: rem(81.6);
+    border-radius: rem(81.6);
+    border-style: none;
+    color: white;
+    font-size: $font-xsm;
+    font-weight: $font-normal;
+
+    &.cake-btn {
+        background-color: $normalPink;
+
+
+        &:hover {
+            background-color: $darkPink;
+        }
+    }
+
+    &.normal-btn {
+        background-color: $normalOrange;
+
+
+        &:hover {
+            background-color: $darkOrange;
+        }
+    }
+
+    &.challenging-btn {
+        background-color: $normalPurple;
+
+
+        &:hover {
+            background-color: $darkPurple;
+        }
     }
 }
 

@@ -1,6 +1,12 @@
 header {
     background-color: $lightGray;
     padding: rem(20) rem(20);
+    height: em(100);
+}
+
+#logged-user {
+    text-align: right;
+    font-size: $font-sm;
 }
 
 .header {
@@ -46,7 +52,7 @@ header {
     &__menu {
         // Position
         position: absolute;
-        top: rem(132);
+        top: rem(148);
         bottom: 0;
         left: 0;
         right: 0;

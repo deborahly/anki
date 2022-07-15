@@ -46,13 +46,28 @@ cancel_option_btn.addEventListener('click', () => {
 })
 
 option_form.addEventListener('submit', () => {
-    overlay_background.classList.add('fade-out');
-    overlay_background.classList.remove('fade-in');
+    // overlay_background.classList.add('fade-out');
+    // overlay_background.classList.remove('fade-in');
 
     game_section.classList.add('fade-in');
     game_section.classList.remove('fade-out');
 
-    // Scroll on
+    // Scroll off
+    document.querySelector('body').classList.add("no-scroll");
+})
+
+// Play - Game section
+const card = document.getElementById('card');
+const quit_btn = document.getElementById('quit-btn');
+
+quit_btn.addEventListener('click', () => {
+    game_section.classList.add('fade-out');
+    game_section.classList.remove('fade-in');
+
+    overlay_background.classList.add('fade-out');
+    overlay_background.classList.remove('fade-in');
+
+    // Scroll off
     document.querySelector('body').classList.add("no-scroll");
 })
 

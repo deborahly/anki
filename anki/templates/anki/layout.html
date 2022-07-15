@@ -10,20 +10,22 @@
     <body>
         <header>
             <div class="flex flex-jc-sb">
-                <a href="/"><img id="header-logo" src="{% static 'anki/images/chili_cards_01.jpg' %}" alt="Chili Cards logo" class="header__logo"></a>
+                <a href="/"><img id="header-logo" src="{% static 'anki/images/chili_cards_05.jpg' %}" alt="Chili Cards logo" class="header__logo flex-1"></a>
 
-                <h1 id="header-title">Chili Cards</h1>
+                <div class="flex-1 header-grid">
+                    {% if user.is_authenticated %}
+                        <div id="logged-user" class="grid-area-top">
+                            Signed in as <strong>{{ user.username }}</strong>
+                        </div>
+                    {% endif %}
 
-                {% if user.is_authenticated %}
-                    <div>
-                        Signed in as <strong>{{ user.username }}</strong>
+                    <h1 id="header-title" class="grid-area-left">Chili Cards</h1>
+
+                    <div id="header-icon" class="header__icon hide-for-desktop grid-area-right">
+                        <p></p>
+                        <p></p>
+                        <p></p>
                     </div>
-                {% endif %}
-
-                <div id="header-icon" class="header__icon hide-for-desktop">
-                    <p></p>
-                    <p></p>
-                    <p></p>
                 </div>
 
                 <nav id="header-menu" class="header__menu">
