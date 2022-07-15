@@ -128,8 +128,6 @@ function displayInitialList() {
 }
 
 function showOptions() {
-    displayInitialCollection();
-
     let option_nav = document.getElementById('option-nav');
     let option_list = document.createElement('ul');
 

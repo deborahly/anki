@@ -1,29 +1,8 @@
-#overlay-background {
+#play-option-section {
     // Display
     display: block;
     opacity: 1;
     visibility: hidden;
-    // Position
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    // Appearance
-    background: linear-gradient($dargGreen, transparent);
-
-    &.fade-in {
-        animation: fade-in 300ms ease-in-out forwards;
-    }
-
-    &.fade-out {
-        animation: fade-out 300ms ease-in-out forwards;
-    }
-}
-
-#option-section {
-    // Display
-    display: none;
     // Position
     position: absolute;
     top: 30%;
@@ -41,6 +20,14 @@
     background: white;
     // Content
     text-align: center;
+
+    &.fade-in {
+        animation: fade-in 300ms ease-in-out forwards;
+    }
+
+    &.fade-out {
+        animation: fade-out 300ms ease-in-out forwards;
+    }
 }
 
 #game-section {
@@ -66,7 +53,6 @@
     // Content
     text-align: center;
     align-items: center;
-    // row-gap: rem(16);
 
     &.fade-in {
         animation: fade-in 300ms ease-in-out forwards;
@@ -78,10 +64,10 @@
 }
 
 #game-message {
-    height: rem(10);
+    height: rem(30);
 }
 
-#card {
+#game-card {
     // Display
     display: grid;
     // Dimension
@@ -89,14 +75,6 @@
     width: rem(152);
     // Padding
     padding: 1rem 1rem;
-    // // Margin
-    // margin-block-start: rem(20);
-    // margin-block-end: rem(20);
-    // // Appearance
-    // border-width: 0.5rem;
-    // border-radius: rem(10);
-    // border-style: solid;
-    // border-color: white;
     // Content
     align-items: center;
     font-size: $font-md;
@@ -128,29 +106,27 @@
     }
 }
 
-#btn-div {
-    height: rem(10);
+#game-btn-div {
+    height: rem(74);
+}
+
+.play-deck {
+    background-image: url("chili_cards_05.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    
+    height: rem(80);
+    width: rem(100);
+    
+    display: inline-block;
+    padding-top: rem(60);
+    
+    text-align: center;
+    font-size: $font-md;
+    font-weight: $font-bold;
 }
 
 .front, .back-main {
     font-size: $font-md-lg;
-}
-
-.play {
-    &-deck {
-        background-image: url("chili_cards_05.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-        
-        height: rem(80);
-        width: rem(100);
-        
-        display: inline-block;
-        padding-top: rem(60);
-        
-        text-align: center;
-        font-size: $font-md;
-        font-weight: $font-bold;
-    }
 }

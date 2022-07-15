@@ -22,10 +22,10 @@
         </ul>
     </section>
 
-    <div id="overlay-background"></div>
+    <div class="overlay-background"></div>
 
-    <section id="option-section">
-        <form action="#" id="option-form">
+    <section id="play-option-section">
+        <form action="#" id="play-option-form">
             <div class="form-group">
                 <label for="quantity">Enter card quantity:</label>
                 <input type="number" id="quantity" name="quantity" min="1" class="form-input-number">
@@ -43,7 +43,7 @@
 
             <div class="form-group">
                 <input type="submit" id="start" value="Start" class="form-input-submit">
-                <button type="button" id="cancel-option-btn" class="cancel-btn">Cancel</button>
+                <button type="button" id="play-cancel-option-btn" class="cancel-btn">Cancel</button>
             </div>
         </form>
     </section>
@@ -52,16 +52,16 @@
         <div class="flex flex-jc-sb">
             <div id="countdown"></div>
 
-            <button type="button" id="quit-btn" class="quit-btn">Quit</button>
+            <button type="button" id="game-quit-btn" class="cancel-btn">Quit</button>
         </div>
 
         <div id="game-message"></div>
 
-        <div id="card-div" class="flex flex-jc-sa">
-            <div id="card"></div>
+        <div id="game-card-div" class="flex flex-jc-sa">
+            <div id="game-card"></div>
         </div>
     
-        <div id="btn-div" class="flex flex-jc-sa"></div>
+        <div id="game-btn-div" class="flex flex-jc-sa"></div>
     </section>
 </main>
 {% endblock %}

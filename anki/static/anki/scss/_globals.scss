@@ -9,6 +9,29 @@ h1 {
     font-size: $font-xlg;
 }
 
+.overlay-background {
+    // Display
+    display: block;
+    opacity: 1;
+    visibility: hidden;
+    // Position
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    // Appearance
+    background: linear-gradient($dargGreen, transparent);
+
+    &.fade-in {
+        animation: fade-in 300ms ease-in-out forwards;
+    }
+
+    &.fade-out {
+        animation: fade-out 300ms ease-in-out forwards;
+    }
+}
+
 // Flexbox
 .flex {
     display: flex;
@@ -124,21 +147,6 @@ h1 {
 
 // Buttons
 .cancel-btn {
-    height: rem(28);
-    width: rem(56);
-    border-radius: rem(20);
-    border-width: 0;
-    background-color: $darkGray;
-    color: white;
-    font-size: $font-sm;
-    font-weight: $font-normal;
-
-    &:hover {
-        background-color: $mediumGray
-    }
-}
-
-.quit-btn {
     height: rem(28);
     width: rem(56);
     border-radius: rem(20);
