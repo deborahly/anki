@@ -27,13 +27,13 @@
                         <tr>
                             <td>{{ deck.name }}</td>
                         
-                            <td><button type="button" class="manage-btn" data-id="{{ deck.id }}">Manage</button></td>
+                            <td><button type="button" class="link-btn" data-id="{{ deck.id }}">Manage</button></td>
                             
                             <td>
                                 <form action="{% url 'archive' %}" method="post" id="archive-form">
                                     {% csrf_token %}
                                     <input type="hidden" name="deck-to-archive" id="deck-to-archive" value="{{ deck.id }}">
-                                    <button type="submit" class="archive-btn">Archive</button>
+                                    <button type="submit" class="link-btn">Archive</button>
                                 </form>
                             </td>
                         </tr>
@@ -46,7 +46,7 @@
 
         <section id="manage-section">
             <div class="grid-area-top">
-                <nav id="option-nav">
+                <nav id="option-nav" class="front-layer">
                     <div class="go-back-btn-div">
                         <button type="button" id="nav-go-back-btn" class="go-back-btn">Go back</button>
                     </div>
@@ -60,7 +60,7 @@
             </div>
 
             <div class="grid-area-right">
-                <div id="option-display">
+                <div id="option-display" class="front-layer">
                     <div class="go-back-btn-div">
                         <button type="button" id="display-go-back-btn" class="go-back-btn">Go back</button>
                     </div>
@@ -71,12 +71,12 @@
                 </div>
             </div>
     
-            <div id="edit-form-div">
+            <div id="edit-form-div" class="front-layer">
                 <div class="go-back-btn-div">
                     <button type="button" id="edit-go-back-btn" class="go-back-btn">Go back</button>
                 </div>
                 
-                <h5>Edit card</h5>
+                <h4>Edit card</h4>
 
                 <form action="#" id="basic-card-form">
                     {% csrf_token %}
@@ -93,7 +93,7 @@
                 
                 <div id="create-message"></div>
 
-                <h5>Create new card</h5>
+                <h4>Create new card</h4>
 
                 <form action="#" id="basic-card-form">
                     {% csrf_token %}

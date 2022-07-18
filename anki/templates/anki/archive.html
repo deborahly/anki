@@ -8,18 +8,24 @@
         {{ message }}
     </div>
 
-    <ul>
+    <h3>Archived decks</h3>
+
+    <table>
         {% for deck in archived_decks %}
-            <li id="li-{{ deck.id }}">
-                <span class="archived-deck" data-id="{{ deck.id }}">{{ deck.name }}</span>
-                <form action="{% url 'unarchive' %}" method="post" id="unarchive-form">
-                    {% csrf_token %}
-                    <input type="hidden" name="deck-to-unarchive" id="deck-to-unarchive" value="{{ deck.id }}">
-                    <input type="submit" value="Unarchive">
-                </form>
-                <button type="button" class="delete-deck-btn" data-id="{{ deck.id }}">Delete</button>
-            </li>          
+            <tr id="tr-{{ deck.id }}">
+                <td>{{ deck.name }}</td>
+
+                <td>
+                    <form action="{% url 'unarchive' %}" method="post" id="unarchive-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="deck-to-unarchive" id="deck-to-unarchive" value="{{ deck.id }}">
+                        <button type="submit" class="link-btn">Unarchive</button>
+                    </form>
+                </td>
+
+                <td><button type="button" class="delete-deck-btn link-btn" data-id="{{ deck.id }}">Delete</button></td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 </main>
 {% endblock %}

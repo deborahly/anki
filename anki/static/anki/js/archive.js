@@ -17,8 +17,11 @@ document.querySelectorAll('.delete-deck-btn').forEach(element => {
                         body: JSON.stringify({deck_id: deck_id})
                     })
                     if (response.ok) {
-                        document.getElementById(`li-${deck_id}`).remove();
-                        document.getElementById('message').innerHTML = 'Deck deleted.'
+                        document.getElementById(`tr-${deck_id}`).remove();
+                        document.getElementById('message').innerHTML = 'Deck deleted';
+                        setTimeout(function() {
+                            document.getElementById('message').innerHTML = '';
+                        }, 3000);
                     }
                 } catch (error) {
                     console.error(error);

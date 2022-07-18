@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // When ARCHIVE page is loaded:
     if (document.title === 'Archive') {
         loadScript('static/anki/js/archive.js');
-        loadScript('static/anki/js/style_archive.js');
     }
 
     // When any page is loaded:

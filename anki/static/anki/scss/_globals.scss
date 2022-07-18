@@ -9,6 +9,10 @@ h1 {
     font-size: $font-xlg;
 }
 
+h4 {
+    margin: rem(10) 0;
+}
+
 .overlay-background {
     // Display
     display: block;
@@ -222,6 +226,18 @@ h1 {
         &:hover {
             background-color: $darkPurple;
         }
+    }
+}
+
+.link-btn {
+    border: none;
+    background-color: transparent;
+    font-size: $font-xsm;
+    padding: 0;
+
+    &:hover {
+        color: gray;
+        cursor: pointer;
     }
 }
 
