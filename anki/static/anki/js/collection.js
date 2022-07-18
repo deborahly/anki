@@ -2,25 +2,24 @@
 const PER_PAGE = 10;
 
 // Globals
+var deck_id;
 var deck = {};
 var cards = [];
 var pagination = [];
-var page_index = 0  ;
+var page_index = 0;
 
-document.querySelectorAll('.deck').forEach(element => {
+document.querySelectorAll('.manage-btn').forEach(element => {
     element.addEventListener('click', () => {      
-        displayInitialCollection();
+        displayInitialSet();
         
-        // Get deck id and show options:
-        let deck_id = element.dataset.id;
-        showOptions();
+        deck_id = element.dataset.id;
 
         // If deck info is selected:   
         document.getElementById('deck-info-link').addEventListener('click', () => {
             let getInfo = async () => {
-                displayInitialOptions();
-
                 await fetchBatch(deck_id, page_index);
+                
+                displayInitialSet();
                 
                 showInfo();
             }
@@ -30,17 +29,16 @@ document.querySelectorAll('.deck').forEach(element => {
         // If list deck is selected:
         document.getElementById('list-deck-link').addEventListener('click', () => {
             let getBatch = async () => {
-                displayInitialOptions();
-
                 page_index = 1;
                 
                 await fetchBatch(deck_id, page_index);
+                
+                displayInitialSet();
 
                 if (cards.length != 0) {
                     listBatch();
                 } else {
-                    let message = document.getElementById('message');
-                    message.innerHTML = 'This deck is empty.'
+                    document.getElementById('option-area').innerHTML = 'This deck is empty.';
                 }
             }
             getBatch();
@@ -48,20 +46,12 @@ document.querySelectorAll('.deck').forEach(element => {
     
         // If create card is selected:
         document.getElementById('create-card-link').addEventListener('click', () => {
-            displayInitialOptions();
+            displayInitialSet();
             
-            let card_form_section = document.getElementById('card-form-section');
-            card_form_section.style.display = 'block';
-            
-            let cancel_create_btn = document.getElementById('cancel-create-btn');
-            cancel_create_btn.addEventListener('click', () => {
-                displayInitialOptions();
-            })
-            
-            let deck_field = getElementByXpath('//*[@id="card-form-section"]//select[@id="deck-field"]');
+            let deck_field = getElementByXpath('//*[@id="create-form-div"]//select[@id="deck-field"]');
             deck_field.value = deck_id;
     
-            let form = getElementByXpath('//*[@id="card-form-section"]//form[@id="basic-card-form"]');
+            let form = getElementByXpath('//*[@id="create-form-div"]//form[@id="basic-card-form"]');
             form.onsubmit = async (event) => {
                 event.preventDefault();
                 createCard(form);
@@ -70,92 +60,14 @@ document.querySelectorAll('.deck').forEach(element => {
     })
 });
 
-function displayInitialCollection() {
-    let message = document.getElementById('message');
-    message.innerHTML = '';
-  
-    let option_nav = document.getElementById('option-nav');
-    option_nav.innerHTML = '';
+function displayInitialSet() {
+    document.getElementById('message').innerHTML = '';
 
-    let option_area = document.getElementById('option-area');
-    option_area.innerHTML = '';
+    document.getElementById('option-area').innerHTML = '';
+    
+    document.getElementById('next-previous-btn-div').innerHTML = '';
 
-    let card_section = document.getElementById('card-section');
-    card_section.innerHTML = '';
-
-    let btn_section = document.getElementById('btn-section');
-    btn_section.innerHTML = '';
-
-    let edit_form_section = document.getElementById('edit-form-section');
-    edit_form_section.style.display = 'none';
-
-    let card_form_section = document.getElementById('card-form-section');
-    card_form_section.style.display = 'none';
-}
-
-function displayInitialOptions() {
-    let message = document.getElementById('message');
-    message.innerHTML = '';
-
-    let option_area = document.getElementById('option-area');
-    option_area.innerHTML = '';
-
-    let card_section = document.getElementById('card-section');
-    card_section.innerHTML = '';
-
-    let btn_section = document.getElementById('btn-section');
-    btn_section.innerHTML = '';
-
-    let edit_form_section = document.getElementById('edit-form-section');
-    edit_form_section.style.display = 'none';
-
-    let card_form_section = document.getElementById('card-form-section');
-    card_form_section.style.display = 'none';
-}
-
-function displayInitialList() {
-    let card_section = document.getElementById('card-section');
-    card_section.innerHTML = '';
-
-    let btn_section = document.getElementById('btn-section');
-    btn_section.innerHTML = '';
-
-    let edit_form_section = document.getElementById('edit-form-section');
-    edit_form_section.style.display = 'none';
-
-    let card_form_section = document.getElementById('card-form-section');
-    card_form_section.style.display = 'none';
-}
-
-function showOptions() {
-    let option_nav = document.getElementById('option-nav');
-    let option_list = document.createElement('ul');
-
-    let deck_info_li = document.createElement('li');
-    let deck_info_a = document.createElement('a');
-    deck_info_a.id = 'deck-info-link';
-    deck_info_a.setAttribute('href', '#');
-    deck_info_a.innerHTML = 'Deck info';
-    deck_info_li.append(deck_info_a);
-
-    let list_deck_li = document.createElement('li');
-    let list_deck_a = document.createElement('a');
-    list_deck_a.id = 'list-deck-link';
-    list_deck_a.setAttribute('href', '#');
-    list_deck_a.innerHTML = 'List deck';
-    list_deck_li.append(list_deck_a);
-
-    let create_card_li = document.createElement('li');
-    let create_card_a = document.createElement('a');
-    create_card_a.id = 'create-card-link'
-    create_card_a.setAttribute('href', '#');
-    create_card_a.innerHTML = 'Create new card';
-    create_card_li.append(create_card_a);
-
-    option_nav.append(option_list);
-    option_list.append(deck_info_li);
-    option_list.append(list_deck_li);
-    option_list.append(create_card_li);
+    document.getElementById('create-message').innerHTML = '';
 }
 
 async function fetchBatch(deck_id, page_index) {
@@ -165,12 +77,6 @@ async function fetchBatch(deck_id, page_index) {
         pagination = await data.pagination;
         deck = await data.deck;
         cards = await data.cards;
-        // let response_dict = {
-        //     'pagination': pagination,
-        //     'deck': deck,
-        //     'cards': cards
-        // }
-        // return response_dict
     } catch (error) {
         console.error(error);
     } 
@@ -202,143 +108,81 @@ function showInfo() {
 }
 
 function listBatch() {
-    displayInitialOptions();
-
     let option_area = document.getElementById('option-area');
 
-    let list_header = document.createElement('div');
-    list_header.id = 'list-header';
-    option_area.append(list_header);
-
-    let list_name = document.createElement('h5');
-    list_name.innerHTML = deck['name'];
-    list_header.append(list_name);
-
-    let list = document.createElement('ol');
-    option_area.append(list);
+    let table = document.createElement('table');
+    option_area.append(table);
     
     for (let i = 0; i < cards.length; i++) {
-        let list_element = document.createElement('li');
+        let tr = document.createElement('tr');
+        let td_card = document.createElement('td');
+        let td_edit = document.createElement('td');
+        let td_delete = document.createElement('td');
 
-        let list_link = document.createElement('a');
-        list_link.classList.add('card');
-        list_link.setAttribute('href', '#');
-        list_link.innerHTML = `${cards[i]['front']}`
+        td_card.innerHTML = `${cards[i]['front']}`;
 
-        list_element.append(list_link);
-        list.append(list_element);
+        let edit_link = document.createElement('a');
+        edit_link.setAttribute('href', '#');
+        edit_link.classList.add('edit-link');
+        edit_link.innerHTML = 'Edit';
+        td_edit.append(edit_link);  
 
-        list_element.addEventListener('click', (event) => {
-            event.preventDefault();
-            displayInitialList();
-            showDeck(i);        
+        let delete_link = document.createElement('a');
+        delete_link.setAttribute('href', '#');
+        delete_link.classList.add('delete-link');
+        delete_link.innerHTML = 'Delete';
+        td_delete.append(delete_link);
+
+        table.append(tr);
+        tr.append(td_card);
+        tr.append(td_edit);
+        tr.append(td_delete);
+        
+        edit_link.addEventListener('click', () => {
+            editCard(i);
+            document.getElementById('edit-form-div').classList.add('fade-in');
+            document.getElementById('edit-form-div').classList.remove('fade-out');
+            document.getElementById('option-display').classList.add('fade-out');
+            document.getElementById('option-display').classList.remove('fade-in');
+        })
+
+        delete_link.addEventListener('click', () => {
+            var result = confirm('Are you sure to delete?');
+            if (result) {
+                deleteCard(i);
+            }
         })
     }
 
     addPaginationBtn();
 }
 
-function showDeck(index) {    
-    showCard(index);
-
-    addEditBtn();
-    let edit_btn = document.getElementById('edit-btn');
-    edit_btn.addEventListener('click', () => {
-        editCard(index);
-    })
-
-    addDeleteBtn();
-    let delete_btn = document.getElementById('delete-btn');
-    delete_btn.addEventListener('click', () => {
-        var result = confirm('Are you sure to delete?');
-        if (result) {
-            deleteCard(index);
-        }
-    })
-}
-
-function showCard(index) {
-    // Clean card section
-    let card_section = document.getElementById('card-section');
-    card_section.innerHTML = '';
-
-    // Create card front:
-    let card_front = document.createElement('div');
-    card_front.classList.add('card');
-    card_front.dataset.side = 'front';
-
-    // Create elements:
-    let grammar_class = document.createElement('div');
-    grammar_class.innerHTML = cards[index]['grammar_class'];
-    grammar_class.classList.add('grammar-class');
-
-    let front = document.createElement('div');
-    front.innerHTML = cards[index]['front'];
-    front.classList.add('front');
-
-    let front_extra = document.createElement('div');
-    front_extra.innerHTML = cards[index]['front_extra'];
-    front_extra.classList.add('front-extra');
-
-    // Append everything:
-    card_section.append(card_front);
-    card_front.append(grammar_class);
-    card_front.append(front);
-    card_front.append(front_extra);
-
-    // Add event listener to turn card when clicked:
-    card_front.addEventListener('click', () => {
-        showCardBack(index);
-    }, {once: true});
-}
-
-function addEditBtn() {
-    let edit_btn = document.createElement('button');
-    edit_btn.id = 'edit-btn';
-    edit_btn.setAttribute('type', 'button');
-    edit_btn.innerHTML = 'Edit';
-
-    let btn_section = document.getElementById('btn-section');
-    btn_section.append(edit_btn);
-}
-
-function addDeleteBtn() {
-    let delete_btn = document.createElement('button');
-    delete_btn.id = 'delete-btn';
-    delete_btn.setAttribute('type', 'button');
-    delete_btn.innerHTML = 'Delete';
-
-    let btn_section = document.getElementById('btn-section');
-    btn_section.append(delete_btn);
-}
-
 function editCard(index) {
-    // Display form section:
-    let edit_form_section = document.getElementById('edit-form-section');
-    edit_form_section.style.display = 'block';
-
     // Add listener to cancel input:
-    let cancel_edit_btn = document.getElementById('cancel-edit-btn');
-    cancel_edit_btn.addEventListener('click', () => {
-        displayInitialList();
+    let edit_go_back_btn = document.getElementById('edit-go-back-btn');
+    edit_go_back_btn.addEventListener('click', () => {
+        document.getElementById('edit-form-div').classList.add('fade-out');
+        document.getElementById('edit-form-div').classList.remove('fade-in');
+        document.getElementById('option-display').classList.add('fade-in');
+        document.getElementById('option-display').classList.remove('fade-out');
     })
 
     // Pre-fill form with current data:
-    let grammar_class_field = getElementByXpath('//*[@id="edit-form-section"]//select[@id="grammar-class-field"]');
+    let grammar_class_field = getElementByXpath('//*[@id="edit-form-div"]//select[@id="grammar-class-field"]');
     grammar_class_field.value = cards[index]['grammar_class'];
-    let grade_field = getElementByXpath('//*[@id="edit-form-section"]//select[@id="grade-field"]');
+    let grade_field = getElementByXpath('//*[@id="edit-form-div"]//select[@id="grade-field"]');
     grade_field.value = cards[index]['grade'];
-    let front_field = getElementByXpath('//*[@id="edit-form-section"]//input[@id="front-field"]');
+    let front_field = getElementByXpath('//*[@id="edit-form-div"]//input[@id="front-field"]');
     front_field.value = cards[index]['front'];
-    let front_extra_field = getElementByXpath('//*[@id="edit-form-section"]//input[@id="front-extra-field"]');
+    let front_extra_field = getElementByXpath('//*[@id="edit-form-div"]//input[@id="front-extra-field"]');
     front_extra_field.value = cards[index]['front_extra'];
-    let back_main_field = getElementByXpath('//*[@id="edit-form-section"]//input[@id="back-main-field"]');
+    let back_main_field = getElementByXpath('//*[@id="edit-form-div"]//input[@id="back-main-field"]');
     back_main_field.value = cards[index]['back_main'];
-    let back_alt_1_field = getElementByXpath('//*[@id="edit-form-section"]//input[@id="back-alt-1-field"]');
+    let back_alt_1_field = getElementByXpath('//*[@id="edit-form-div"]//input[@id="back-alt-1-field"]');
     back_alt_1_field.value = cards[index]['back_alt_1'];
-    let back_alt_2_field = getElementByXpath('//*[@id="edit-form-section"]//input[@id="back-alt-2-field"]');
+    let back_alt_2_field = getElementByXpath('//*[@id="edit-form-div"]//input[@id="back-alt-2-field"]');
     back_alt_2_field.value = cards[index]['back_alt_2'];
-    let deck_field = getElementByXpath('//*[@id="edit-form-section"]//select[@id="deck-field"]');
+    let deck_field = getElementByXpath('//*[@id="edit-form-div"]//select[@id="deck-field"]');
     deck_field.value = cards[index]['deck'];
 
     // Get form:
@@ -361,14 +205,14 @@ function editCard(index) {
                 body: new FormData(form)
             })
             if (response.ok) {
-                displayInitialOptions();
+                await fetchBatch(deck['id'], page_index);
                 
-                // let response = await fetchBatch(deck['id'], page_index);
-                // deck = response['deck'];
-                // cards = response['cards'];
-                // pagination = response['pagination'];
-
-                fetchBatch(deck['id'], page_index);
+                displayInitialSet();
+                
+                document.getElementById('edit-form-div').classList.add('fade-out');
+                document.getElementById('edit-form-div').classList.remove('fade-in');
+                document.getElementById('option-display').classList.add('fade-in');
+                document.getElementById('option-display').classList.remove('fade-out');
                 
                 listBatch();
             }
@@ -381,7 +225,7 @@ function editCard(index) {
 function deleteCard(index) {
     let csrftoken = getCookie('csrftoken');
     
-    let newDeck = async () => {
+    let deleteFromDeck = async () => {
         try {
             let response = await fetch(`http://127.0.0.1:8000/delete/card`, {
                 method: 'POST',
@@ -392,14 +236,9 @@ function deleteCard(index) {
                 body: JSON.stringify({id: cards[index]['id']})
             })
             if (response.ok) {
-                displayInitialOptions();
-                
-                // let response = await fetchBatch(deck['id'], page_index);
-                // deck = response['deck'];
-                // cards = response['cards'];
-                // pagination = response['pagination'];
+                await fetchBatch(deck['id'], page_index);
 
-                fetchBatch(deck['id'], page_index);
+                displayInitialSet();
 
                 if (cards.length != 0) {
                     listBatch();
@@ -412,11 +251,13 @@ function deleteCard(index) {
             console.error(error);
         }
     }
-    newDeck();        
+
+    deleteFromDeck();        
 }
 
 async function createCard(form) {
     let csrftoken = getCookie('csrftoken');
+    
     try {
         let response = await fetch(`http://127.0.0.1:8000/create/basic%20card`, {
             method: 'POST',
@@ -425,43 +266,53 @@ async function createCard(form) {
             },
             body: new FormData(form)
         })
+
         // Clean fields:
-        let grammar_class_field = getElementByXpath('//*[@id="card-form-section"]//select[@id="grammar-class-field"]');
+        let grammar_class_field = getElementByXpath('//*[@id="create-form-div"]//select[@id="grammar-class-field"]');
         grammar_class_field.value = '';
-        let grade_field = getElementByXpath('//*[@id="card-form-section"]//select[@id="grade-field"]');
+        let grade_field = getElementByXpath('//*[@id="create-form-div"]//select[@id="grade-field"]');
         grade_field.value = '';
-        let front_field = getElementByXpath('//*[@id="card-form-section"]//input[@id="front-field"]');
+        let front_field = getElementByXpath('//*[@id="create-form-div"]//input[@id="front-field"]');
         front_field.value = '';
-        let front_extra_field = getElementByXpath('//*[@id="card-form-section"]//input[@id="front-extra-field"]');
+        let front_extra_field = getElementByXpath('//*[@id="create-form-div"]//input[@id="front-extra-field"]');
         front_extra_field.value = '';
-        let back_main_field = getElementByXpath('//*[@id="card-form-section"]//input[@id="back-main-field"]');
+        let back_main_field = getElementByXpath('//*[@id="create-form-div"]//input[@id="back-main-field"]');
         back_main_field.value = '';
-        let back_alt_1_field = getElementByXpath('//*[@id="card-form-section"]//input[@id="back-alt-1-field"]');
+        let back_alt_1_field = getElementByXpath('//*[@id="create-form-div"]//input[@id="back-alt-1-field"]');
         back_alt_1_field.value = '';
-        let back_alt_2_field = getElementByXpath('//*[@id="card-form-section"]//input[@id="back-alt-2-field"]');
+        let back_alt_2_field = getElementByXpath('//*[@id="create-form-div"]//input[@id="back-alt-2-field"]');
         back_alt_2_field.value = '';
+        
         if (response.ok) {
             // Show message:
-            let message = document.getElementById('message');
-            message.innerHTML = 'Card successfully created.';
-            } else {
-                // Show message:
-                let message = document.getElementById('message');
-                message.innerHTML = 'It was not possible to create the card. Please, try again.';
-            }
+            let create_message = document.getElementById('create-message');
+            create_message.innerHTML = 'Card successfully created.';
+            
+            setTimeout(function() {
+                create_message.innerHTML = '';
+            }, 3000);
+        } else {
+            // Show message:
+            let create_message = document.getElementById('create-message');
+            create_message.innerHTML = 'It was not possible to create the card. Please, try again.';
+
+            setTimeout(function() {
+                create_message.innerHTML = '';
+            }, 3000);
+        }
     } catch (error) {
         console.error(error);
         }
 }
 
 function addPaginationBtn() {
-    let option_area = document.getElementById('option-area');
+    let next_previous_btn_div = document.getElementById('next-previous-btn-div');
     
     if (pagination.has_previous === false && pagination.has_next === true) {
         let next_btn = document.createElement('button');
         next_btn.setAttribute('type', 'button');
         next_btn.innerHTML = 'Next';
-        option_area.append(next_btn);
+        next_previous_btn_div.append(next_btn);
 
         // Add event listener to next button:
         next_btn.addEventListener('click', (event) => {
@@ -469,6 +320,9 @@ function addPaginationBtn() {
             page_index++;
             let getBatch = async () => {
                 await fetchBatch(deck['id'], page_index);
+                
+                displayInitialSet();
+                
                 listBatch();
             }
             getBatch();
@@ -478,7 +332,7 @@ function addPaginationBtn() {
             let previous_btn = document.createElement('button');
             previous_btn.setAttribute('type', 'button');
             previous_btn.innerHTML = 'Previous';
-            option_area.append(previous_btn);
+            next_previous_btn_div.append(previous_btn);
 
             // Add event listener to previous button:
             previous_btn.addEventListener('click', (event) => {
@@ -486,6 +340,9 @@ function addPaginationBtn() {
                 page_index--;
                 let getBatch = async () => {
                     await fetchBatch(deck['id'], page_index);
+                    
+                    displayInitialSet();
+                    
                     listBatch();
                 }
                 getBatch();
@@ -495,7 +352,7 @@ function addPaginationBtn() {
                 let next_btn = document.createElement('button');
                 next_btn.setAttribute('type', 'button');
                 next_btn.innerHTML = 'Next';
-                option_area.append(next_btn);
+                next_previous_btn_div.append(next_btn);
 
                 // Add event listener to next button:
                 next_btn.addEventListener('click', (event) => {
@@ -503,6 +360,9 @@ function addPaginationBtn() {
                     page_index++;
                     let getBatch = async () => {
                         await fetchBatch(deck['id'], page_index);
+                        
+                        displayInitialSet();
+                        
                         listBatch();
                     }
                     getBatch();
@@ -511,7 +371,7 @@ function addPaginationBtn() {
                 let previous_btn = document.createElement('button');
                 previous_btn.setAttribute('type', 'button');
                 previous_btn.innerHTML = 'Previous';
-                option_area.append(previous_btn);
+                next_previous_btn_div.append(previous_btn);
 
                 // Add event listener to previous button:
                 previous_btn.addEventListener('click', (event) => {
@@ -519,6 +379,9 @@ function addPaginationBtn() {
                     page_index--;
                     let getBatch = async () => {
                         await fetchBatch(deck['id'], page_index);
+                        
+                        displayInitialSet();
+                        
                         listBatch();
                     }
                     getBatch();

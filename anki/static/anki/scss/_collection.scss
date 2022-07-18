@@ -1,0 +1,201 @@
+#option-section {
+    // Display
+    display: block;
+    opacity: 1;
+    visibility: hidden;
+    // Position
+    position: absolute;
+    top: 30%;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    transform: translateX(-50%);
+    // Dimension
+    width: 70%;
+    height: max-content;
+    // Padding
+    padding: rem(25) 0;
+    // Appearance
+    border-radius: rem(5);
+    background: white;
+    // Content
+    text-align: center;
+
+    &.fade-in {
+        animation: fade-in 300ms ease-in-out forwards;
+    }
+
+    &.fade-out {
+        animation: fade-out 300ms ease-in-out forwards;
+    }
+}
+
+#option-nav {
+    // Display
+    display: block;
+    opacity: 1;
+    visibility: hidden;
+    // Position
+    position: absolute;
+    top: 30%;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    transform: translateX(-50%);
+    // Dimension
+    width: 70%;
+    height: max-content;
+    // Padding
+    padding: rem(25) 0;
+    // Appearance
+    border-radius: rem(5);
+    background: white;
+    // Content
+    text-align: center;
+    
+    @include screen-breakpoint {
+        > ul {
+            overflow: hidden;
+            padding: rem(20) 0;
+            margin: 0;
+    
+            > li {
+                float: left;
+    
+                > a {
+                    padding-right: rem(10);
+                }
+            }
+        }
+    }
+    
+    &.fade-in {
+        animation: fade-in 300ms ease-in-out forwards;
+    }
+
+    &.fade-out {
+        animation: fade-out 300ms ease-in-out forwards;
+    }
+}
+
+#option-display {
+    // Display
+    display: block;
+    opacity: 1;
+    visibility: hidden;
+    // Position
+    position: absolute;
+    top: 30%;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    transform: translateX(-50%);
+    // Dimension
+    width: 70%;
+    height: max-content;
+    // Padding
+    padding: rem(25) 0;
+    // Appearance
+    border-radius: rem(5);
+    background: white;
+    // Content
+    text-align: center;
+
+    &.fade-in {
+        animation: fade-in 300ms ease-in-out forwards;
+    }
+
+    &.fade-out {
+        animation: fade-out 300ms ease-in-out forwards;
+    }
+}
+
+#option-area {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    padding: 0 rem(15);
+}
+
+#edit-form-div {
+    // Display
+    display: block;
+    opacity: 1;
+    visibility: hidden;
+    // Position
+    position: absolute;
+    top: 30%;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    transform: translateX(-50%);
+    // Dimension
+    width: 70%;
+    height: max-content;
+    // Padding
+    padding: rem(25) 0;
+    // Appearance
+    border-radius: rem(5);
+    background: white;
+    // Content
+    text-align: center;
+
+    &.fade-in {
+        animation: fade-in 300ms ease-in-out forwards;
+    }
+
+    &.fade-out {
+        animation: fade-out 300ms ease-in-out forwards;
+    }
+}
+
+.front-layer {
+    // Display
+    display: block;
+    opacity: 1;
+    visibility: hidden;
+    // Position
+    position: absolute;
+    top: 30%;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    transform: translateX(-50%);
+    // Dimension
+    width: 70%;
+    height: max-content;
+    // Padding
+    padding: rem(25) 0;
+    // Appearance
+    border-radius: rem(5);
+    background: white;
+    // Content
+    text-align: center;
+
+    &.fade-in {
+        animation: fade-in 300ms ease-in-out forwards;
+    }
+
+    &.fade-out {
+        animation: fade-out 300ms ease-in-out forwards;
+    }
+}
+
+.manage-btn, .archive-btn {
+    border: none;
+    background-color: transparent;
+    font-size: $font-xsm;
+    padding: 0;
+
+    &:hover {
+        color: gray;
+        cursor: pointer;
+    }
+}
+
+.go-back-btn-div {
+    display: grid;
+    justify-content: left;
+    align-items: center;
+    padding: 0 rem(15);
+}

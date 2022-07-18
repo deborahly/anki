@@ -98,6 +98,33 @@ h1 {
     row-gap: rem(15);
 }
 
+.collection-grid {
+    @include screen-breakpoint {
+        display: grid;
+        justify-content: start;
+        align-items: start;
+        grid-template-areas:
+            'left top'
+            'left right';
+        padding: 0 rem(15);
+        row-gap: rem(15);
+    
+        > .grid-area-left {
+            background-color: aqua;
+        }
+    
+        > #option-section {
+            .grid-area-top {
+                background-color: aquamarine;
+            }
+    
+            > .grid-area-right {
+                background-color: cadetblue;
+            }
+        }
+    }
+}
+
 // Visibility
 .hide-for-mobile {
     display: none;
@@ -203,7 +230,7 @@ h1 {
     overflow: hidden;
 }
 
-// Tags
+// Lists
 ul {
     margin-block-start: em(32);
     margin-block-end: em(32);
@@ -219,6 +246,7 @@ li {
     }
 }
 
+// Links
 a, a:visited {
     text-decoration: none;
     color: black;
@@ -226,4 +254,13 @@ a, a:visited {
 
 a:hover {
     color: gray;
+}
+
+// Tables
+td {
+    padding: rem(10) rem(10);
+
+    > a {
+        font-size: $font-xsm;
+    }
 }
