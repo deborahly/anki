@@ -15,32 +15,114 @@
   to {
     visibility: hidden; } }
 html {
+  box-sizing: border-box;
+  min-width: 25em;
+  max-width: 68.75em;
+  margin: auto;
   font-size: 100%;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   line-height: 1.5; }
 
-.flex-jc-sb {
+header {
+  background-color: #f3f2f1;
+  padding: 1.25rem 1.25rem;
+  height: 6.25em; }
+
+main {
+  padding: 0; }
+
+h1 {
+  margin: 0;
+  font-size: 2.625rem; }
+
+h4 {
+  margin: 0.625rem 0; }
+
+#register-div, #login-div {
+  padding: 0.625rem 1.875rem; }
+
+#register-form, #login-form {
+  display: grid;
+  justify-content: start;
+  justify-items: start;
+  align-content: space-between;
+  row-gap: 1.25rem; }
+
+.register-input, .login-input {
+  width: 21.875rem; }
+
+#archive-div {
+  padding: 0.625rem 1.875rem; }
+
+.flex {
   display: flex;
+  flex-wrap: wrap;
+  row-gap: 0.625rem; }
+  .flex-jc-sb {
+    justify-content: space-between;
+    align-items: center; }
+  .flex-jc-sa {
+    justify-content: space-around;
+    align-items: center; }
+  .flex-jc-c {
+    justify-content: center;
+    align-items: center; }
+  .flex-jc-r {
+    justify-content: right;
+    align-items: center; }
+  .flex-1 {
+    flex: 1; }
+  .flex-2 {
+    flex: 2; }
+
+.grid {
+  display: grid; }
+
+.grid-area-top {
+  grid-area: top; }
+.grid-area-left {
+  grid-area: left; }
+.grid-area-center {
+  grid-area: center; }
+.grid-area-right {
+  grid-area: right; }
+.grid-area-bottom {
+  grid-area: bottom; }
+
+.header-grid {
+  display: grid;
   justify-content: space-between;
-  align-items: center; }
-.flex-jc-sa {
-  display: flex;
-  justify-content: space-around;
-  align-items: center; }
-.flex-jc-c {
-  display: flex;
+  align-items: center;
+  grid-template-areas: 'top top' 'left right';
+  padding: 0 0.9375rem;
+  row-gap: 0.9375rem; }
+
+.game-btn-grid {
+  display: grid;
+  grid-template-columns: auto auto auto;
   justify-content: center;
-  align-items: center; }
+  column-gap: 1.25rem; }
+
+@media (min-width: 64.0625em) {
+  .collection-grid {
+    display: grid;
+    justify-content: start;
+    align-items: start;
+    grid-template-areas: 'left top right' 'left center bottom';
+    grid-template-rows: 6.125em auto;
+    grid-template-columns: 20% 60% 20%; }
+    .collection-grid > .grid-area-left {
+      background-color: #fcdacf; } }
 
 .hide-for-mobile {
   display: none; }
-  @media (min-width: 36em) {
+  @media (min-width: 64.0625em) {
     .hide-for-mobile {
       display: block; } }
 
 .hide-for-desktop {
   display: block; }
-  @media (min-width: 36em) {
+  @media (min-width: 64.0625em) {
     .hide-for-desktop {
       display: none; } }
 
@@ -64,6 +146,18 @@ html {
   .form-input-submit:hover {
     background-color: #33cc33; }
 
+.ordinary-btn {
+  height: 1.25rem;
+  width: 3.5rem;
+  border-radius: 1.25rem;
+  border-width: 0;
+  background-color: orange;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 400; }
+  .ordinary-btn:hover {
+    background-color: #f7b36e; }
+
 .cancel-btn {
   height: 1.75rem;
   width: 3.5rem;
@@ -76,17 +170,35 @@ html {
   .cancel-btn:hover {
     background-color: #b5b3b0; }
 
-.quit-btn {
-  height: 1.75rem;
-  width: 3.5rem;
-  border-radius: 1.25rem;
-  border-width: 0;
-  background-color: #83807c;
+.grade-btn {
+  height: 5.1rem;
+  width: 5.1rem;
+  border-radius: 5.1rem;
+  border-style: none;
   color: white;
   font-size: 0.875rem;
   font-weight: 400; }
-  .quit-btn:hover {
-    background-color: #b5b3b0; }
+  .grade-btn.cake-btn {
+    background-color: #ee77c6; }
+    .grade-btn.cake-btn:hover {
+      background-color: #dd22be; }
+  .grade-btn.normal-btn {
+    background-color: #f7b36e; }
+    .grade-btn.normal-btn:hover {
+      background-color: #f2800d; }
+  .grade-btn.challenging-btn {
+    background-color: #af78ed; }
+    .grade-btn.challenging-btn:hover {
+      background-color: #8b47eb; }
+
+.link-btn {
+  border: none;
+  background-color: transparent;
+  font-size: 0.75rem;
+  padding: 0; }
+  .link-btn:hover {
+    color: gray;
+    cursor: pointer; }
 
 .no-scroll {
   overflow: hidden; }
@@ -109,9 +221,16 @@ a, a:visited {
 a:hover {
   color: gray; }
 
-header {
-  background-color: #f3f2f1;
-  padding: 1.25rem 1.25rem; }
+td {
+  padding: 0.625rem 0.625rem; }
+  td > a {
+    font-size: 0.75rem; }
+
+#logged-user {
+  text-align: right;
+  font-size: 0.875rem; }
+  #logged-user.empty {
+    height: 1.3125rem; }
 
 .header__logo {
   height: 6.25rem;
@@ -134,7 +253,7 @@ header {
   transform: rotate(-45deg); }
 .header__menu {
   position: absolute;
-  top: 8.25rem;
+  top: 9.25rem;
   bottom: 0;
   left: 0;
   right: 0;
@@ -151,24 +270,112 @@ header {
     animation: fade-in 300ms ease-in-out forwards; }
   .header__menu.fade-out {
     animation: fade-out 300ms ease-in-out forwards; }
+  @media (min-width: 64.0625em) {
+    .header__menu.fade-in {
+      animation: none; } }
 .header__nav {
-  padding: 0.75rem 0.75rem; }
+  width: 40.375rem; }
+  .header__nav > ul {
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    margin-block-start: 0.75rem;
+    column-gap: 1.875rem; }
+    .header__nav > ul > li {
+      float: left;
+      margin: 0; }
 
-main {
-  padding: 1.25rem 1.25rem; }
-
-#index-welcome {
-  padding-top: 0;
-  padding-bottom: 1.25rem; }
+#welcome-div {
+  padding: 0.625rem 1.875rem; }
 
 .index-p {
-  font-size: 0.875rem;
+  font-size: 1rem;
   text-align: justify;
   font-weight: 300; }
 .index-a {
   font-style: italic; }
 
-#overlay-background {
+#play-option-section {
+  display: block;
+  opacity: 1;
+  visibility: hidden;
+  position: absolute;
+  top: 30%;
+  bottom: 0;
+  left: 50%;
+  right: 0;
+  transform: translateX(-50%);
+  width: 70%;
+  height: max-content;
+  min-width: 18.75rem;
+  padding: 1.5625rem 0;
+  border-radius: 0.3125rem;
+  background: white;
+  text-align: center; }
+  #play-option-section.fade-in {
+    animation: fade-in 300ms ease-in-out forwards; }
+  #play-option-section.fade-out {
+    animation: fade-out 300ms ease-in-out forwards; }
+
+#game-section {
+  display: grid;
+  opacity: 1;
+  visibility: hidden;
+  position: absolute;
+  top: 5.625rem;
+  bottom: 0;
+  left: 50%;
+  right: 0;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 70%;
+  min-width: 18.75rem;
+  padding: 1rem 1rem;
+  border-radius: 0.3125rem;
+  background: #f7f1d4;
+  text-align: center;
+  align-items: center; }
+  #game-section.fade-in {
+    animation: fade-in 300ms ease-in-out forwards; }
+  #game-section.fade-out {
+    animation: fade-out 300ms ease-in-out forwards; }
+
+#game-message {
+  height: 1.875rem; }
+
+#game-card {
+  display: grid;
+  height: 16rem;
+  width: 9.5rem;
+  padding: 1rem 1rem;
+  align-items: center;
+  font-size: 1.125rem; }
+  #game-card.front-side {
+    border-width: 0.5rem;
+    border-radius: 0.625rem;
+    border-style: solid;
+    border-color: white;
+    background-image: url("chili_cards_03.jpg");
+    background-repeat: repeat;
+    background-size: 20%; }
+  #game-card.back-side {
+    border-width: 0.5rem;
+    border-radius: 0.625rem;
+    border-style: solid;
+    border-color: white;
+    background-image: none;
+    background-color: #f3f2f1; }
+  #game-card.finished {
+    background-image: url("chili_cards_04.jpg");
+    background-size: cover; }
+
+#game-btn-div {
+  height: 4.625rem; }
+
+#countdown {
+  font-size: 1.125rem; }
+
+.play-overlay-background {
   display: block;
   opacity: 1;
   visibility: hidden;
@@ -178,58 +385,13 @@ main {
   left: 0;
   right: 0;
   background: linear-gradient(#33cc33, transparent); }
-  #overlay-background.fade-in {
+  .play-overlay-background.fade-in {
     animation: fade-in 300ms ease-in-out forwards; }
-  #overlay-background.fade-out {
+  .play-overlay-background.fade-out {
     animation: fade-out 300ms ease-in-out forwards; }
-
-#option-section {
-  display: none;
-  position: absolute;
-  top: 5.625rem;
-  bottom: 0;
-  left: 50%;
-  right: 0;
-  transform: translateX(-50%);
-  width: 70%;
-  height: max-content;
-  padding: 1.5625rem 0;
-  border-radius: 0.3125rem;
-  background: white;
-  text-align: center; }
-
-#game-section {
-  display: block;
-  opacity: 1;
-  visibility: hidden;
-  position: absolute;
-  top: 5.625rem;
-  bottom: 0;
-  left: 50%;
-  right: 0;
-  transform: translateX(-50%);
-  width: 70%;
-  height: max-content;
-  padding: 1rem 1rem;
-  border-radius: 0.3125rem;
-  background: white;
-  text-align: center; }
-  #game-section.fade-in {
-    animation: fade-in 300ms ease-in-out forwards; }
-  #game-section.fade-out {
-    animation: fade-out 300ms ease-in-out forwards; }
-
-.card {
-  border-width: 0.0625rem;
-  border-style: solid;
-  padding: 1rem 1rem;
-  height: 256px;
-  width: 152px;
-  margin-block-start: 20px;
-  margin-block-end: 20px; }
 
 .play-deck {
-  background-image: url("chili_cards_01.jpg");
+  background-image: url("chili_cards_05.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -240,5 +402,153 @@ main {
   text-align: center;
   font-size: 1.125rem;
   font-weight: 700; }
+
+.front, .back-main {
+  font-size: 1.625rem; }
+
+#deck-form-section {
+  padding: 0.625rem 1.25rem; }
+
+#deck-section {
+  padding: 0.625rem 1.25rem; }
+
+#deck-section table tr td a {
+  font-size: 1.125rem; }
+
+#create-deck-btn-div {
+  margin-block-start: 0.3125rem; }
+
+@media (min-width: 64.0625em) {
+  #option-nav {
+    padding: 0;
+    visibility: hidden; }
+    #option-nav > ul {
+      display: flex;
+      justify-content: space-around;
+      overflow: hidden;
+      padding: 0;
+      margin: 0; }
+      #option-nav > ul > li {
+        float: left; }
+        #option-nav > ul > li > a {
+          padding: 0 0.625rem; } }
+
+@media (min-width: 64.0625em) {
+  #option-display {
+    display: none; }
+    #option-display.appear {
+      display: block;
+      visibility: visible; }
+    #option-display.disappear {
+      display: none;
+      visibility: hidden; } }
+
+#option-area {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  padding: 0 0.9375rem;
+  row-gap: 0.625rem; }
+
+@media (min-width: 64.0625em) {
+  #create-form-div {
+    visibility: hidden;
+    padding: 0; }
+    #create-form-div.fade-in {
+      animation: fade-in 300ms ease-in-out forwards; }
+    #create-form-div.fade-out {
+      animation: fade-out 300ms ease-in-out forwards; }
+    #create-form-div.appear {
+      display: block; }
+    #create-form-div.disappear {
+      display: none; } }
+
+@media (min-width: 64.0625em) {
+  #edit-form-div {
+    display: none;
+    padding: 0.625rem 1.25rem; }
+    #edit-form-div.appear {
+      display: block;
+      visibility: visible; }
+    #edit-form-div.disappear {
+      display: none;
+      visibility: hidden; } }
+
+#create-message {
+  height: 1.875rem; }
+
+#save-submit, #create-submit {
+  margin: 0.9375rem 0; }
+
+.overlay-background {
+  display: block;
+  opacity: 1;
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(#33cc33, transparent); }
+  .overlay-background.fade-in {
+    animation: fade-in 300ms ease-in-out forwards; }
+  .overlay-background.fade-out {
+    animation: fade-out 300ms ease-in-out forwards; }
+  @media (min-width: 64.0625em) {
+    .overlay-background {
+      display: none; } }
+
+.front-layer {
+  display: block;
+  opacity: 1;
+  visibility: hidden;
+  position: absolute;
+  top: 30%;
+  bottom: 0;
+  left: 50%;
+  right: 0;
+  transform: translateX(-50%);
+  width: 70%;
+  height: max-content;
+  padding: 1.5625rem 0;
+  border-radius: 0.3125rem;
+  background: white;
+  text-align: center; }
+  .front-layer.fade-in {
+    animation: fade-in 300ms ease-in-out forwards; }
+  .front-layer.fade-out {
+    animation: fade-out 300ms ease-in-out forwards; }
+  @media (min-width: 64.0625em) {
+    .front-layer {
+      display: block;
+      opacity: 1;
+      visibility: hidden;
+      position: relative;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      transform: initial;
+      width: auto;
+      height: max-content;
+      padding: 1.5625rem 0;
+      border-radius: 0;
+      background: transparent;
+      text-align: center; }
+      .front-layer.fade-in {
+        animation: none; }
+      .front-layer.fade-out {
+        animation: none; }
+      .front-layer.fade-in-once {
+        animation: fade-in 150ms ease-in-out forwards; } }
+
+.go-back-btn-div {
+  display: grid;
+  justify-content: left;
+  align-items: center;
+  padding: 0 0.9375rem; }
+  @media (min-width: 64.0625em) {
+    .go-back-btn-div {
+      display: none; } }
 
 /*# sourceMappingURL=styles.css.map */

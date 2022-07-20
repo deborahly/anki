@@ -11,13 +11,16 @@ const display_go_back_btn = document.getElementById('display-go-back-btn');
 const edit_go_back_btn = document.getElementById('edit-go-back-btn');
 const create_go_back_btn = document.getElementById('create-go-back-btn');
 
-document.querySelectorAll('.manage-btn').forEach(element => {
+document.querySelectorAll('.manage-link').forEach(element => {
     element.addEventListener('click', () => {   
         overlay_background.classList.add('fade-in');
         overlay_background.classList.remove('fade-out');
 
         option_nav.classList.add('fade-in');
         option_nav.classList.remove('fade-out');
+
+        // Desktop only
+        option_nav.classList.add('fade-in-once');
     });
 });
 
@@ -28,6 +31,13 @@ document.querySelectorAll('.manage-btn').forEach(element => {
 
         option_nav.classList.add('fade-out');
         option_nav.classList.remove('fade-in');
+
+        // Desktop only
+        option_display.classList.add('appear');
+        option_display.classList.remove('disappear');
+
+        create_form_div.classList.add('disappear');
+        create_form_div.classList.remove('appear');
     });
 });
 
@@ -37,6 +47,13 @@ create_card_link.addEventListener('click', () => {
 
     option_nav.classList.add('fade-out');
     option_nav.classList.remove('fade-in');
+
+    // Desktop only
+    create_form_div.classList.add('appear');
+    create_form_div.classList.remove('disappear');
+
+    option_display.classList.add('disappear');
+    option_display.classList.remove('appear');
 });
 
 nav_go_back_btn.addEventListener('click', () => {

@@ -1,5 +1,4 @@
 Django==4.0.3
 django-crispy-forms==1.14.0
-selenium
-requests
 lxml
+sass

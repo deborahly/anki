@@ -43,29 +43,34 @@ def retrieve_session(request):
 
     deck = CardDeck.objects.get(pk=id, user=request.user)
 
-    quantity_normal = int(0.50 * quantity)
     card_list = []
-    q1 = BasicCard.objects.filter(grade='NORMAL', user=request.user, deck=deck).order_by('updated_at')[:(quantity_normal)]
-    remainder = quantity - q1.count()
-    for card in q1:
+    q = BasicCard.objects.filter(user=request.user, deck=deck).order_by('updated_at')[:(quantity)]
+    for card in q:
         card_dict = card.serialize()
         card_list.append(card_dict)
-    q2 = BasicCard.objects.filter(grade='CHALLENGING', user=request.user, deck=deck).order_by('updated_at')[:(remainder/2)]
-    remainder = remainder - q2.count()
-    for card in q2:
-        card_dict = card.serialize()
-        card_list.append(card_dict)
-    q3 = BasicCard.objects.filter(grade='PIECE OF CAKE', user=request.user, deck=deck).order_by('updated_at')[:(remainder)]
-    for card in q3:
-        card_dict = card.serialize()
-        card_list.append(card_dict)
+    # quantity_normal = int(0.50 * quantity)
+    # card_list = []
+    # q1 = BasicCard.objects.filter(grade='NORMAL', user=request.user, deck=deck).order_by('updated_at')[:(quantity_normal)]
+    # remainder = quantity - q1.count()
+    # for card in q1:
+    #     card_dict = card.serialize()
+    #     card_list.append(card_dict)
+    # q2 = BasicCard.objects.filter(grade='CHALLENGING', user=request.user, deck=deck).order_by('updated_at')[:(remainder/2)]
+    # remainder = remainder - q2.count()
+    # for card in q2:
+    #     card_dict = card.serialize()
+    #     card_list.append(card_dict)
+    # q3 = BasicCard.objects.filter(grade='PIECE OF CAKE', user=request.user, deck=deck).order_by('updated_at')[:(remainder)]
+    # for card in q3:
+    #     card_dict = card.serialize()
+    #     card_list.append(card_dict)
 
-    if (len(card_list) < quantity):
-        q4 = BasicCard.objects.filter(user=request.user, deck=deck).order_by('updated_at')
-        for card in q4:
-            if (len(card_list) < quantity) and (card not in q1) and (card not in q2) and (card not in q3):
-                card_dict = card.serialize()
-                card_list.append(card_dict)
+    # if (len(card_list) < quantity):
+    #     q4 = BasicCard.objects.filter(user=request.user, deck=deck).order_by('updated_at')
+    #     for card in q4:
+    #         if (len(card_list) < quantity) and (card not in q1) and (card not in q2) and (card not in q3):
+    #             card_dict = card.serialize()
+    #             card_list.append(card_dict)
     
     deck = deck.serialize()
 

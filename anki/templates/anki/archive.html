@@ -4,28 +4,30 @@
 
 {% block main %}
 <main>
-    <div id="message">
-        {{ message }}
+    <div id="archive-div">
+        <h3>Archived decks</h3>
+
+        <div id="message">
+            {{ message }}
+        </div>
+    
+        <table>
+            {% for deck in archived_decks %}
+                <tr id="tr-{{ deck.id }}">
+                    <td>{{ deck.name }}</td>
+    
+                    <td>
+                        <form action="{% url 'unarchive' %}" method="post" id="unarchive-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="deck-to-unarchive" id="deck-to-unarchive" value="{{ deck.id }}">
+                            <button type="submit" class="link-btn">Unarchive</button>
+                        </form>
+                    </td>
+    
+                    <td><button type="button" class="delete-deck-btn link-btn" data-id="{{ deck.id }}">Delete</button></td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
-
-    <h3>Archived decks</h3>
-
-    <table>
-        {% for deck in archived_decks %}
-            <tr id="tr-{{ deck.id }}">
-                <td>{{ deck.name }}</td>
-
-                <td>
-                    <form action="{% url 'unarchive' %}" method="post" id="unarchive-form">
-                        {% csrf_token %}
-                        <input type="hidden" name="deck-to-unarchive" id="deck-to-unarchive" value="{{ deck.id }}">
-                        <button type="submit" class="link-btn">Unarchive</button>
-                    </form>
-                </td>
-
-                <td><button type="button" class="delete-deck-btn link-btn" data-id="{{ deck.id }}">Delete</button></td>
-            </tr>
-        {% endfor %}
-    </table>
 </main>
 {% endblock %}

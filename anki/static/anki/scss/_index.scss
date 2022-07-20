@@ -1,11 +1,10 @@
-#index-welcome {
-    padding-top: 0;
-    padding-bottom: rem(20);
+#welcome-div {
+    padding: rem(10) rem(30);
 }
 
 .index {
     &-p {
-        font-size: $font-sm;
+        font-size: $font-sm-md;
         text-align: justify;
         font-weight: $font-thin;
     }

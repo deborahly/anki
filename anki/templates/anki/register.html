@@ -4,23 +4,23 @@
 
 {% block main %}
 <main>
-    <h2>Register</h2>
+    <div id="register-div">
+        <h2>Register</h2>
 
-    <section id="register_form">
-        <form action="{% url 'register' %}" method="post">
+        <form action="{% url 'register' %}" method="post" id="register-form">
             {% csrf_token %}
-            <input autofocus type="text" name="username" placeholder="Username">
-            <input type="email" name="email" placeholder="Email Address">
-            <input type="password" name="password" placeholder="Password">
-            <input type="password" name="confirmation" placeholder="Confirm Password">            
+            <input autofocus type="text" name="username" placeholder="Username" class="register-input">
+            <input type="email" name="email" placeholder="Email Address" class="register-input">
+            <input type="password" name="password" placeholder="Password" class="register-input">
+            <input type="password" name="confirmation" placeholder="Confirm Password" class="register-input">            
             <input type="submit" value="Register">
         </form>
-    </section>
-    
-    <section id="register_message">
-        {% if message %}
-            {{ message }}
-        {% endif %}
-    </section>
+        
+        <div id="register-message">
+            {% if message %}
+                {{ message }}
+            {% endif %}
+        </div>
+    </div>
 </main>
 {% endblock %}

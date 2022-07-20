@@ -13,6 +13,7 @@
     // Dimension
     width: 70%;
     height: max-content;
+    min-width: rem(300);
     // Padding
     padding: rem(25) 0;
     // Appearance
@@ -45,6 +46,7 @@
     // Dimension
     width: 70%;
     height: 70%;
+    min-width: rem(300);
     // Padding
     padding: rem(16) rem(16);
     // Appearance
@@ -108,6 +110,33 @@
 
 #game-btn-div {
     height: rem(74);
+}
+
+#countdown {
+    font-size: $font-md;
+}
+
+.play-overlay-background {
+    // Display
+    display: block;
+    opacity: 1;
+    visibility: hidden;
+    // Position
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    // Appearance
+    background: linear-gradient($darkGreen, transparent);
+
+    &.fade-in {
+        animation: fade-in 300ms ease-in-out forwards;
+    }
+
+    &.fade-out {
+        animation: fade-out 300ms ease-in-out forwards;
+    }
 }
 
 .play-deck {

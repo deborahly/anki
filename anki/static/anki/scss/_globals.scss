@@ -1,7 +1,21 @@
 html {
+    box-sizing: border-box;
+    min-width: em(400);
+    max-width: em(1100);
+    margin: auto;
     font-size: 100%;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     line-height: 1.5;
+}
+
+header {
+    background-color: $lightGray;
+    padding: rem(20) rem(20);
+    height: em(100);
+}
+
+main {
+    padding: 0;
 }
 
 h1 {
@@ -13,32 +27,33 @@ h4 {
     margin: rem(10) 0;
 }
 
-.overlay-background {
-    // Display
-    display: block;
-    opacity: 1;
-    visibility: hidden;
-    // Position
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    // Appearance
-    background: linear-gradient($dargGreen, transparent);
+// Register and login page
+#register-div, #login-div {
+    padding: rem(10) rem(30);
+}
 
-    &.fade-in {
-        animation: fade-in 300ms ease-in-out forwards;
-    }
+#register-form, #login-form{
+    display: grid;
+    justify-content: start;
+    justify-items: start;
+    align-content: space-between;
+    row-gap: rem(20);
+}
 
-    &.fade-out {
-        animation: fade-out 300ms ease-in-out forwards;
-    }
+.register-input, .login-input {
+    width: rem(350);
+}
+
+// Archive page
+#archive-div {
+    padding: rem(10) rem(30);
 }
 
 // Flexbox
 .flex {
     display: flex;
+    flex-wrap: wrap;
+    row-gap: rem(10);
 
     &-jc-sb {
         justify-content: space-between;
@@ -52,6 +67,11 @@ h4 {
 
     &-jc-c {
         justify-content: center;
+        align-items: center;
+    }
+
+    &-jc-r {
+        justify-content: right;
         align-items: center;
     }
 
@@ -102,30 +122,43 @@ h4 {
     row-gap: rem(15);
 }
 
+.game-btn-grid {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: center;
+    column-gap: rem(20);
+}
+
 .collection-grid {
     @include screen-breakpoint {
         display: grid;
         justify-content: start;
         align-items: start;
         grid-template-areas:
-            'left top'
-            'left right';
-        padding: 0 rem(15);
-        row-gap: rem(15);
+            'left top right'
+            'left center bottom';
+        grid-template-rows: em(98) auto;
+        grid-template-columns: 20% 60% 20%;
     
         > .grid-area-left {
-            background-color: aqua;
+            background-color: $lightRed;
         }
     
-        > #option-section {
-            .grid-area-top {
-                background-color: aquamarine;
-            }
-    
-            > .grid-area-right {
-                background-color: cadetblue;
-            }
-        }
+        // > .grid-area-top {
+        //     background-color: aquamarine;
+        // }
+
+        // > .grid-area-center {
+        //     background-color: cornflowerblue;
+        // }
+
+        // > .grid-area-right {
+        //     background-color: cadetblue;
+        // }
+
+        // > .grid-area-bottom {
+        //     background-color: chocolate;
+        // }
     }
 }
 
@@ -171,12 +204,27 @@ h4 {
         font-weight: $font-normal;
 
         &:hover {
-            background-color: $dargGreen;
+            background-color: $darkGreen;
         }
     }
 }
 
 // Buttons
+.ordinary-btn {
+    height: rem(20);
+    width: rem(56);
+    border-radius: rem(20);
+    border-width: 0;
+    background-color: orange;
+    color: white;
+    font-size: $font-xsm;
+    font-weight: $font-normal;
+
+    &:hover {
+        background-color: $mediumOrange;
+    }
+}
+
 .cancel-btn {
     height: rem(28);
     width: rem(56);
@@ -188,7 +236,7 @@ h4 {
     font-weight: $font-normal;
 
     &:hover {
-        background-color: $mediumGray
+        background-color: $mediumGray;
     }
 }
 
@@ -198,11 +246,11 @@ h4 {
     border-radius: rem(81.6);
     border-style: none;
     color: white;
-    font-size: $font-xsm;
+    font-size: $font-sm;
     font-weight: $font-normal;
 
     &.cake-btn {
-        background-color: $normalPink;
+        background-color: $mediumPink;
 
 
         &:hover {
@@ -211,7 +259,7 @@ h4 {
     }
 
     &.normal-btn {
-        background-color: $normalOrange;
+        background-color: $mediumOrange;
 
 
         &:hover {
@@ -220,7 +268,7 @@ h4 {
     }
 
     &.challenging-btn {
-        background-color: $normalPurple;
+        background-color: $mediumPurple;
 
 
         &:hover {

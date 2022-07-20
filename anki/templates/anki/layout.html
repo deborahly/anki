@@ -17,6 +17,8 @@
                         <div id="logged-user" class="grid-area-top">
                             Signed in as <strong>{{ user.username }}</strong>
                         </div>
+                    {% else %}
+                        <div id="logged-user" class="grid-area-top empty"></div>
                     {% endif %}
 
                     <h1 id="header-title" class="grid-area-left">Chili Cards</h1>
@@ -26,24 +28,24 @@
                         <p></p>
                         <p></p>
                     </div>
+
+                    <nav id="header-nav" class="header__nav hide-for-mobile">
+                        <ul class="flex flex-jc-r">
+                            <li><a href="{% url 'index' %}">Home</a></li>
+                            {% if user.is_authenticated %}
+                                <li><a href="{% url 'play' %}">Play cards</a></li>
+                                <li><a href="{% url 'collection' %}">My collection</a></li>
+                                <li><a href="{% url 'archive' %}">Archive</a></li>   
+                                <li><a href="{% url 'logout' %}">Log out</a></li>
+                            {% else %}
+                                <li><a href="{% url 'login' %}">Log in</a></li>
+                                <li><a href="{% url 'register' %}">Register</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
                 </div>
 
                 <nav id="header-menu" class="header__menu">
-                    <ul>
-                        <li><a href="{% url 'index' %}">Home</a></li>
-                        {% if user.is_authenticated %}
-                            <li><a href="{% url 'play' %}">Play cards</a></li>
-                            <li><a href="{% url 'collection' %}">My collection</a></li>
-                            <li><a href="{% url 'archive' %}">Archive</a></li>   
-                            <li><a href="{% url 'logout' %}">Log out</a></li>
-                        {% else %}
-                            <li><a href="{% url 'login' %}">Log in</a></li>
-                            <li><a href="{% url 'register' %}">Register</a></li>
-                        {% endif %}
-                    </ul>
-                </nav>
-                
-                <nav id="header-nav" class="header__nav hide-for-mobile">
                     <ul>
                         <li><a href="{% url 'index' %}">Home</a></li>
                         {% if user.is_authenticated %}

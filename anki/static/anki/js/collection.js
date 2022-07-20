@@ -1,5 +1,5 @@
 // Constants
-const PER_PAGE = 10;
+const PER_PAGE = 8;
 
 // Globals
 var deck_id;
@@ -8,11 +8,13 @@ var cards = [];
 var pagination = [];
 var page_index = 0;
 
-document.querySelectorAll('.manage-btn').forEach(element => {
+document.querySelectorAll('.manage-link').forEach(element => {
     element.addEventListener('click', () => {      
         displayInitialSet();
         
         deck_id = element.dataset.id;
+
+        document.getElementById('manage-title').innerHTML = element.dataset.name;
 
         // If deck info is selected:   
         document.getElementById('deck-info-link').addEventListener('click', () => {
@@ -51,7 +53,7 @@ document.querySelectorAll('.manage-btn').forEach(element => {
             let deck_field = getElementByXpath('//*[@id="create-form-div"]//select[@id="deck-field"]');
             deck_field.value = deck_id;
     
-            let form = getElementByXpath('//*[@id="create-form-div"]//form[@id="basic-card-form"]');
+            let form = getElementByXpath('//*[@id="create-form-div"]//form[@id="create-basic-card-form"]');
             form.onsubmit = async (event) => {
                 event.preventDefault();
                 createCard(form);
@@ -68,6 +70,10 @@ function displayInitialSet() {
     document.getElementById('next-previous-btn-div').innerHTML = '';
 
     document.getElementById('create-message').innerHTML = '';
+
+    // Desktop only
+    document.getElementById('edit-form-div').classList.add('disappear');
+    document.getElementById('edit-form-div').classList.remove('appear');
 }
 
 async function fetchBatch(deck_id, page_index) {
@@ -85,8 +91,8 @@ async function fetchBatch(deck_id, page_index) {
 function showInfo() {
     let option_area = document.getElementById('option-area');
 
-    let deck_name = document.createElement('div');
-    deck_name.innerHTML = `Deck name: ${deck['name']}`;
+    // let deck_name = document.createElement('div');
+    // deck_name.innerHTML = `Deck name: ${deck['name']}`;
     
     let total_cards = document.createElement('div');
     total_cards.innerHTML = `Total cards: ${deck['count']}`;
@@ -100,7 +106,7 @@ function showInfo() {
     let updated_at = document.createElement('div');
     updated_at.innerHTML = `Last played at: ${deck['updated_at']}`;
 
-    option_area.append(deck_name);
+    // option_area.append(deck_name);
     option_area.append(total_cards);
     option_area.append(grade);
     option_area.append(created_at);
@@ -144,6 +150,12 @@ function listBatch() {
             document.getElementById('edit-form-div').classList.remove('fade-out');
             document.getElementById('option-display').classList.add('fade-out');
             document.getElementById('option-display').classList.remove('fade-in');
+
+            // Desktop only
+            document.getElementById('edit-form-div').classList.add('appear');
+            document.getElementById('edit-form-div').classList.remove('disappear');
+            document.getElementById('option-display').classList.add('appear');
+            document.getElementById('option-display').classList.remove('disappear');
         })
 
         delete_link.addEventListener('click', () => {
@@ -186,7 +198,7 @@ function editCard(index) {
     deck_field.value = cards[index]['deck'];
 
     // Get form:
-    let form = document.getElementById('basic-card-form');
+    let form = document.getElementById('edit-basic-card-form');
 
     form.onsubmit = async (event) => {
         event.preventDefault();     
@@ -213,6 +225,10 @@ function editCard(index) {
                 document.getElementById('edit-form-div').classList.remove('fade-in');
                 document.getElementById('option-display').classList.add('fade-in');
                 document.getElementById('option-display').classList.remove('fade-out');
+
+                // Desktop only
+                document.getElementById('edit-form-div').classList.add('disappear');
+                document.getElementById('edit-form-div').classList.remove('appear');
                 
                 listBatch();
             }
@@ -349,25 +365,6 @@ function addPaginationBtn() {
             })
         } else {
             if (pagination.has_previous === true && pagination.has_next === true) {
-                let next_btn = document.createElement('button');
-                next_btn.setAttribute('type', 'button');
-                next_btn.innerHTML = 'Next';
-                next_previous_btn_div.append(next_btn);
-
-                // Add event listener to next button:
-                next_btn.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    page_index++;
-                    let getBatch = async () => {
-                        await fetchBatch(deck['id'], page_index);
-                        
-                        displayInitialSet();
-                        
-                        listBatch();
-                    }
-                    getBatch();
-                })
-
                 let previous_btn = document.createElement('button');
                 previous_btn.setAttribute('type', 'button');
                 previous_btn.innerHTML = 'Previous';
@@ -377,6 +374,25 @@ function addPaginationBtn() {
                 previous_btn.addEventListener('click', (event) => {
                     event.preventDefault();
                     page_index--;
+                    let getBatch = async () => {
+                        await fetchBatch(deck['id'], page_index);
+                        
+                        displayInitialSet();
+                        
+                        listBatch();
+                    }
+                    getBatch();
+                })
+                
+                let next_btn = document.createElement('button');
+                next_btn.setAttribute('type', 'button');
+                next_btn.innerHTML = 'Next';
+                next_previous_btn_div.append(next_btn);
+
+                // Add event listener to next button:
+                next_btn.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    page_index++;
                     let getBatch = async () => {
                         await fetchBatch(deck['id'], page_index);
                         

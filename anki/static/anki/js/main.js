@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // When any page is loaded:
     loadScript('static/anki/js/style_layout.js');
-
 })
 
 function getCookie(name) {
