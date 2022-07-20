@@ -9,6 +9,8 @@ document.querySelectorAll('.deck').forEach(element => {
         const play_option_form = document.getElementById('play-option-form');
 
         play_option_form.onsubmit = async (event) => {
+            displayInitialPlay();
+
             event.preventDefault();
             
             let validate = validateForm();
@@ -23,23 +25,19 @@ document.querySelectorAll('.deck').forEach(element => {
                     
                     if (cards.length === 0) {
                         document.getElementById('game-message').innerHTML = 'This deck is empty.'; 
-                    } else {                       
+                    } else { 
                         showCard(cards, 0, cards.length);
 
                         if (minutes != '') {
                             // Set timer:
                             var time = minutes * 60;
-                            let interval = setInterval(function(){
+                            let interval = setInterval(function() {
                                 time--;
 
-                                if (time === 0) {
-                                    // Clear out card section and btn section:  
-                                    const game_card = document.getElementById('game-card');
-                                    game_card.innerHTML = '';
+                                if (time === 0) {  
                                     const game_btn_div = document.getElementById('game-btn-div');
-                                    game_btn_div.innerHTML = '';
-                                    
                                     const game_card_div = document.getElementById('game-card-div');
+                                    
                                     game_card_div.style.visibility = 'hidden';
                                     game_btn_div.style.visibility = 'hidden';
 
@@ -48,8 +46,6 @@ document.querySelectorAll('.deck').forEach(element => {
                                     let game_message = document.getElementById('game-message');
                                     game_message.innerHTML = 'Time is up!';
                                 } else {
-                                    // const game_section = document.getElementById('game-section');
-                                    
                                     // Stop timer when session is finished:
                                     if (game_card.classList.contains('finished')) {
                                         clearInterval(interval);
@@ -113,7 +109,6 @@ async function fetchDeck(deck_id, quantity) {
 
 function showCard(cards, index, quantity) {
     const game_card_div = document.getElementById('game-card-div');
-    // game_card_div.style.visibility = 'visible';
 
     // Get card and mark it as front:
     const game_card = document.getElementById('game-card');
@@ -182,6 +177,8 @@ function showCardBack(cards, index, quantity) {
 }
 
 function addGradeBtn(cards, index, quantity) {
+    document.getElementById('game-btn-div').innerHTML = '';
+    
     const cake_btn = document.createElement('button');
     cake_btn.id = 'cake-btn';
     cake_btn.dataset.value = 'PIECE OF CAKE';
@@ -204,7 +201,6 @@ function addGradeBtn(cards, index, quantity) {
     challenging_btn.classList.add('grade-btn', 'challenging-btn');
 
     const game_btn_div = document.getElementById('game-btn-div');
-    // game_btn_div.style.visibility = 'visible';
     game_btn_div.append(cake_btn);
     game_btn_div.append(normal_btn);
     game_btn_div.append(challenging_btn);

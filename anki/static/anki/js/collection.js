@@ -90,23 +90,24 @@ async function fetchBatch(deck_id, page_index) {
 
 function showInfo() {
     let option_area = document.getElementById('option-area');
-
-    // let deck_name = document.createElement('div');
-    // deck_name.innerHTML = `Deck name: ${deck['name']}`;
     
     let total_cards = document.createElement('div');
     total_cards.innerHTML = `Total cards: ${deck['count']}`;
 
     let grade = document.createElement('div');
-    grade.innerHTML = `Grade: ${deck['grade']}`;
+    
+    if (deck['grade'] != null) {
+        grade.innerHTML = `Grade: ${deck['grade']}`;
+    } else {
+        grade.innerHTML = 'Grade: undefined';
+    }
 
     let created_at = document.createElement('div');
     created_at.innerHTML = `Created at: ${deck['created_at']}`;
 
     let updated_at = document.createElement('div');
-    updated_at.innerHTML = `Last played at: ${deck['updated_at']}`;
+    updated_at.innerHTML = `Last updated at: ${deck['updated_at']}`;
 
-    // option_area.append(deck_name);
     option_area.append(total_cards);
     option_area.append(grade);
     option_area.append(created_at);

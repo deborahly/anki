@@ -16,7 +16,9 @@
 
 #option-nav {
     @include screen-breakpoint {
+        visibility: hidden;
         padding: 0;
+        border-bottom: 1px solid gray;
 
         > ul {
             display: flex;
@@ -30,25 +32,16 @@
     
                 > a {
                     padding: 0 rem(10);
+                    font-size: $font-md;
                 }
             }
         }
-
-        visibility: hidden;
     }
 }
 
 #option-display {
     @include screen-breakpoint {
         display: none;
-
-        // &.fade-in {
-        //     animation: fade-in 300ms ease-in-out forwards;
-        // }
-    
-        // &.fade-out {
-        //     animation: fade-out 300ms ease-in-out forwards;
-        // }
         
         &.appear {
             display: block;
@@ -60,6 +53,10 @@
             visibility: hidden;
         }
     }
+}
+
+#manage-title {
+    font-size: $font-md-lg;
 }
 
 #option-area {
@@ -74,6 +71,7 @@
     @include screen-breakpoint {
         visibility: hidden;
         padding: 0;
+        font-size: $font-sm;
 
         &.fade-in {
             animation: fade-in 300ms ease-in-out forwards;
@@ -97,6 +95,9 @@
     @include screen-breakpoint {
         display: none;
         padding: rem(10) rem(20);
+        border: rem(0.5) dotted gray;
+        font-size: $font-sm;
+        margin: rem(20) 0;
 
         &.appear {
             display: block;
@@ -152,7 +153,7 @@
     visibility: hidden;
     // Position
     position: absolute;
-    top: 30%;
+    top: 20%;
     bottom: 0;
     left: 50%;
     right: 0;

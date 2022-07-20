@@ -29,11 +29,6 @@ class BasicCardForm(forms.ModelForm):
             tuple = tuple + (t,)
         self.fields['deck'].choices = tuple
 
-    # def __init__(self, *args, **kwargs):
-    #     user = kwargs.pop('user', None)
-    #     super(BasicCardForm, self).__init__(*args, **kwargs)
-    #     self.fields['deck'].queryset = CardDeck.objects.filter(archived=False, user=user)
-
 class CardDeckForm(forms.ModelForm):
     class Meta:
         model = CardDeck

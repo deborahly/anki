@@ -26,17 +26,17 @@
                     {% for deck in decks %}
                         <tr>
                             <td><a href="#" class="manage-link" data-id="{{ deck.id }}" data-name="{{ deck.name }}">{{ deck.name }}</a></td>
-                        
-                            <!-- <td><button type="button" class="manage-btn link-btn" data-id="{{ deck.id }}">Manage</button></td> -->
                             
                             <td>
                                 <form action="{% url 'archive' %}" method="post" id="archive-form">
                                     {% csrf_token %}
                                     <input type="hidden" name="deck-to-archive" id="deck-to-archive" value="{{ deck.id }}">
-                                    <button type="submit" class="link-btn">Archive</button>
+                                    <button type="submit" class="archive-btn">Archive</button>
                                 </form>
                             </td>
                         </tr>
+                    {% empty %}
+                        This list is empty
                     {% endfor %}
                     </table>
             </section>
@@ -73,7 +73,7 @@
 
                 <div id="option-area"></div>
 
-                <div id="next-previous-btn-div"></div>
+                <div id="next-previous-btn-div" class="flex flex-jc-c"></div>
             </div>
 
             <div id="create-form-div" class="front-layer">
@@ -82,8 +82,6 @@
                 </div>
                 
                 <div id="create-message"></div>
-
-                <!-- <h4 class="hide-for-desktop">Create new card</h4> -->
 
                 <form action="#" id="create-basic-card-form">
                     {% csrf_token %}
@@ -98,8 +96,6 @@
                 <div class="go-back-btn-div">
                     <button type="button" id="edit-go-back-btn" class="go-back-btn">Go back</button>
                 </div>
-                
-                <!-- <h4 class="hide-for-desktop">Edit card</h4> -->
 
                 <form action="#" id="edit-basic-card-form">
                     {% csrf_token %}

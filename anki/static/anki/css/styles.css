@@ -35,6 +35,10 @@ h1 {
   margin: 0;
   font-size: 2.625rem; }
 
+h3 {
+  margin: 0;
+  padding: 0.625rem 0; }
+
 h4 {
   margin: 0.625rem 0; }
 
@@ -112,6 +116,7 @@ h4 {
     grid-template-rows: 6.125em auto;
     grid-template-columns: 20% 60% 20%; }
     .collection-grid > .grid-area-left {
+      min-height: 36.25em;
       background-color: #fcdacf; } }
 
 .hide-for-mobile {
@@ -145,6 +150,10 @@ h4 {
   font-weight: 400; }
   .form-input-submit:hover {
     background-color: #33cc33; }
+
+button {
+  width: 4.375rem;
+  margin: 0.1875rem; }
 
 .ordinary-btn {
   height: 1.25rem;
@@ -198,6 +207,19 @@ h4 {
   padding: 0; }
   .link-btn:hover {
     color: gray;
+    cursor: pointer; }
+
+.archive-btn {
+  height: 1.25rem;
+  width: 3.5rem;
+  border-radius: 1.25rem;
+  border-width: 0;
+  background-color: #b5b3b0;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 400; }
+  .archive-btn:hover {
+    background-color: #83807c;
     cursor: pointer; }
 
 .no-scroll {
@@ -420,8 +442,9 @@ td {
 
 @media (min-width: 64.0625em) {
   #option-nav {
+    visibility: hidden;
     padding: 0;
-    visibility: hidden; }
+    border-bottom: 1px solid gray; }
     #option-nav > ul {
       display: flex;
       justify-content: space-around;
@@ -431,7 +454,8 @@ td {
       #option-nav > ul > li {
         float: left; }
         #option-nav > ul > li > a {
-          padding: 0 0.625rem; } }
+          padding: 0 0.625rem;
+          font-size: 1.125rem; } }
 
 @media (min-width: 64.0625em) {
   #option-display {
@@ -443,6 +467,9 @@ td {
       display: none;
       visibility: hidden; } }
 
+#manage-title {
+  font-size: 1.625rem; }
+
 #option-area {
   display: grid;
   justify-content: center;
@@ -453,7 +480,8 @@ td {
 @media (min-width: 64.0625em) {
   #create-form-div {
     visibility: hidden;
-    padding: 0; }
+    padding: 0;
+    font-size: 0.875rem; }
     #create-form-div.fade-in {
       animation: fade-in 300ms ease-in-out forwards; }
     #create-form-div.fade-out {
@@ -466,7 +494,10 @@ td {
 @media (min-width: 64.0625em) {
   #edit-form-div {
     display: none;
-    padding: 0.625rem 1.25rem; }
+    padding: 0.625rem 1.25rem;
+    border: 0.03125rem dotted gray;
+    font-size: 0.875rem;
+    margin: 1.25rem 0; }
     #edit-form-div.appear {
       display: block;
       visibility: visible; }
@@ -503,7 +534,7 @@ td {
   opacity: 1;
   visibility: hidden;
   position: absolute;
-  top: 30%;
+  top: 20%;
   bottom: 0;
   left: 50%;
   right: 0;

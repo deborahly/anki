@@ -26,6 +26,8 @@
     
                     <td><button type="button" class="delete-deck-btn link-btn" data-id="{{ deck.id }}">Delete</button></td>
                 </tr>
+            {% empty %}
+                This list is empty
             {% endfor %}
         </table>
     </div>

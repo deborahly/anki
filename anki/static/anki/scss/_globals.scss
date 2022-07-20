@@ -23,6 +23,11 @@ h1 {
     font-size: $font-xlg;
 }
 
+h3 {
+    margin: 0;
+    padding: rem(10) 0;
+}
+
 h4 {
     margin: rem(10) 0;
 }
@@ -141,24 +146,9 @@ h4 {
         grid-template-columns: 20% 60% 20%;
     
         > .grid-area-left {
+            min-height: em(580);
             background-color: $lightRed;
         }
-    
-        // > .grid-area-top {
-        //     background-color: aquamarine;
-        // }
-
-        // > .grid-area-center {
-        //     background-color: cornflowerblue;
-        // }
-
-        // > .grid-area-right {
-        //     background-color: cadetblue;
-        // }
-
-        // > .grid-area-bottom {
-        //     background-color: chocolate;
-        // }
     }
 }
 
@@ -210,6 +200,11 @@ h4 {
 }
 
 // Buttons
+button {
+    width: rem(70);
+    margin: rem(3);
+}
+
 .ordinary-btn {
     height: rem(20);
     width: rem(56);
@@ -285,6 +280,22 @@ h4 {
 
     &:hover {
         color: gray;
+        cursor: pointer;
+    }
+}
+
+.archive-btn {
+    height: rem(20);
+    width: rem(56);
+    border-radius: rem(20);
+    border-width: 0;
+    background-color: $mediumGray;
+    color: white;
+    font-size: $font-xsm;
+    font-weight: $font-normal;
+
+    &:hover {
+        background-color: $darkGray;
         cursor: pointer;
     }
 }

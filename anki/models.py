@@ -14,7 +14,7 @@ class TimeStampedModel(models.Model):
 
 class CardDeck(TimeStampedModel):
     id = models.AutoField(primary_key=True)
-    name =  models.CharField(max_length=32, verbose_name='File name', editable=True)
+    name =  models.CharField(max_length=32, verbose_name='Deck name', editable=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='files', editable=False, blank=False, null=False)
     grade = models.CharField(max_length=16, verbose_name='Overall grade', editable=True, blank=True, null=True)
     archived = models.BooleanField(default=False)

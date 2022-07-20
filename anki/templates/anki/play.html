@@ -16,7 +16,9 @@
                 {% for deck in decks %}
                     <a href="#" class="deck" data-id="{{ deck.id }}">
                         <div class="play-deck">{{ deck.name }}</div>
-                    </a>             
+                    </a>
+                {% empty %}    
+                    <p>You have currently zero decks</p>
                 {% endfor %}
             </div>
         </ul>
@@ -28,7 +30,7 @@
         <form action="#" id="play-option-form">
             <div class="form-group">
                 <label for="quantity">Enter card quantity:</label>
-                <input type="number" id="quantity" name="quantity" min="1" class="form-input-number">
+                <input type="number" id="quantity" name="quantity" min="1" max="50" class="form-input-number">
             </div>
 
             <div class="form-group">
