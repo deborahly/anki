@@ -29,16 +29,23 @@ On the server side, Django's framework was considerably explored. Apart from the
 Make sure to have installed at least python 3.8.10.
 
 Create virtual environment and install all dependencies:
+
 ```bash
+git clone https://github.com/deborahly/cs50-web-capstone.git
+cd cs50-web-capstone
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
 ```
-Run:
+
+To run the application, execute:
+
 ```bash
 python manage.py runserver
 ```
-By default, the app is going to run on port [127.0.0.1:8000](http://127.0.0.1:8000/).
+The app is going to run on [127.0.0.1:8000](http://127.0.0.1:8000/).
 
 ### DIRECTORIES AND FILES CONTENT
 The below directory contains the app's CSS files and some JPEG images used in the CSS coding:
