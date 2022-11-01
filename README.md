@@ -1,9 +1,11 @@
-# CHILI CARDS
+# CHILI CARDS (anki)
+
+This was my capstone project for Harvard's CS50's Web Programming with Python and JavaScript, having conceived the project and built it from the ground up completely on my own.
 
 ### CONCEPT
 Chili Cards lets the user create flashcards with front and back sides to exercice any given knowledge, such as languages and school disciplines. The app enables the creation of different decks and the configuration of the study sessions by minutes you want to spend or number of cards you want to review.
 
-App presentation video: https://youtu.be/dCjwqGBTr50
+App presentation video: [https://youtu.be/dCjwqGBTr50](https://youtu.be/dCjwqGBTr50)
 
 ### PROJET CHARACTERISTICS 
 The app uses a good amount of JavaScript code to comunicate with the server, fetching data as well as updating the client side without reloading the pages. Sass was adopted to facilitate styling. Among the style features, it is worth mentioning the app's screen responsiveness, with two different page layouts, one for small and the other for large screens.
@@ -54,4 +56,4 @@ To run the tests, execute:
 
 ```bash
 python manage.py test
-```
+``` 
